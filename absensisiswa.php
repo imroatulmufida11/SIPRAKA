@@ -8,6 +8,8 @@
     <meta content="" name="keywords">
     <meta content="" name="description">
 
+    <link rel="icon" type="jpg" href="img/rakanya.jpg">
+
     <!-- Favicon -->
     <link href="img/favicon.ico" rel="icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
@@ -51,7 +53,7 @@
                 </a>
                 <div class="d-flex align-items-center ms-4 mb-4">
                     <div class="position-relative">
-                        <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                        <img class="rounded-circle" src="img/admin.jpg" alt="" style="width: 40px; height: 40px;">
                         <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
                     </div>
                     <div class="ms-3">
@@ -64,7 +66,7 @@
                     <div class="nav-item dropdown">
                     </div>
                     <a href="widget.html" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Permohonan</a>
-                    <a href="form.html" class="nav-item nav-link active"><i class="fa-solid fa-pen me-2"></i>Absensi</a>
+                    <a href="absensisiswa.php" class="nav-item nav-link active"><i class="fa-solid fa-pen me-2"></i>Absensi</a>
                     <a href="table.html" class="nav-item nav-link"><i class="fa-solid fa-eye me-2"></i>Monitoring</a>
                     <a href="chart.html" class="nav-item nav-link"><i class="fa-solid fa-hand-holding-heart me-2"></i>Penarikan</a>
                 </div>
