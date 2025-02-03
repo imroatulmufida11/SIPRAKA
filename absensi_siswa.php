@@ -100,7 +100,7 @@
                     <!-- Input Nama -->
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control" id="namaInput" name="nama" placeholder="Masukkan Nama" required>
-                        <label for="namaInput">Nama</label>
+                        <label for="namaInput">Nama   </label>
                     </div>
                     <!-- Input Tanggal -->
                     <div class="form-floating mb-3">
