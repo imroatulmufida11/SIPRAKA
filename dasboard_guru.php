@@ -58,17 +58,16 @@
                     <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
                 </div>
                 <div class="ms-3">
-                    <h6 class="mb-0">Admin</h6>
+                    <h6 class="mb-0">Guru</h6>
                     <span>Online</span>
                 </div>
             </div>
             <div class="navbar-nav w-100">
-                <a href="dasboard_admin.php" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
-                <a href="tambahdata_admin.php" class="nav-item nav-link"><i class="fa-solid fa-calendar-plus me-2"></i>Tambah Data</a>
-                <a href="form.html" class="nav-item nav-link"><i class="fa-solid fa-th me-2"></i>Permohonan</a>
-                <a href="table.html" class="nav-item nav-link"><i class="fa-solid fa-eye me-2"></i>Monitoring</a>
-                <a href="chart.html" class="nav-item nav-link"><i class="fa-solid fa-hand-holding-heart me-2"></i>Penarikan</a>
-                <a href="chart.html" class="nav-item nav-link"><i class="fa-solid fa-pen me-2"></i>Absensi</a>
+                <a href="dasboard_guru.php" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                <a href="widget.html" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Permohonan</a>
+                <a href="form.html" class="nav-item nav-link"><i class="fa-solid fa-eye me-2"></i>Monitoring</a>
+                <a href="table.html" class="nav-item nav-link"><i class="fa-solid fa-hand-holding-heart me-2"></i>Penarikan</a>
+
             </div>
         </nav>
     </div>
@@ -87,7 +86,7 @@
             <div class="nav-item dropdown ms-auto">
                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                     <img class="rounded-circle me-lg-2" src="img/foto.jpg" alt="" style="width: 40px; height: 40px;">
-                    <span class="d-none d-lg-inline-flex">Admin</span>
+                    <span class="d-none d-lg-inline-flex">Guru</span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
                     <a href="login.php" class="dropdown-item">Keluar</a>
@@ -132,8 +131,8 @@
                     <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
                         <i class="fa fa-chart-area fa-3x text-primary"></i>
                         <div class="ms-3">
-                            <p class="mb-2">Total Du/Di</p>
-                            <h6 class="mb-0">100</h6>
+                            <p class="mb-2">Data Telah Disimpan</p>
+                            <h6 class="mb-0">355</h6>
                         </div>
                     </div>
                 </div>
@@ -149,7 +148,7 @@
                         <ul class="list-unstyled">
                             <li><strong>Siswa:</strong> Melakukan absensi harian.</li>
                             <li><strong>Guru:</strong> Mengisi data monitoring dan memberi penilaian.</li>
-                            <li><strong>Admin:</strong> Mengelola seluruh data.</li>
+                            <li><strong>Admin:</strong> Mengelola seluruh data siswa.</li>
                         </ul>
                     </div>
                 </div>
