@@ -83,7 +83,7 @@
 
         <div class="ms-auto">
             <!-- Tombol Lihat Data (pojok kanan) -->
-            <a href="data_list.php" class="btn btn-primary px-3 py-2">
+            <a href="lihatdata_guru.php" class="btn btn-primary px-3 py-2">
                 Lihat Data
             </a>
         </div>
@@ -92,20 +92,58 @@
         </nav>
         <!-- Navbar End -->
 
+        
+        <?php
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "db_sipraka";
 
-            <!-- Other Elements Start -->
-            <div class="container-fluid pt-4 px-4">
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+if ($conn->connect_error) {
+    die("Koneksi gagal: " . $conn->connect_error);
+}
+
+// Ambil daftar Du/Di dari database
+$sql_du_di = "SELECT id, nama_dudi FROM data_dudi";
+$result_du_di = $conn->query($sql_du_di);
+
+$message = "";
+
+// Jika form disubmit
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $nama = $_POST['nama_pembimbing'];
+    $jurusan = $_POST['jurusan'];
+    $du_di = $_POST['du_di']; // Nama Du/Di dari dropdown
+
+    // Simpan data ke tabel data_pembimbing
+    $stmt = $conn->prepare("INSERT INTO data_pembimbing (nama_pembimbing, jurusan, du_di) VALUES (?, ?, ?)");
+    $stmt->bind_param("sss", $nama_pembimbing, $jurusan, $du_di);
+
+    if ($stmt->execute()) {
+        $message = "<div class='alert alert-success mt-3'>Data berhasil disimpan.</div>";
+    } else {
+        $message = "<div class='alert alert-danger mt-3'>Error: " . $stmt->error . "</div>";
+    }
+
+    $stmt->close();
+}
+
+$conn->close();
+?>
+
+<!-- Form Input -->
+<div class="container-fluid pt-4 px-4">
     <div class="row g-4">
         <div class="col-12">
             <div class="bg-light rounded h-100 p-4">
                 <h6 class="mb-4">Data Pembimbing</h6>
-                <form action="absensisiswa.php" method="POST">
-                    <!-- Input Nama -->
+                <form action="" method="POST">
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control" id="namaInput" name="nama" placeholder="Masukkan Nama" required>
                         <label for="namaInput">Nama Pembimbing</label>
                     </div>
-                    <!-- Pilihan Jurusan -->
                     <div class="form-floating mb-3">
                         <select class="form-select" id="jurusanSelect" name="jurusan" required>
                             <option selected disabled>Pilih Jurusan</option>
@@ -125,20 +163,25 @@
                         </select>
                         <label for="jurusanSelect">Jurusan</label>
                     </div>
-                    <!-- Keterangan -->
-                    <div class="form-floating">
-                    <input type="text" class="form-control" id="namaInput" name="nama" placeholder="Masukkan Nama" required>
-                    <label for="namaInput">Nama Du/Di</label>
+                    <div class="form-floating mb-3">
+                        <select class="form-select" id="duDiSelect" name="du_di" required>
+                            <option selected disabled>Pilih Du/Di</option>
+                            <?php while ($row = $result_du_di->fetch_assoc()) : ?>
+                                <option value="<?= $row['nama']; ?>"><?= $row['nama']; ?></option>
+                            <?php endwhile; ?>
+                        </select>
+                        <label for="duDiSelect">Nama Du/Di</label>
                     </div>
-                    <!-- Tombol Submit -->
                     <div class="mt-3">
                         <button type="submit" class="btn btn-primary w-100">Simpan</button>
                     </div>
                 </form>
+                <?= $message; ?> <!-- Menampilkan pesan sukses atau error -->
             </div>
         </div>
     </div>
 </div>
+
                     
             <!-- Other Elements End -->
 

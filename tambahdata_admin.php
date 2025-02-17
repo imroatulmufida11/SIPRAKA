@@ -145,7 +145,7 @@
             <i class="fa fa-database text-secondary fs-1"></i>
             <h5 class="mt-3">Semua Data</h5>
             <p class="flex-grow-1">Lihat dan kelola semua data yang telah diinputkan.</p>
-            <a href="data_semua.php" class="btn btn-secondary mt-auto">Lihat Data</a>
+            <a href="semua_data.php" class="btn btn-secondary mt-auto">Lihat Data</a>
         </div>
     </div>
 </div>

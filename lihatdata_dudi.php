@@ -85,67 +85,62 @@ if ($conn->connect_error) {
     die("Koneksi gagal: " . $conn->connect_error);
 }
 
-$sql = "SELECT id, nama, created_at FROM du_di ORDER BY created_at DESC";
+$sql = "SELECT id, nama_dudi FROM data_dudi";
 $result = $conn->query($sql);
 ?>
 
+<body>
 <div class="content">
     <!-- Navbar Start -->
-    <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0" style="height: 56px;">
-        <!-- Tombol Kembali (pojok kiri) -->
-        <button onclick="history.back()" class="btn btn-secondary px-3 py-2">
-            Kembali
-        </button>
-
-        <!-- <div class="ms-auto">
-            <!-- Pastikan tombol ini tidak menuju halaman ini sendiri 
-            <a href="lihatdata_dudi.php" class="btn btn-primary px-3 py-2">
-                Lihat Data
-            </a>
-        </div> -->
+    <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-2 shadow">
+        <button onclick="history.back()" class="btn btn-secondary px-3 py-2">Kembali</button>
     </nav>
     <!-- Navbar End -->
 
     <!-- Tampilan Tabel -->
     <div class="container-fluid pt-4 px-4">
-        <div class="row g-4">
-            <div class="col-12">
-                <div class="bg-light rounded h-100 p-4">
-                    <h6 class="mb-4">Daftar Data Du/Di</h6>
-                    <table class="table table-bordered table-striped">
-                        <thead class="table-primary">
-                            <tr>
-                                <th>ID</th>
-                                <th>Nama Du/Di</th>
-                                <th>Tanggal Input</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            if ($result->num_rows > 0) {
-                                while ($row = $result->fetch_assoc()) {
-                                    echo "<tr>";
-                                    echo "<td>" . htmlspecialchars($row["id"]) . "</td>";
-                                    echo "<td>" . htmlspecialchars($row["nama"]) . "</td>";
-                                    echo "<td>" . htmlspecialchars($row["created_at"]) . "</td>";
-                                    echo "</tr>";
-                                }
-                            } else {
-                                echo "<tr><td colspan='3' class='text-center'>Tidak ada data</td></tr>";
+    <div class="row g-4">
+        <div class="col-12">
+            <div class="bg-light rounded p-4 shadow-sm">
+                <h2 class="mb-4">Data Du/Di</h2>
+                <table class="table table-bordered table-striped">
+                    <thead class="table-light">
+                        <tr>
+                            <th>No</th>
+                            <th>Nama Du/Di</th>
+                            <th class="text-center">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        if ($result->num_rows > 0) {
+                            $no = 1;
+                            while ($row = $result->fetch_assoc()) {
+                                echo "<tr>";
+                                echo "<td>" . $no++ . "</td>";
+                                echo "<td>" . htmlspecialchars($row['nama_dudi']) . "</td>";
+                                echo "<td class='text-center'>
+                                        <div class='d-flex justify-content-center gap-2'>
+                                            <a href='edit_dudi.php?id=" . $row['id'] . "' class='btn btn-warning btn-sm'>
+                                                <i class='fa fa-edit'></i>
+                                            </a>
+                                            <a href='hapus_dudi.php?id=" . $row['id'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"Yakin ingin menghapus?\")'>
+                                                <i class='fa fa-trash'></i>
+                                            </a>
+                                        </div>
+                                      </td>";
+                                echo "</tr>";
                             }
-                            ?>
-                        </tbody>
-                    </table>
-                </div>
+                        } else {
+                            echo "<tr><td colspan='3' class='text-center'>Tidak ada data</td></tr>";
+                        }
+                        ?>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 </div>
-
-<?php
-$conn->close();
-?>
-
 
                    
             <!-- Other Elements End -->

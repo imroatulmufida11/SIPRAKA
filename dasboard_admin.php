@@ -108,37 +108,75 @@
         </div>
 
         <!-- Sale & Revenue Start -->
-        <div class="container-fluid pt-4 px-4">
-            <div class="row row-cols-1 row-cols-md-3 g-4">
-                <div class="col">
-                    <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
-                        <i class="fa fa-chart-line fa-3x text-primary"></i>
-                        <div class="ms-3">
-                            <p class="mb-2">Total Siswa PKL</p>
-                            <h6 class="mb-0">340</h6>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
-                        <i class="fa fa-chart-bar fa-3x text-primary"></i>
-                        <div class="ms-3">
-                            <p class="mb-2">Guru Pembimbing</p>
-                            <h6 class="mb-0">20</h6>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
-                        <i class="fa fa-chart-area fa-3x text-primary"></i>
-                        <div class="ms-3">
-                            <p class="mb-2">Total Du/Di</p>
-                            <h6 class="mb-0">100</h6>
-                        </div>
-                    </div>
+        <?php
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "db_sipraka";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+if ($conn->connect_error) {
+    die("Koneksi gagal: " . $conn->connect_error);
+}
+
+// Total Siswa PKL
+$sql_total_siswa = "SELECT COUNT(*) AS total FROM siswa";
+$result_total_siswa = $conn->query($sql_total_siswa);
+$row_total = $result_total_siswa->fetch_assoc();
+$total_siswa_pkl = $row_total['total'];
+
+// Total Guru Pembimbing
+$sql_total_pembimbing = "SELECT COUNT(*) AS total FROM data_pembimbing";
+$result_total_pembimbing = $conn->query($sql_total_pembimbing);
+$row_pembimbing = $result_total_pembimbing->fetch_assoc();
+$total_pembimbing = $row_pembimbing['total'];
+
+// Total Du/Di
+$sql_total_dudi = "SELECT COUNT(*) AS total FROM data_dudi";
+$result_total_dudi = $conn->query($sql_total_dudi);
+$row_dudi = $result_total_dudi->fetch_assoc();
+$total_dudi = $row_dudi['total'];
+
+$conn->close();
+?>
+
+<div class="container-fluid pt-4 px-4">
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        <!-- Total Siswa PKL -->
+        <div class="col">
+            <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                <i class="fa fa-chart-line fa-3x text-primary"></i>
+                <div class="ms-3">
+                    <p class="mb-2">Total Siswa PKL</p>
+                    <h6 class="mb-0"><?= $total_siswa_pkl; ?></h6>
                 </div>
             </div>
         </div>
+
+        <!-- Total Guru Pembimbing -->
+        <div class="col">
+            <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                <i class="fa fa-chart-bar fa-3x text-primary"></i>
+                <div class="ms-3">
+                    <p class="mb-2">Guru Pembimbing</p>
+                    <h6 class="mb-0"><?= $total_pembimbing; ?></h6>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Du/Di -->
+        <div class="col">
+            <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                <i class="fa fa-chart-area fa-3x text-primary"></i>
+                <div class="ms-3">
+                    <p class="mb-2">Total Du/Di</p>
+                    <h6 class="mb-0"><?= $total_dudi; ?></h6>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
         <!-- Panduan Pengguna -->
         <div class="container-fluid pt-4 px-4">

@@ -48,7 +48,7 @@
         <!-- Sidebar Start -->
         <div class="sidebar pe-4 pb-3">
         <nav class="navbar bg-light navbar-light">
-            <a href="tambahdata_admin.php" class="navbar-brand mx-4 mb-3">
+            <a href="dasboard_admin.php" class="navbar-brand mx-4 mb-3">
                 <h3 class="text-primary">SIPRAKA</h3>
             </a>
 
@@ -109,8 +109,8 @@ if ($conn->connect_error) {
 $message = ""; // Variabel untuk menampilkan pesan
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $nama = $_POST['nama'];
-    $stmt = $conn->prepare("INSERT INTO du_di (nama) VALUES (?)");
+    $nama = $_POST['nama_dudi'];
+    $stmt = $conn->prepare("INSERT INTO data_dudi (nama_dudi) VALUES (?)");
     $stmt->bind_param("s", $nama);
 
     if ($stmt->execute()) {
