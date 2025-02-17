@@ -7,7 +7,7 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
-    
+
     <link rel="icon" type="jpg" href="img/rakanya.jpg">
 
     <!-- Favicon -->
@@ -54,22 +54,64 @@
                                 <h3 class="text-primary">SIPRAKA</h3>
                             </a>
                         </div>
-                        <div class="form-floating mb-3">
-                            <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                            <label for="floatingInput">Username</label>
-                        </div>
-                        <div class="form-floating mb-4">
-                            <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
-                            <label for="floatingPassword">Password</label>
-                        </div>
-                        </div>
-                        <button type="submit" class="btn btn-primary py-3 w-100 mb-4">Login</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+                       <form action="login.php" method="POST">
+    <div class="form-floating mb-3">
+        <input type="text" class="form-control" name="username" placeholder="Username" required>
+        <label>Username</label>
+    </div>
+    <div class="form-floating mb-4">
+        <input type="password" class="form-control" name="password" placeholder="Password" required>
+        <label>Password</label>
+    </div>
+    <button type="submit" class="btn btn-primary py-3 w-100 mb-4">Login</button>
+</form>
+
         <!-- Sign In End -->
-  
+        <?php
+session_start();
+$conn = new mysqli("localhost", "root", "", "db_sipraka");
+
+if ($conn->connect_error) {
+    die("Koneksi gagal: " . $conn->connect_error);
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $username = $_POST["username"];
+    $password = $_POST["password"];
+
+    // Cek user berdasarkan username
+    $stmt = $conn->prepare("SELECT id, password, role FROM login WHERE username = ?");
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows == 1) {
+        $user = $result->fetch_assoc();
+
+        // Cek password
+        if (password_verify($password, $user["password"])) {
+            $_SESSION["user_id"] = $user["id"];
+            $_SESSION["username"] = $username;
+            $_SESSION["role"] = $user["role"];
+
+            // Redirect sesuai role
+            if ($user["role"] == "admin") {
+                header("Location: dasboard_admin.php");
+            } elseif ($user["role"] == "guru") {
+                header("Location: dasboard_guru.php");
+            } elseif ($user["role"] == "siswa") {
+                header("Location: siswa_dashboard.php");
+            }
+            exit();
+        } else {
+            echo "<script>alert('Password salah!'); window.location='index.php';</script>";
+        }
+    } else {
+        echo "<script>alert('Username tidak ditemukan!'); window.location='index.php';</script>";
+    }
+}
+?>
+
 
 
 

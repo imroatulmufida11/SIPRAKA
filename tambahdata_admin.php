@@ -14,7 +14,6 @@
     <link href="img/favicon.ico" rel="icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
-
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -36,19 +35,20 @@
 </head>
 
 <body>
-<div class="container-xxl position-relative bg-white d-flex p-0">
-    <!-- Spinner Start -->
-    <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
-        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
-            <span class="sr-only">Loading...</span>
+    <div class="container-xxl position-relative bg-white d-flex p-0">
+        <!-- Spinner Start -->
+        <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
         </div>
-    </div>
-    <!-- Spinner End -->
+        <!-- Spinner End -->
 
-    <!-- Sidebar Start -->
-    <div class="sidebar pe-4 pb-3">
+
+        <!-- Sidebar Start -->
+        <div class="sidebar pe-4 pb-3">
         <nav class="navbar bg-light navbar-light">
-            <a href="index.html" class="navbar-brand mx-4 mb-3">
+            <a href="tambahdata_admin.php" class="navbar-brand mx-4 mb-3">
                 <h3 class="text-primary">SIPRAKA</h3>
             </a>
 
@@ -62,20 +62,18 @@
                     <span>Online</span>
                 </div>
             </div>
-            <div class="navbar-nav w-100">
-                <a href="dasboard_admin.php" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
-                <a href="tambahdata_admin.php" class="nav-item nav-link"><i class="fa-solid fa-calendar-plus me-2"></i>Tambah Data</a>
-                <a href="form.html" class="nav-item nav-link"><i class="fa-solid fa-th me-2"></i>Permohonan</a>
-                <a href="table.html" class="nav-item nav-link"><i class="fa-solid fa-eye me-2"></i>Monitoring</a>
-                <a href="chart.html" class="nav-item nav-link"><i class="fa-solid fa-hand-holding-heart me-2"></i>Penarikan</a>
-                <a href="chart.html" class="nav-item nav-link"><i class="fa-solid fa-pen me-2"></i>Absensi</a>
-            </div>
-        </nav>
-    </div>
-    <!-- Sidebar End -->
-
-    <!-- Content Start -->
-    <div class="content">
+        <div class="navbar-nav w-100">
+            <a href="dasboard_admin.php" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+            <a href="tambahdata_admin.php" class="nav-item nav-link active"><i class="fa fa-calendar-plus me-2"></i>Tambah Data</a>
+            <a href="permohonan_admin.php" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Permohonan</a>
+            <a href="form.html" class="nav-item nav-link"><i class="fa fa-eye me-2"></i>Monitoring</a>
+            <a href="table.html" class="nav-item nav-link"><i class="fa-solid fa-hand-holding-heart me-2"></i>Penarikan</a>
+            <a href="chart.html" class="nav-item nav-link"><i class="fa fa-pen me-2"></i>Absensi</a>
+        </div>
+    </nav>
+</div>
+ <!-- Content Start -->
+ <div class="content">
         <!-- Navbar Start -->
         <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0">
             <a href="index.html" class="navbar-brand d-flex d-lg-none me-4">
@@ -96,68 +94,68 @@
         </nav>
         <!-- Navbar End -->
 
-        <!-- Welcome Message -->
-        <div class="container-fluid pt-4 px-4">
-            <div class="row">
-                <div class="col-12">
-                    <div class="bg-light rounded p-4 text-center">
-                        <h3 class="text-primary">SELAMAT DATANG DI SIPRAKA</h3>
-                    </div>
-                </div>
+
+            <!-- Other Elements Start -->
+            <div class="container-fluid pt-4 px-4">
+    <div class="row">
+        <!-- Card Tambah Data -->
+        <div class="col-12">
+            <div class="bg-light rounded p-4 text-center">
+                <h3 class="text-primary">TAMBAH DATA</h3>
+                <p>Lengkapi informasi di bawah ini untuk menambahkan data yang diperlukan dalam sistem.</p>
             </div>
         </div>
+    </div>
 
-        <!-- Sale & Revenue Start -->
-        <div class="container-fluid pt-4 px-4">
-            <div class="row row-cols-1 row-cols-md-3 g-4">
-                <div class="col">
-                    <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
-                        <i class="fa fa-chart-line fa-3x text-primary"></i>
-                        <div class="ms-3">
-                            <p class="mb-2">Total Siswa PKL</p>
-                            <h6 class="mb-0">340</h6>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
-                        <i class="fa fa-chart-bar fa-3x text-primary"></i>
-                        <div class="ms-3">
-                            <p class="mb-2">Guru Pembimbing</p>
-                            <h6 class="mb-0">20</h6>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
-                        <i class="fa fa-chart-area fa-3x text-primary"></i>
-                        <div class="ms-3">
-                            <p class="mb-2">Total Du/Di</p>
-                            <h6 class="mb-0">100</h6>
-                        </div>
-                    </div>
-                </div>
-            </div>
+  <!-- Row untuk 4 Card -->
+<div class="row mt-4">
+    <!-- Card Data Du/Di -->
+    <div class="col-md-3">
+        <div class="card bg-light text-center p-3 h-100 d-flex flex-column justify-content-between">
+            <i class="fa fa-building text-warning fs-1"></i>
+            <h5 class="mt-3">Data Du/Di</h5>
+            <p class="flex-grow-1">Kelola data Dunia Usaha/Dunia Industri secara efisien.</p>
+            <a href="data_dudi.php" class="btn btn-warning mt-auto">Tambah Data</a>
         </div>
+    </div>
 
-        <!-- Panduan Pengguna -->
-        <div class="container-fluid pt-4 px-4">
-            <div class="row">
-                <div class="col-12">
-                    <div class="bg-light rounded p-4">
-                        <h5 class="text-primary mb-3">Panduan Pengguna</h5>
-                        <ul class="list-unstyled">
-                            <li><strong>Siswa:</strong> Melakukan absensi harian.</li>
-                            <li><strong>Guru:</strong> Mengisi data monitoring dan memberi penilaian.</li>
-                            <li><strong>Admin:</strong> Mengelola seluruh data.</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+    <!-- Card Data Siswa -->
+    <div class="col-md-3">
+        <div class="card bg-light text-center p-3 h-100 d-flex flex-column justify-content-between">
+            <i class="fa fa-user-graduate text-primary fs-1"></i>
+            <h5 class="mt-3">Data Siswa</h5>
+            <p class="flex-grow-1">Kelola data siswa yang terdaftar dalam sistem.</p>
+            <a href="data_siswa.php" class="btn btn-primary mt-auto">Tambah Data</a>
         </div>
+    </div>
 
-        <!-- Footer Start -->
-        <div class="container-fluid pt-4 px-4">
+    <!-- Card Data Pembimbing -->
+    <div class="col-md-3">
+        <div class="card bg-light text-center p-3 h-100 d-flex flex-column justify-content-between">
+            <i class="fa fa-user-tie text-success fs-1"></i>
+            <h5 class="mt-3">Data Pembimbing</h5>
+            <p class="flex-grow-1">Kelola data pembimbing yang mendampingi siswa.</p>
+            <a href="data_pembimbing.php" class="btn btn-success mt-auto">Tambah Data</a>
+        </div>
+    </div>
+
+    <!-- Card Semua Data -->
+    <div class="col-md-3">
+        <div class="card bg-light text-center p-3 h-100 d-flex flex-column justify-content-between">
+            <i class="fa fa-database text-secondary fs-1"></i>
+            <h5 class="mt-3">Semua Data</h5>
+            <p class="flex-grow-1">Lihat dan kelola semua data yang telah diinputkan.</p>
+            <a href="data_semua.php" class="btn btn-secondary mt-auto">Lihat Data</a>
+        </div>
+    </div>
+</div>
+
+                    
+            <!-- Other Elements End -->
+
+
+          <!-- Footer Start -->
+          <div class="container-fluid pt-4 px-4">
             <div class="bg-light rounded-top p-4">
                 <div class="row">
                     <div class="col-12 col-sm-6 text-center text-sm-start">
@@ -169,12 +167,8 @@
     </div>
     <!-- Content End -->
 </div>
-
 <!-- Footer End -->
 
-            <!-- Footer End -->
-        </div>
-        <!-- Content End -->
 
 
         <!-- Back to Top -->
