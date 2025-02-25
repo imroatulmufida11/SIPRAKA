@@ -65,8 +65,8 @@
         <div class="navbar-nav w-100">
             <a href="dasboard_admin.php" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
             <a href="tambahdata_admin.php" class="nav-item nav-link active"><i class="fa fa-calendar-plus me-2"></i>Tambah Data</a>
-            <a href="permohonan_admin.php" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Permohonan</a>
-            <a href="form.html" class="nav-item nav-link"><i class="fa fa-eye me-2"></i>Monitoring</a>
+            <a href="form_permohonan.php" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Permohonan</a>
+            <a href="from_monitoring.php" class="nav-item nav-link"><i class="fa fa-eye me-2"></i>Monitoring</a>
             <a href="table.html" class="nav-item nav-link"><i class="fa-solid fa-hand-holding-heart me-2"></i>Penarikan</a>
             <a href="chart.html" class="nav-item nav-link"><i class="fa fa-pen me-2"></i>Absensi</a>
         </div>
@@ -99,6 +99,7 @@ $username = "root";
 $password = "";
 $dbname = "db_sipraka";
 
+// Koneksi ke database
 $conn = new mysqli($servername, $username, $password, $dbname);
 
 if ($conn->connect_error) {
@@ -113,7 +114,7 @@ $message = "";
 
 // Jika form disubmit
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $nama = $_POST['nama_pembimbing'];
+    $nama_pembimbing = $_POST['nama']; // Sesuai dengan name di input form
     $jurusan = $_POST['jurusan'];
     $du_di = $_POST['du_di']; // Nama Du/Di dari dropdown
 
@@ -147,19 +148,14 @@ $conn->close();
                     <div class="form-floating mb-3">
                         <select class="form-select" id="jurusanSelect" name="jurusan" required>
                             <option selected disabled>Pilih Jurusan</option>
-                            <option value="XII DPIB">XII DPIB</option>
-                            <option value="XII TITL">XII TITL</option>
-                            <option value="XII TPM 1">XII TPM 1</option>
-                            <option value="XII TPM 2">XII TPM 2</option>
-                            <option value="XII TBSM 1">XII TBSM 1</option>
-                            <option value="XII TBSM 2">XII TBSM 2</option>
-                            <option value="XII TKRO 1">XII TKRO 1</option>
-                            <option value="XII TKRO 2">XII TKRO 2</option>
-                            <option value="XII TKJ 1">XII TKJ 1</option>
-                            <option value="XII TKJ 2">XII TKJ 2</option>
-                            <option value="XII RPL 1">XII RPL 1</option>
-                            <option value="XII RPL 2">XII RPL 2</option>
-                            <option value="XII KI">XII KI</option>
+                            <option value="XII DPIB">DPIB</option>
+                            <option value="XII TITL">TITL</option>
+                            <option value="XII TPM 1">TPM</option>
+                            <option value="XII TBSM 1">TBSM</option>
+                            <option value="XII TKRO 2">TKRO</option>
+                            <option value="XII TKJ 1">TKJ</option>
+                            <option value="XII RPL 2">RPL</option>
+                            <option value="XII KI">KI</option>
                         </select>
                         <label for="jurusanSelect">Jurusan</label>
                     </div>
@@ -167,7 +163,9 @@ $conn->close();
                         <select class="form-select" id="duDiSelect" name="du_di" required>
                             <option selected disabled>Pilih Du/Di</option>
                             <?php while ($row = $result_du_di->fetch_assoc()) : ?>
-                                <option value="<?= $row['nama']; ?>"><?= $row['nama']; ?></option>
+                                <option value="<?= htmlspecialchars($row['nama_dudi']); ?>">
+                                    <?= htmlspecialchars($row['nama_dudi']); ?>
+                                </option>
                             <?php endwhile; ?>
                         </select>
                         <label for="duDiSelect">Nama Du/Di</label>
@@ -181,6 +179,7 @@ $conn->close();
         </div>
     </div>
 </div>
+
 
                     
             <!-- Other Elements End -->

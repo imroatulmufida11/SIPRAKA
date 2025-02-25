@@ -65,8 +65,8 @@
         <div class="navbar-nav w-100">
             <a href="dasboard_admin.php" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
             <a href="tambahdata_admin.php" class="nav-item nav-link active"><i class="fa fa-calendar-plus me-2"></i>Tambah Data</a>
-            <a href="permohonan_admin.php" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Permohonan</a>
-            <a href="form.html" class="nav-item nav-link"><i class="fa fa-eye me-2"></i>Monitoring</a>
+            <a href="form_permohonan.php" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Permohonan</a>
+            <a href="from_monitoring.php" class="nav-item nav-link"><i class="fa fa-eye me-2"></i>Monitoring</a>
             <a href="table.html" class="nav-item nav-link"><i class="fa-solid fa-hand-holding-heart me-2"></i>Penarikan</a>
             <a href="chart.html" class="nav-item nav-link"><i class="fa fa-pen me-2"></i>Absensi</a>
         </div>
@@ -109,9 +109,11 @@ if ($conn->connect_error) {
 $message = ""; // Variabel untuk menampilkan pesan
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $nama = $_POST['nama_dudi'];
-    $stmt = $conn->prepare("INSERT INTO data_dudi (nama_dudi) VALUES (?)");
-    $stmt->bind_param("s", $nama);
+    $nama = $_POST['nama'];
+    $alamat = $_POST['alamat'];
+    
+    $stmt = $conn->prepare("INSERT INTO data_dudi (nama_dudi, alamat) VALUES (?, ?)");
+    $stmt->bind_param("ss", $nama, $alamat);
 
     if ($stmt->execute()) {
         $message = "<div class='alert alert-success mt-3'>Data berhasil disimpan.</div>";
@@ -130,10 +132,14 @@ $conn->close();
         <div class="col-12">
             <div class="bg-light rounded h-100 p-4">
                 <h6 class="mb-4">Data Du/Di</h6>
-                <form action="" method="POST"> <!-- action dikosongkan agar tetap di halaman yang sama -->
+                <form action="" method="POST">
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control" id="namaInput" name="nama" placeholder="Masukkan Nama" required>
-                        <label for="namaInput">Nama Du/Di</label>
+                        <input type="text" class="form-control" id="namaDudi" name="nama" placeholder="Masukkan Nama" required>
+                        <label for="namaDudi">Nama Du/Di</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="alamatDudi" name="alamat" placeholder="Masukkan Alamat" required>
+                        <label for="alamatDudi">Alamat Du/Di</label>
                     </div>
                     <div class="mt-3">
                         <button type="submit" class="btn btn-primary w-100">Simpan</button>
@@ -144,6 +150,7 @@ $conn->close();
         </div>
     </div>
 </div>
+
 
                    
             <!-- Other Elements End -->

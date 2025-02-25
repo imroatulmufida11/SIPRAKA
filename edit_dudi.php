@@ -65,7 +65,7 @@
         <div class="navbar-nav w-100">
             <a href="dasboard_admin.php" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
             <a href="tambahdata_admin.php" class="nav-item nav-link active"><i class="fa fa-calendar-plus me-2"></i>Tambah Data</a>
-            <a href="permohonan_admin.php" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Permohonan</a>
+            <a href="form_permohonan.php" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Permohonan</a>
             <a href="form.html" class="nav-item nav-link"><i class="fa fa-eye me-2"></i>Monitoring</a>
             <a href="table.html" class="nav-item nav-link"><i class="fa-solid fa-hand-holding-heart me-2"></i>Penarikan</a>
             <a href="chart.html" class="nav-item nav-link"><i class="fa fa-pen me-2"></i>Absensi</a>
@@ -127,8 +127,8 @@ $conn->close();
             <div class="navbar-nav w-100">
                 <a href="dasboard_admin.php" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
                 <a href="tambahdata_admin.php" class="nav-item nav-link active"><i class="fa fa-calendar-plus me-2"></i>Tambah Data</a>
-                <a href="permohonan_admin.php" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Permohonan</a>
-                <a href="form.html" class="nav-item nav-link"><i class="fa fa-eye me-2"></i>Monitoring</a>
+                <a href="form_permohonan.php" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Permohonan</a>
+                <a href="from_monitoring.php" class="nav-item nav-link"><i class="fa fa-eye me-2"></i>Monitoring</a>
                 <a href="table.html" class="nav-item nav-link"><i class="fa-solid fa-hand-holding-heart me-2"></i>Penarikan</a>
                 <a href="chart.html" class="nav-item nav-link"><i class="fa fa-pen me-2"></i>Absensi</a>
             </div>
@@ -148,28 +148,84 @@ $conn->close();
         <div class="row">
     <div class="col-12">
 
-    <div class="container-fluid pt-4 px-4">
-                    <div class="row g-4">
-                        <div class="col-12">
-                            <div class="bg-light rounded h-100 p-4">
-                                <h2 class="mb-4">Edit Data Du/Di</h2>
-                                <div class="card">
-                        <div class="card-body">
-                            <form method="POST">
-                                <div class="mb-3">
-                                    <label class="form-label">Nama Du/Di</label>
-                                    <input type="text" class="form-control" name="nama" value="<?= htmlspecialchars($row['nama'] ?? '') ?>" required>
-                                </div>
-                                <div class="d-flex justify-content-between">
-                                    <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
-                                    <a href="data_dudi.php" class="btn btn-secondary">Batal</a>
-                                </div>
-                            </form>
-                        </div>
+    <?php
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "db_sipraka";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+if ($conn->connect_error) {
+    die("Koneksi gagal: " . $conn->connect_error);
+}
+
+// Ambil ID dari URL
+$id = $_GET['id'] ?? null;
+if (!$id) {
+    die("ID tidak ditemukan.");
+}
+
+// Ambil data berdasarkan ID
+$sql = "SELECT * FROM data_dudi WHERE id = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $id);
+$stmt->execute();
+$result = $stmt->get_result();
+$row = $result->fetch_assoc();
+
+if (!$row) {
+    die("Data tidak ditemukan.");
+}
+
+// Proses update data
+$message = "";
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $nama = $_POST['nama'];
+    $alamat = $_POST['alamat'];
+
+    $update_sql = "UPDATE data_dudi SET nama_dudi = ?, alamat = ? WHERE id = ?";
+    $update_stmt = $conn->prepare($update_sql);
+    $update_stmt->bind_param("ssi", $nama, $alamat, $id);
+
+    if ($update_stmt->execute()) {
+        $message = "<div class='alert alert-success mt-3'>Data berhasil diperbarui.</div>";
+    } else {
+        $message = "<div class='alert alert-danger mt-3'>Error: " . $update_stmt->error . "</div>";
+    }
+}
+
+$conn->close();
+?>
+
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+        <div class="col-12">
+            <div class="bg-light rounded h-100 p-4">
+                <h2 class="mb-4">Edit Data Du/Di</h2>
+                <div class="card">
+                    <div class="card-body">
+                        <form method="POST" action="">
+                            <div class="mb-3">
+                                <label class="form-label">Nama Du/Di</label>
+                                <input type="text" class="form-control" name="nama" value="<?= htmlspecialchars($row['nama_dudi'] ?? '') ?>" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Alamat Du/Di</label>
+                                <input type="text" class="form-control" name="alamat" value="<?= htmlspecialchars($row['alamat'] ?? '') ?>" required>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                                <a href="data_dudi.php" class="btn btn-secondary">Batal</a>
+                            </div>
+                        </form>
+                        <?= $message; ?>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+</div>
 
         <!-- Footer Start -->
         <div class="container-fluid pt-4 px-4">

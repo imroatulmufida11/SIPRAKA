@@ -65,8 +65,8 @@
         <div class="navbar-nav w-100">
             <a href="dasboard_admin.php" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
             <a href="tambahdata_admin.php" class="nav-item nav-link active"><i class="fa fa-calendar-plus me-2"></i>Tambah Data</a>
-            <a href="permohonan_admin.php" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Permohonan</a>
-            <a href="form.html" class="nav-item nav-link"><i class="fa fa-eye me-2"></i>Monitoring</a>
+            <a href="form_permohonan.php" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Permohonan</a>
+            <a href="from_monitoring.php" class="nav-item nav-link"><i class="fa fa-eye me-2"></i>Monitoring</a>
             <a href="table.html" class="nav-item nav-link"><i class="fa-solid fa-hand-holding-heart me-2"></i>Penarikan</a>
             <a href="chart.html" class="nav-item nav-link"><i class="fa fa-pen me-2"></i>Absensi</a>
         </div>
@@ -85,7 +85,7 @@ if ($conn->connect_error) {
     die("Koneksi gagal: " . $conn->connect_error);
 }
 
-$sql = "SELECT id, nama_dudi FROM data_dudi";
+$sql = "SELECT id, nama_dudi, alamat FROM data_dudi"; // Tambahkan alamat ke query
 $result = $conn->query($sql);
 ?>
 
@@ -108,6 +108,7 @@ $result = $conn->query($sql);
                         <tr>
                             <th>No</th>
                             <th>Nama Du/Di</th>
+                            <th>Alamat Du/Di</th> <!-- Tambahkan header untuk alamat -->
                             <th class="text-center">Aksi</th>
                         </tr>
                     </thead>
@@ -119,6 +120,7 @@ $result = $conn->query($sql);
                                 echo "<tr>";
                                 echo "<td>" . $no++ . "</td>";
                                 echo "<td>" . htmlspecialchars($row['nama_dudi']) . "</td>";
+                                echo "<td>" . htmlspecialchars($row['alamat']) . "</td>"; // Tampilkan alamat
                                 echo "<td class='text-center'>
                                         <div class='d-flex justify-content-center gap-2'>
                                             <a href='edit_dudi.php?id=" . $row['id'] . "' class='btn btn-warning btn-sm'>
@@ -132,7 +134,7 @@ $result = $conn->query($sql);
                                 echo "</tr>";
                             }
                         } else {
-                            echo "<tr><td colspan='3' class='text-center'>Tidak ada data</td></tr>";
+                            echo "<tr><td colspan='4' class='text-center'>Tidak ada data</td></tr>"; // Sesuaikan colspan
                         }
                         ?>
                     </tbody>
