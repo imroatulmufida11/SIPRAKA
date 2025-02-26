@@ -96,7 +96,7 @@
         </nav>
 
         <?php
-require 'proses.php';
+require 'proses_monitoring.php';
 
 if (!isset($_GET['id'])) {
     echo "ID surat tidak ditemukan!";

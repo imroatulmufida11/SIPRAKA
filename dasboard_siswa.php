@@ -63,10 +63,10 @@
                 </div>
             </div>
             <div class="navbar-nav w-100">
-                <a href="dasboard_guru.php" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
-                <a href="permohonan_guru.php" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Permohonan</a>
-                <a href="monitoring_guru.php" class="nav-item nav-link"><i class="fa-solid fa-eye me-2"></i>Monitoring</a>
-                <a href="penarikan_guru.php" class="nav-item nav-link"><i class="fa-solid fa-hand-holding-heart me-2"></i>Penarikan</a>
+                <a href="dasboard_siswa.php" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                <a href="absensi_siswa.php" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Absensi</a>
+                <a href="monitoring_siswa.php" class="nav-item nav-link"><i class="fa-solid fa-eye me-2"></i>Monitoring</a>
+                <a href="penarikan_siswa.php" class="nav-item nav-link"><i class="fa-solid fa-hand-holding-heart me-2"></i>Penarikan</a>
 
             </div>
         </nav>
@@ -86,7 +86,7 @@
             <div class="nav-item dropdown ms-auto">
                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                     <img class="rounded-circle me-lg-2" src="img/foto.jpg" alt="" style="width: 40px; height: 40px;">
-                    <span class="d-none d-lg-inline-flex">Guru</span>
+                    <span class="d-none d-lg-inline-flex">Siswa</span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
                     <a href="login.php" class="dropdown-item">Keluar</a>

@@ -85,7 +85,7 @@ if ($conn->connect_error) {
     die("Koneksi gagal: " . $conn->connect_error);
 }
 
-$sql = "SELECT id, nama_pembimbing FROM data_pembimbing";
+$sql = "SELECT id, nama_pembimbing, jurusan, du_di FROM data_pembimbing";
 $result = $conn->query($sql);
 ?>
 
@@ -111,42 +111,45 @@ $result = $conn->query($sql);
                     <thead class="table-light">
                         <tr>
                             <th>No</th>
-                            <th>Nama Du/Di</th>
+                            <th>Nama Pembimbing</th>
+                            <th>Jurusan</th>
+                            <th>Du/Di</th>
                             <th class="text-center">Aksi</th>
                         </tr>
                     </thead>
-                            <tbody>
-                                <?php
-                                if ($result->num_rows > 0) {
-                                    $no = 1;
-                                    while ($row = $result->fetch_assoc()) {
-                                        echo "<tr>";
-                                        echo "<td>" . $no++ . "</td>";
-                                        echo "<td>" . htmlspecialchars($row['nama_pembimbing']) . "</td>";
-                                        echo "<td class='text-center'>
-                                                <div class='d-flex justify-content-center gap-2'>
-                                                    <a href='edit_guru.php?id=" . $row['id'] . "' class='btn btn-warning btn-sm'>
-                                                        <i class='fa fa-edit'></i>
-                                                    </a>
-                                                    <a href='hapus_guru.php?id=" . $row['id'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"Yakin ingin menghapus?\")'>
-                                                        <i class='fa fa-trash'></i>
-                                                    </a>
-                                                </div>
-                                              </td>";
-                                        echo "</tr>";
-                                    }
-                                } else {
-                                    echo "<tr><td colspan='3' class='text-center'>Tidak ada data</td></tr>";
-                                }
-                                ?>
-                            </tbody>
-                        </table>
-                    </div> <!-- Tutup div .table-responsive -->
-                </div>
+                    <tbody>
+                        <?php
+                        if ($result->num_rows > 0) {
+                            $no = 1;
+                            while ($row = $result->fetch_assoc()) {
+                                echo "<tr>";
+                                echo "<td>" . $no++ . "</td>";
+                                echo "<td>" . htmlspecialchars($row['nama_pembimbing']) . "</td>";
+                                echo "<td>" . htmlspecialchars($row['jurusan']) . "</td>";
+                                echo "<td>" . htmlspecialchars($row['du_di']) . "</td>"; 
+                                echo "<td class='text-center'>
+                                        <div class='d-flex justify-content-center gap-2'>
+                                            <a href='edit_guru.php?id=" . $row['id'] . "' class='btn btn-warning btn-sm'>
+                                                <i class='fa fa-edit'></i>
+                                            </a>
+                                            <a href='hapus_guru.php?id=" . $row['id'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"Yakin ingin menghapus?\")'>
+                                                <i class='fa fa-trash'></i>
+                                            </a>
+                                        </div>
+                                      </td>";
+                                echo "</tr>";
+                            }
+                        } else {
+                            echo "<tr><td colspan='4' class='text-center'>Tidak ada data</td></tr>"; // Sesuaikan colspan dengan jumlah kolom
+                        }
+                        ?>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 </div>
+
     <!-- Content End -->
 
  <!-- Footer Start -->
