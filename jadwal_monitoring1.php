@@ -63,8 +63,8 @@
                 </div>
             </div>
             <div class="navbar-nav w-100">
-                <a href="dasboard_guru.php" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
-                <a href="permohonan_guru.php" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Permohonan</a>
+                <a href="dasboard_guru.php" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                <a href="permohonan_guru.php" class="nav-item nav-link active"><i class="fa fa-th me-2"></i>Permohonan</a>
                 <a href="monitoring_guru.php" class="nav-item nav-link"><i class="fa-solid fa-eye me-2"></i>Monitoring</a>
                 <a href="penarikan_guru.php" class="nav-item nav-link"><i class="fa-solid fa-hand-holding-heart me-2"></i>Penarikan</a>
 
@@ -95,65 +95,7 @@
         </nav>
         <!-- Navbar End -->
 
-        <!-- Welcome Message -->
-        <div class="container-fluid pt-4 px-4">
-            <div class="row">
-                <div class="col-12">
-                    <div class="bg-light rounded p-4 text-center">
-                        <h3 class="text-primary">SELAMAT DATANG DI SIPRAKA</h3>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Sale & Revenue Start -->
-        <div class="container-fluid pt-4 px-4">
-            <div class="row row-cols-1 row-cols-md-3 g-4">
-                <div class="col">
-                    <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
-                        <i class="fa fa-chart-line fa-3x text-primary"></i>
-                        <div class="ms-3">
-                            <p class="mb-2">Total Siswa PKL</p>
-                            <h6 class="mb-0">340</h6>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
-                        <i class="fa fa-chart-bar fa-3x text-primary"></i>
-                        <div class="ms-3">
-                            <p class="mb-2">Guru Pembimbing</p>
-                            <h6 class="mb-0">20</h6>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
-                        <i class="fa fa-chart-area fa-3x text-primary"></i>
-                        <div class="ms-3">
-                            <p class="mb-2">Data Telah Disimpan</p>
-                            <h6 class="mb-0">355</h6>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Panduan Pengguna -->
-        <div class="container-fluid pt-4 px-4">
-            <div class="row">
-                <div class="col-12">
-                    <div class="bg-light rounded p-4">
-                        <h5 class="text-primary mb-3">Panduan Pengguna</h5>
-                        <ul class="list-unstyled">
-                            <li><strong>Siswa:</strong> Melakukan absensi harian.</li>
-                            <li><strong>Guru:</strong> Mengisi data monitoring dan memberi penilaian.</li>
-                            <li><strong>Admin:</strong> Mengelola seluruh data siswa.</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
+    
 
         <!-- Footer Start -->
         <div class="container-fluid pt-4 px-4">

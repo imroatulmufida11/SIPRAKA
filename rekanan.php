@@ -37,6 +37,13 @@
 
 <body class="index-page">
 
+<style>
+  .mobile-nav-toggle {
+    display: none !important;
+}
+
+</style>
+
 <header id="header" class="header d-flex align-items-center sticky-top bg-light">
 <div class="container-fluid container-xl d-flex align-items-center justify-content-start">
     
@@ -73,7 +80,7 @@
       </a>
       <ul class="dropdown-menu">
         <li><a class="dropdown-item" href="alur.php">Alur Prakerin</a></li>
-        <li><a class="dropdown-item" href="#du-di-rekanan">Du/Di Rekanan</a></li>
+        <li><a class="dropdown-item" href="rekanan.php">Du/Di Rekanan</a></li>
       </ul>
     </li>
   </ul>
@@ -97,89 +104,367 @@
   <p>Daftar Du/di Rekanan yang bekerja sama dengan SMKN 2 Bangkalan</p>
 </div><!-- End Section Title -->
 
+<style>
+
+        .faq-card {
+            max-width: 600px; /* Maksimal lebar */
+            width: 100%;
+        }
+        .faq-item {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .faq-item h3 {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+        .faq-content {
+            padding-top: 10px;
+        }
+        .faq-content ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        .faq-content ul li {
+            padding: 5px 0;
+        }
+    </style>
+
 <div class="container">
-
-  <div class="row justify-content-center">
-
-    <div class="col-lg-10" data-aos="fade-up" data-aos-delay="100">
-
-      <div class="faq-container">
-      <div class="card">
-    <div class="card bg-light">
-        <button class="btn w-100 text-start fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#listIndustri">
-            <i class="bi bi-dash-circle me-2"></i> DAFTAR INDUSTRI PROGLI GAMBAR BANGUNAN
-        </button>
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="faq-item p-3 mb-3 shadow-sm rounded">
+                <h3 class="mb-0">
+                    <a class="text-decoration-none d-block fw-bold" data-bs-toggle="collapse" href="#faq1">
+                        PEMBANGUNAN DAN INFORMASI BANGUNAN
+                        <i class="bi bi-chevron-down"></i>
+                    </a>
+                </h3>
+                        <div id="faq1" class="collapse">
+                            <div class="faq-content">
+                                <ul class="list-unstyled">
+                                    <li>› PT. PERTAMA ANUGRAH YALAPERSADA</li>
+                                    <li>› PT. WISMA MUKTI</li>
+                                    <li>› PT. WIJAYA KARYA BETON</li>
+                                    <li>› CV. MATA ANGIN KONSULTAN</li>
+                                    <li>› CV. WIJAYA</li>
+                                    <li>› PPPPTK VEDC MALANG</li>
+                                    <li>› CV. KONSOEI</li>
+                                    <li>› PT. RANCANG PERSADA</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div id="listIndustri" class="collapse show">
-        <div class="card-body">
-            <ul class="list-unstyled">
-                <li>› PT. PERTAMA ANUGRAH YALAPERSADA</li>
-                <li>› PT. WISMA MUKTI</li>
-                <li>› PT. WIJAYA KARYA BETON</li>
-                <li>› CV. MATA ANGIN KONSULTAN</li>
-                <li>› CV. WIJAYA</li>
-                <li>› PPPPTK VEDC MALANG</li>
-                <li>› CV. KONSOEI</li>
-                <li>› PT. RANCANG PERSADA</li>
-            </ul>
+
+    <div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="faq-item p-3 mb-3 shadow-sm rounded">
+                <h3 class="mb-0">
+                    <a class="text-decoration-none d-block fw-bold" data-bs-toggle="collapse" href="#faq2">
+                        TEHNIK INSTALASI TENAGA LISTRIK
+                        <i class="bi bi-chevron-down"></i>
+                    </a>
+                </h3>
+                <div id="faq2" class="collapse">
+                    <div class="faq-content mt-2">
+                        <ul class="list-unstyled">
+                            <li>› PT. PLN (PERSERO) UPJ BANGKALAN</li>
+                            <li>› PT. PLN (PERSERO) UPJ BLEGA</li>
+                            <li>› PT. PLN (PERSERO) UPJ KAMAL</li>
+                            <li>› PT. PAL INDONESIA</li>
+                            <li>› PT. ASSI</li>
+                            <li>› ADITYA ELEKTRO</li>
+                            <li>› PT. WIJAYA KARYA BETON</li>
+                            <li>› UNIVERSITAS TRUNOJOYO MADURA</li>
+                            <li>› PT. PERWIRA MULTI JAYA KENCANA</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item p-3 mb-3 shadow-sm rounded">
+                <h3 class="mb-0">
+                    <a class="text-decoration-none d-block fw-bold" data-bs-toggle="collapse" href="#faq3">
+                        TEHNIK PEMESINAN
+                        <i class="bi bi-chevron-down"></i>
+                    </a>
+                </h3>
+                <div id="faq3" class="collapse">
+                    <div class="faq-content mt-2">
+                        <ul class="list-unstyled">
+                            <li>› PT. DUMAS</li>
+                            <li>› PT. COKRO BERSAUDARA</li>
+                            <li>› PT. ADILUHUNG SARANA SEGARA INDONESIA</li>
+                            <li>› PT. PAL SURABAYA</li>
+                            <li>› CV. JAYATAMA TEKNIK</li>
+                            <li>› PT. ISPAT INDO</li>
+                            <li>› ANUGERAH PUTRA LOKA</li>
+                            <li>› BENGKEL BERKAT ANUGERAH</li>
+                            <li>› SAM BENGKEL</li>
+                            <li>› BENGKEL LAS TIKO</li>
+                            <li>› BERKAT TEKNIK</li>
+                            <li>› MARQSAH</li>
+                            <li>› BERJAYA LAS</li>
+                            <li>› SAPANYANA LAS</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
 
-<!-- End Faq item-->
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="faq-item p-3 mb-3 shadow-sm rounded">
+                <h3 class="mb-0">
+                    <a class="text-decoration-none d-block fw-bold" data-bs-toggle="collapse" href="#faq4">
+                       TEHNIK KENDARAAN RINGAN OTOMOTIF
+                        <i class="bi bi-chevron-down"></i>
+                    </a>
+                </h3>
+                        <div id="faq4" class="collapse">
+                            <div class="faq-content">
+                                <ul class="list-unstyled">
+                                    <li>› HONDA SURABAYA CENTER</li>
+                                    <li>› PT. MURNI BERLIAN MTR </li>
+                                    <li>› ARUM MOTOR</li>
+                                    <li>› PT. BLUE BIRD</li>
+                                    <li>› PERUM DARMI UNIT KOTA SURABAYA</li>
+                                    <li>› RAJAWALI PERKASA MOTOR</li>
+                                    <li>› BENGRAH 05-41-01 KODAM 5 BRAWIJAYA</li>
+                                    <li>› SURYA MOTOR</li>
+                                    <li>› BANCARAN MOTOR</li>
+                                    <li>› LOKA JAYA MOTOR</li>
+                                    <li>› KOREA MOTOR</li>
+                                    <li>› JONI MOTOR</li>
+                                    <li>› MAJU JAYA MOTOR</li>
+                                    <li>› NISSAN</li>
+                                    <li>› BENGKEL MAIN</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        <div class="faq-item">
-          <h3>Feugiat scelerisque varius morbi enim nunc faucibus?</h3>
-          <div class="faq-content">
-          <ul class="list-unstyled">
-                <li>› PT. PERTAMA ANUGRAH YALAPERSADA</li>
-                <li>› PT. WISMA MUKTI</li>
-                <li>› PT. WIJAYA KARYA BETON</li>
-                <li>› CV. MATA ANGIN KONSULTAN</li>
-                <li>› CV. WIJAYA</li>
-                <li>› PPPPTK VEDC MALANG</li>
-                <li>› CV. KONSOEI</li>
-                <li>› PT. RANCANG PERSADA</li>
-            </ul>
-          </div>
-          <i class="faq-toggle bi bi-chevron-right"></i>
-        </div><!-- End Faq item-->
+    <div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="faq-item p-3 mb-3 shadow-sm rounded">
+                <h3 class="mb-0">
+                    <a class="text-decoration-none d-block fw-bold" data-bs-toggle="collapse" href="#faq5">
+                       TEHNIK KOMPUTER DAN JARINGAN 
+                        <i class="bi bi-chevron-down"></i>
+                    </a>
+                </h3>
+                        <div id="faq5" class="collapse">
+                            <div class="faq-content">
+                                <ul class="list-unstyled">
+                                    <li>› ASZEEL COMP</li>
+                                    <li>› AULIA COMP</li>
+                                    <li>› CV. YONAS ECOMPUTER</li>
+                                    <li>› CV. BUANA SEJAHTERA</li>
+                                    <li>› ABAS COMPUTER</li>
+                                    <li>› AZKA COMPUTER</li>
+                                    <li>› SYELLA COMP</li>
+                                    <li>› AKBID NGUDIAA HUSADA</li>
+                                    <li>› FAKULTAS TEKNIK UNIJOYO</li>
+                                    <li>› PROGRAM STUDI D III KEBIDANAN BANGKALAN</li>
+                                    <li>› PT. ADILUHUNG SARANA SEGARA IND.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        <div class="faq-item">
-          <h3>Dolor sit amet consectetur adipiscing elit pellentesque?</h3>
-          <div class="faq-content">
-            <p>Eleifend mi in nulla posuere sollicitudin aliquam ultrices sagittis orci. Faucibus pulvinar elementum integer enim. Sem nulla pharetra diam sit amet nisl suscipit. Rutrum tellus pellentesque eu tincidunt. Lectus urna duis convallis convallis tellus. Urna molestie at elementum eu facilisis sed odio morbi quis</p>
-          </div>
-          <i class="faq-toggle bi bi-chevron-right"></i>
-        </div><!-- End Faq item-->
+    <div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="faq-item p-3 mb-3 shadow-sm rounded">
+                <h3 class="mb-0">
+                    <a class="text-decoration-none d-block fw-bold" data-bs-toggle="collapse" href="#faq6">
+                        REKAYASA PERANGKAT LUNAK
+                        <i class="bi bi-chevron-down"></i>
+                    </a>
+                </h3>
+                        <div id="faq6" class="collapse">
+                            <div class="faq-content">
+                                <ul class="list-unstyled">
+                                    <li>› NGUDIA HUSADA MADURA</li>
+                                    <li>› FAKULTAS TEKNIK UNIJOYO</li>
+                                    <li>› JURUSAN TEKNIK INFORMATIKA FTIf-ITS</li>
+                                    <li>› DINAS KOMUNIKASI DAN INFORMATIKA</li>
+                                    <li>› POLITEKNIK ELEKTRONIKA NEGERI SURABAYA</li>
+                                    <li>› CV. FIESTO INFORMATIKA SURABAYA</li>
+                                    <li>› PT. ADILUHUNG SARANA SEGARA INDONESIA</li>
+                                    <li>› CV. MADURA TECHNOVATION</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        <div class="faq-item">
-          <h3>Ac odio tempor orci dapibus. Aliquam eleifend mi in nulla?</h3>
-          <div class="faq-content">
-            <p>Dolor sit amet consectetur adipiscing elit pellentesque habitant morbi. Id interdum velit laoreet id donec ultrices. Fringilla phasellus faucibus scelerisque eleifend donec pretium. Est pellentesque elit ullamcorper dignissim. Mauris ultrices eros in cursus turpis massa tincidunt dui.</p>
-          </div>
-          <i class="faq-toggle bi bi-chevron-right"></i>
-        </div><!-- End Faq item-->
+    <div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="faq-item p-3 mb-3 shadow-sm rounded">
+                <h3 class="mb-0">
+                    <a class="text-decoration-none d-block fw-bold" data-bs-toggle="collapse" href="#faq7">
+                        TEHNIK SEPEDA MOTOR
+                        <i class="bi bi-chevron-down"></i>
+                    </a>
+                </h3>
+                        <div id="faq7" class="collapse">
+                            <div class="faq-content">
+                                <ul class="list-unstyled">
+                                    <li>› PT. AKOR</li>
+                                    <li>› SS “AKOR II”</li>
+                                    <li>› NEW LANCAR MOTOR</li>
+                                    <li>› MUSTIKA MOTOR</li>
+                                    <li>› SURYA AGUNG MOTOR</li>
+                                    <li>› ARAFAT MOTOR</li>
+                                    <li>› DAFA MOTOR</li>
+                                    <li>› JAYA MAKMUR MOTOR</li>
+                                    <li>› KAKAP JAYA</li>
+                                    <li>› AHASS SURABAYA</li>
+                                    <li>› RAJAWALI MOTOR</li>
+                                    <li>› ALOHA MOTOR</li>
+                                    <li>› ANUGERAH MOTOR</li>
+                                    <li>› ANTARA MOTORR</li>
+                                    <li>› AHASS 13124 DAYA MOTOR</li>
+                                    <li>› AHASS BENTENG MOTOR</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        <div class="faq-item">
-          <h3>Tempus quam pellentesque nec nam aliquam sem et tortor?</h3>
-          <div class="faq-content">
-            <p>Molestie a iaculis at erat pellentesque adipiscing commodo. Dignissim suspendisse in est ante in. Nunc vel risus commodo viverra maecenas accumsan. Sit amet nisl suscipit adipiscing bibendum est. Purus gravida quis blandit turpis cursus in</p>
-          </div>
-          <i class="faq-toggle bi bi-chevron-right"></i>
-        </div><!-- End Faq item-->
+    <div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="faq-item p-3 mb-3 shadow-sm rounded">
+                <h3 class="mb-0">
+                    <a class="text-decoration-none d-block fw-bold" data-bs-toggle="collapse" href="#faq8">
+                        TEHNIK KIMIA INDUSTRI
+                        <i class="bi bi-chevron-down"></i>
+                    </a>
+                </h3>
+                        <div id="faq8" class="collapse">
+                            <div class="faq-content">
+                                <ul class="list-unstyled">
+                                    <li>› PT. KASA HUSADA WIRA JATIM</li>
+                                    <li>› PDAM SURABAYA</li>
+                                    <li>› PG. CANDI BARU</li>
+                                    <li>› PG. TOELANGAN SIDOARJO</li>
+                                    <li>› PT. SEMEN GRESIK Tbk</li>
+                                    <li>› ITS (TEKNIK KIMIA)</li>
+                                    <li>› UPN (TEKNIK KIMIA & PANGAN)</li>
+                                    <li>› UNIVERSITAS TRUNOJOYO MADURA</li>
+                                    <li>› PG. JOMBANG BARU</li>
+                                    <li>› PG. KEBON AGUNG</li>
+                                    <li>› PG. MERITJAN KEDIRI</li>
+                                    <li>› PG. PESANTREN BARU KEDIRI</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        <div class="faq-item">
-          <h3>Perspiciatis quod quo quos nulla quo illum ullam?</h3>
-          <div class="faq-content">
-            <p>Enim ea facilis quaerat voluptas quidem et dolorem. Quis et consequatur non sed in suscipit sequi. Distinctio ipsam dolore et.</p>
-          </div>
-          <i class="faq-toggle bi bi-chevron-right"></i>
-        </div><!-- End Faq item-->
+    <div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="faq-item p-3 mb-3 shadow-sm rounded">
+                <h3 class="mb-0">
+                    <a class="text-decoration-none d-block fw-bold" data-bs-toggle="collapse" href="#faq9">
+                        TEHNIK ELETRONIKA INDUSTRI
+                        <i class="bi bi-chevron-down"></i>
+                    </a>
+                </h3>
+                        <div id="faq9" class="collapse">
+                            <div class="faq-content">
+                                <ul class="list-unstyled">
+                                    <li>› JAYA NEGERIKU NUSANTARA</li>
+                                    <li>› INNOTECH</li>
+                                    <li>› UNIVERSITAS TRUNOJOYO MADURA</li>
+                                    <li>› PPPPTK VEDC MALANG</li>
+                                    <li>› PT. ISPATINDO</li>
+                                    <li>› PT. NALA ANGGADA PERSADA</li>
+                                    <li>› NE. SERVICE</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-      </div>
+    <div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="faq-item p-3 mb-3 shadow-sm rounded">
+                <h3 class="mb-0">
+                    <a class="text-decoration-none d-block fw-bold" data-bs-toggle="collapse" href="#faq10">
+                        TEHNIK AUDIO VIDEO
+                        <i class="bi bi-chevron-down"></i>
+                    </a>
+                </h3>
+                        <div id="faq10" class="collapse">
+                            <div class="faq-content">
+                                <ul class="list-unstyled">
+                                    <li>› AGUS STUDIO</li>
+                                    <li>› ZIAD ELEKTRONIC SERVICE</li>
+                                    <li>› IRAMA MAS</li>
+                                    <li>› BERKAH JAYA BERSAMA</li>
+                                    <li>› MAULA ELEKTRONIC SERVICE</li>
+                                    <li>› ADEX ELEKTRONIK</li>
+                                    <li>› MONALISA</li>
+                                    <li>› HIDUP JAYA</li>
+                                    <li>› BUD ELECTRONIC SERVICE</li>
+                                    <li>› PT. LG ELECTRONICS</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    </div><!-- End Faq Column-->
+
+       
+
+      
 
     
 <footer class="bg-light pt-4">

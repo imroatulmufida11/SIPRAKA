@@ -37,6 +37,13 @@
 
 <body class="index-page">
 
+<style>
+  .mobile-nav-toggle {
+    display: none !important;
+}
+
+</style>
+
 <header id="header" class="header d-flex align-items-center sticky-top bg-light">
 <div class="container-fluid container-xl d-flex align-items-center justify-content-start">
     
@@ -73,7 +80,7 @@
       </a>
       <ul class="dropdown-menu">
         <li><a class="dropdown-item" href="alur.php">Alur Prakerin</a></li>
-        <li><a class="dropdown-item" href="#du-di-rekanan">Du/Di Rekanan</a></li>
+        <li><a class="dropdown-item" href="rekanan.php">Du/Di Rekanan</a></li>
       </ul>
     </li>
   </ul>
@@ -87,6 +94,12 @@
   </div>
 </header>
 
+<div class="container mt-4">
+    <h2 class="text-center">Struktur Organisasi</h2>
+    <div class="text-center">
+        <img src="img/STRUKTUR-ORGANISASI.jpg" alt="Struktur Organisasi SMKN 2 Bangkalan" class="img-fluid">
+    </div>
+</div>
 
 
 <footer class="bg-light pt-4">
