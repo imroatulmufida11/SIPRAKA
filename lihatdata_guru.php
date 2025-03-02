@@ -111,7 +111,7 @@ $result = $conn->query($sql);
                     <thead class="table-light">
                         <tr>
                             <th>No</th>
-                            <th>Nama Du/Di</th>
+                            <th>Nama Pembimbing</th>
                             <th class="text-center">Aksi</th>
                         </tr>
                     </thead>
