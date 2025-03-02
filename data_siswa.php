@@ -37,12 +37,12 @@
 <body>
      <div class="container-xxl position-relative bg-white d-flex p-0">
     
-        <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <!-- <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
             <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
                 <span class="sr-only">Loading...</span>
             </div>
         </div> 
-        <!-- Spinner End -->
+        Spinner End -->
 
 
         <!-- Sidebar Start -->
@@ -112,22 +112,28 @@ $message = "";
 
 // Jika form disubmit
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $nama = $_POST["nama_siswa"];
+    // Mengambil data dari form dengan nama field yang benar
+    $nama = $_POST["nama"];  // Sesuaikan dengan name="nama" di form
     $jurusan = $_POST["jurusan"];
     $du_di = $_POST["du_di"];
 
-    // Query untuk menyimpan data ke tabel siswa
-    $sql_insert = "INSERT INTO siswa (nama_siswa, jurusan, du_di) VALUES (?, ?, ?)";
-    $stmt = $conn->prepare($sql_insert);
-    $stmt->bind_param("sss", $nama, $jurusan, $du_di);
+    // Validasi input tidak boleh kosong
+    if (!empty($nama) && !empty($jurusan) && !empty($du_di)) {
+        // Query untuk menyimpan data ke tabel siswa
+        $sql_insert = "INSERT INTO siswa (nama_siswa, jurusan, du_di) VALUES (?, ?, ?)";
+        $stmt = $conn->prepare($sql_insert);
+        $stmt->bind_param("sss", $nama, $jurusan, $du_di);
 
-    if ($stmt->execute()) {
-        $message = "<div class='alert alert-success'>Data berhasil disimpan!</div>";
+        if ($stmt->execute()) {
+            $message = "<div class='alert alert-success'>Data berhasil disimpan!</div>";
+        } else {
+            $message = "<div class='alert alert-danger'>Gagal menyimpan data: " . $conn->error . "</div>";
+        }
+
+        $stmt->close();
     } else {
-        $message = "<div class='alert alert-danger'>Gagal menyimpan data: " . $conn->error . "</div>";
+        $message = "<div class='alert alert-danger'>Semua field harus diisi!</div>";
     }
-
-    $stmt->close();
 }
 ?>
   
@@ -137,6 +143,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="col-12">
             <div class="bg-light rounded h-100 p-4">
                 <h6 class="mb-4">Data Siswa</h6>
+                <?= $message; ?> <!-- Menampilkan pesan sukses atau error -->
                 <form action="" method="POST">
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control" id="namaInput" name="nama" placeholder="Masukkan Nama" required>
@@ -174,7 +181,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <button type="submit" class="btn btn-primary w-100">Simpan</button>
                     </div>
                 </form>
-                <?= $message; ?> <!-- Menampilkan pesan sukses atau error -->
+                
             </div>
         </div>
     </div>
