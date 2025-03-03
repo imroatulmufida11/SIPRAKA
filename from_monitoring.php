@@ -1,3 +1,42 @@
+<?php
+session_start();
+// Gunakan path absolut atau relatif yang benar
+require_once __DIR__ . '/config.php';
+
+$message = '';  // Inisialisasi variabel message
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Ambil data dari form
+    $nomor_surat = $_POST['nomorSurat'];
+    $nama_guru = $_POST['namaGuru'];
+    $nip_guru = $_POST['nipGuru'];
+    $jabatan_guru = $_POST['jabatanGuru'];
+    $tempat_pkl = $_POST['tempatPkl'];
+    $alamat_pkl = $_POST['alamatPkl'];
+    $tanggal_surat = $_POST['tanggalSurat'];
+    $konsentrasi_keahlian = $_POST['konsentrasiKeahlian'];
+    $siswa = $_POST['siswaList'];
+
+    // Query insert
+    $sql = "INSERT INTO monitoring_pkl (nomor_surat, nama_guru, nip_guru, jabatan_guru, tempat_pkl, 
+            alamat_pkl, tanggal_surat, konsentrasi_keahlian, siswa) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("sssssssss", $nomor_surat, $nama_guru, $nip_guru, $jabatan_guru, $tempat_pkl, 
+                      $alamat_pkl, $tanggal_surat, $konsentrasi_keahlian, $siswa);
+    
+    if ($stmt->execute()) {
+        $message = '<div class="alert alert-success">Data berhasil disimpan!</div>';
+        $last_id = $stmt->insert_id;
+        $stmt->close();
+        header("Location: surat_monitoring.php?id=" . $last_id);
+        exit();
+    } else {
+        $message = '<div class="alert alert-danger">Error: ' . $stmt->error . '</div>';
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -38,11 +77,11 @@
 <body>
 <div class="container-xxl position-relative bg-white d-flex p-0">
     <!-- Spinner Start -->
-    <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    <!-- <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
         <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
             <span class="sr-only">Loading...</span>
         </div>
-    </div>
+    </div> -->
     <!-- Spinner End -->
 
     <!-- Sidebar Start -->
@@ -97,7 +136,7 @@
 
         
     <?php
-include 'config.php'; // Pastikan koneksi database hanya di satu tempat
+require 'proses.php'; // Pastikan koneksi database hanya di satu tempat
 
 $message = "";
 
@@ -111,8 +150,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $alamat_pkl = $_POST['alamatPkl'];
     $tanggal_surat = $_POST['tanggalSurat'];
     $konsentrasi_keahlian = $_POST['konsentrasiKeahlian'];
-    $siswa = trim($_POST['siswaList']); // Ambil data siswa langsung
-
+    $siswa = implode("\n", explode("\r\n", $_POST['siswaList'])); // Format data siswa jadi satu string
 
     $sql = "INSERT INTO monitoring_pkl (nomor_surat, nama_guru, nip_guru, jabatan_guru, tempat_pkl, alamat_pkl, tanggal_surat, konsentrasi_keahlian, siswa) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -156,26 +194,35 @@ $resultJurusan = $conn->query($sqlJurusan);{
             <div class="bg-light rounded h-100 p-4">
                 <div class="container mt-4">
                     <h2 class="text-center">Formulir Surat Tugas PKL</h2>
-                    <form method="POST">
+                    <?php
+                    if(isset($_SESSION['error'])) {
+                        echo '<div class="alert alert-danger">' . $_SESSION['error'] . '</div>';
+                        unset($_SESSION['error']);
+                    }
+                    if(isset($_SESSION['success'])) {
+                        echo '<div class="alert alert-success">' . $_SESSION['success'] . '</div>';
+                        unset($_SESSION['success']);
+                    }
+                    ?>
+                    <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
                         <div class="mb-3">
                             <label class="form-label">Nomor Surat:</label>
                             <input type="text" class="form-control" name="nomorSurat" required>
                         </div>
                         <div class="mb-3">
-    <label class="form-label">Nama Guru Pembimbing:</label>
-    <select class="form-select" name="namaGuru" required>
-        <option selected disabled>Pilih Guru Pembimbing</option>
-        <?php 
-        $sqlPembimbing = "SELECT nama_pembimbing FROM data_pembimbing"; // Jalankan ulang query
-        $resultPembimbing = $conn->query($sqlPembimbing); 
-        while ($row = $resultPembimbing->fetch_assoc()) { ?>
-            <option value="<?= htmlspecialchars($row['nama_pembimbing']); ?>">
-                <?= htmlspecialchars($row['nama_pembimbing']); ?>
-            </option>
-        <?php } ?>
-    </select>
-</div>
-
+                            <label class="form-label">Nama Guru Pembimbing:</label>
+                            <select class="form-select" name="namaGuru" required>
+                                <option selected disabled>Pilih Guru Pembimbing</option>
+                                <?php 
+                                $sqlPembimbing = "SELECT nama_pembimbing FROM data_pembimbing"; // Jalankan ulang query
+                                $resultPembimbing = $conn->query($sqlPembimbing); 
+                                while ($row = $resultPembimbing->fetch_assoc()) { ?>
+                                    <option value="<?= htmlspecialchars($row['nama_pembimbing']); ?>">
+                                        <?= htmlspecialchars($row['nama_pembimbing']); ?>
+                                    </option>
+                                <?php } ?>
+                            </select>
+                        </div>
                         <div class="mb-3">
                             <label class="form-label">NIP:</label>
                             <input type="text" class="form-control" name="nipGuru" required>
@@ -200,18 +247,20 @@ $resultJurusan = $conn->query($sqlJurusan);{
                             <textarea class="form-control" name="alamatPkl" id="alamatPkl" rows="2" required readonly></textarea>
                         </div>
                         <div class="mb-3">
-    <label class="form-label">Konsentrasi Keahlian:</label>
-    <select class="form-control" name="konsentrasiKeahlian" required>
-        <option value="">Pilih Konsentrasi Keahlian</option>
-        <?php while ($rowJurusan = mysqli_fetch_assoc($resultJurusan)) : ?>
-            <option value="<?= htmlspecialchars($rowJurusan['jurusan']) ?>">
-                <?= htmlspecialchars($rowJurusan['jurusan']) ?>
-            </option>
-        <?php endwhile; ?>
-    </select>
-</div>
-
-                    
+                            <label class="form-label">Konsentrasi Keahlian:</label>
+                            <select class="form-control" name="konsentrasiKeahlian" required>
+                                <option value="">Pilih Konsentrasi Keahlian</option>
+                                <?php while ($rowJurusan = mysqli_fetch_assoc($resultJurusan)) : ?>
+                                    <option value="<?= htmlspecialchars($rowJurusan['jurusan']) ?>">
+                                        <?= htmlspecialchars($rowJurusan['jurusan']) ?>
+                                    </option>
+                                <?php endwhile; ?>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Tanggal Surat:</label>
+                            <input type="date" class="form-control" name="tanggalSurat" required>
+                        </div>
                         <div class="mb-3">
                             <label class="form-label">Nama Siswa (Setiap Nama di Baris Baru):</label>
                             <textarea class="form-control" name="siswaList" rows="3" required></textarea>

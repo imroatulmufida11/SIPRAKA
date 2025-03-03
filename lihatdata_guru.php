@@ -112,8 +112,11 @@ $result = $conn->query($sql);
                         <tr>
                             <th>No</th>
                             <th>Nama Pembimbing</th>
+<<<<<<< HEAD
+=======
                             <th>Jurusan</th>
                             <th>Du/Di</th>
+>>>>>>> cba6263cca518a1d44ac66f5e1da2041d7994a32
                             <th class="text-center">Aksi</th>
                         </tr>
                     </thead>
