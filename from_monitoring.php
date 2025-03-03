@@ -104,8 +104,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="navbar-nav w-100">
                 <a href="dasboard_admin.php" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
                 <a href="tambahdata_admin.php" class="nav-item nav-link"><i class="fa-solid fa-calendar-plus me-2"></i>Tambah Data</a>
-                <a href="form_permohonan.php" class="nav-item nav-link active"><i class="fa-solid fa-th me-2"></i>Permohonan</a>
-                <a href="from_monitoring.php" class="nav-item nav-link"><i class="fa-solid fa-eye me-2"></i>Monitoring</a>
+                <a href="form_permohonan.php" class="nav-item nav-link"><i class="fa-solid fa-th me-2"></i>Permohonan</a>
+                <a href="from_monitoring.php" class="nav-item nav-link active"><i class="fa-solid fa-eye me-2"></i>Monitoring</a>
                 <a href="chart.html" class="nav-item nav-link"><i class="fa-solid fa-hand-holding-heart me-2"></i>Penarikan</a>
                 <a href="chart.html" class="nav-item nav-link"><i class="fa-solid fa-pen me-2"></i>Absensi</a>
             </div>
@@ -228,14 +228,6 @@ $resultJurusan = $conn->query($sqlJurusan);{
                         <div class="mb-3">
                             <label class="form-label">Tanggal Surat:</label>
                             <input type="date" class="form-control" name="tanggalSurat" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Tanggal Mulai PKL:</label>
-                            <input type="date" class="form-control" name="tanggalMulai" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Tanggal Berakhir PKL:</label>
-                            <input type="date" class="form-control" name="tanggalBerakhir" required>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Nama Siswa (Setiap Nama di Baris Baru):</label>

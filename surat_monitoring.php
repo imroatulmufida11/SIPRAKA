@@ -62,7 +62,7 @@ $data = $result->fetch_assoc();
         
         <p>Untuk: Monitoring siswa PKL ke <strong><?= htmlspecialchars($data['tempat_pkl']) ?></strong></p>
         <p>Alamat: <?= nl2br(htmlspecialchars($data['alamat_pkl'])) ?></p>
-        <p>Pada tanggal: <?= date("d F Y", strtotime($data['tanggal_mulai'])) ?> s/d <?= date("d F Y", strtotime($data['tanggal_berakhir'])) ?></p>
+        <p>Pada tanggal:  </p>
         <p>Konsentrasi Keahlian: <strong><?= htmlspecialchars($data['konsentrasi_keahlian']) ?></strong></p>
 
         <!-- Tabel Siswa -->
