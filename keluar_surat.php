@@ -96,165 +96,108 @@
         <!-- Navbar End -->
 
         <?php
-include 'config.php';
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "db_sipraka";
 
-if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
-    echo "Data tidak ditemukan!";
-    exit;
+$conn = new mysqli($servername, $username, $password, $dbname);
+if ($conn->connect_error) {
+    die("Koneksi gagal: " . $conn->connect_error);
 }
 
-$id = intval($_GET["id"]); 
+// Ambil nama_dudi dari URL
+$nama_dudi = isset($_GET['nama_dudi']) ? trim($_GET['nama_dudi']) : '';
 
-$sql = "SELECT p.*, 
-               CASE 
-                   WHEN p.tempat_pkl REGEXP '^[0-9]+$' THEN d.nama_dudi 
-                   ELSE p.tempat_pkl 
-               END AS tempat_pkl_final,
-               CASE 
-                   WHEN p.alamat_pkl = '' OR p.alamat_pkl IS NULL THEN d.alamat 
-                   ELSE p.alamat_pkl 
-               END AS alamat_pkl_final
-        FROM permohonan_pkl p
-        LEFT JOIN data_dudi d ON p.tempat_pkl = d.id
-        WHERE p.id = $id";
-
-$result = mysqli_query($conn, $sql);
-
-if ($row = mysqli_fetch_assoc($result)) {
+$row = null;
+if (!empty($nama_dudi)) {
+    $query = "SELECT * FROM permohonan_pkl 
+          JOIN data_dudi ON permohonan_pkl.dudi_id = data_dudi.dudi_id 
+          WHERE TRIM(data_dudi.nama_dudi)=?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("s", $nama_dudi);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    $stmt->close();
 }
+
+$conn->close();
 ?>
 
+<?php if ($row): ?>
+    <p>Data ditemukan: <?= htmlspecialchars($row["nama_dudi"]) ?></p>
+<?php else: ?>
+    <div class="alert alert-warning" role="alert">
+        Data tidak ditemukan. Pastikan nama_dudi sudah benar.
+    </div>
+<?php endif; ?>
 
-
-
-<body>
-
-
-
-    <div id="surat" class="card p-4 text-dark">
-        <div class="row">
-            <div class="col-2">
-                <img src="img/jatim.png" alt="Logo" style="width: 100px;">
-            </div>
-            <div class="col-10 text-center">
-                <h5 class="fw-normal">PEMERINTAH PROVINSI JAWA TIMUR</h5>
-                <h6 class="fw-normal">DINAS PENDIDIKAN</h6>
-                <h6 class="fw-normal">SMK NEGERI 2 BANGKALAN</h6>
-                <h6 class="fw-normal">NPSN/NSS: 20531223 / 321052901002</h6>
-                <p>Jalan. Halim Perdana Kusuma, Bangkalan, Jawa Timur 69116</p>
-                <p>Telepon (031) 3092223, Email: smkn2_bkl@yahoo.com</p>
-            </div>
+<div id="surat" class="card p-4 text-dark">
+    <div class="row">
+        <div class="col-2">
+            <img src="img/jatim.png" alt="Logo" style="width: 100px;">
         </div>
-        <div style="height: 3px; background-color: black; width:100%;"></div>
+        <div class="col-10 text-center">
+            <h5 class="fw-normal">PEMERINTAH PROVINSI JAWA TIMUR</h5>
+            <h6 class="fw-normal">DINAS PENDIDIKAN</h6>
+            <h6 class="fw-normal">SMK NEGERI 2 BANGKALAN</h6>
+            <h6 class="fw-normal">NPSN/NSS: 20531223 / 321052901002</h6>
+            <p>Jalan. Halim Perdana Kusuma, Bangkalan, Jawa Timur 69116</p>
+            <p>Telepon (031) 3092223, Email: smkn2_bkl@yahoo.com</p>
+        </div>
+    </div>
+    <div style="height: 3px; background-color: black; width:100%;"></div>
 
-        <p class="text-end">Bangkalan, <?= date("d F Y") ?></p>
-        <p>Nomor: <?= htmlspecialchars($row["nomor_surat"]) ?></p>
-        <p>Hal: Permohonan Praktik Kerja Lapangan</p>
-        <p>Lampiran: - </p>
+    <p class="text-end">Bangkalan, <?= date("d F Y") ?></p>
+    <p>Nomor: <?= htmlspecialchars($row["nomor_surat"] ?? "-") ?></p>
+    <p>Hal: Permohonan Praktik Kerja Lapangan</p>
+    <p>Lampiran: - </p>
 
-        <p><strong>Yth : Pimpinan / Direktur</strong></p>
-        <p><strong><?= htmlspecialchars($row["tempat_pkl_final"]) ?></strong></p>
-        <p><?= nl2br(htmlspecialchars($row["alamat_pkl_final"])) ?></p>
+    <p><strong>Yth : Pimpinan / Direktur</strong></p>
+    <p><strong><?= htmlspecialchars($row["tempat_pkl"] ?? "-") ?></strong></p>
+    <p><?= nl2br(htmlspecialchars($row["alamat_pkl"] ?? "-")) ?></p>
 
-        <p><em>Assalamu'alaikum Wr. Wb.</em></p>
-        <p>Dengan Hormat,</p>
+    <p><em>Assalamu'alaikum Wr. Wb.</em></p>
+    <p>Dengan Hormat,</p>
 
-        <p>
-            Dalam penyelenggaraan sistem pendidikan tingkat kejuruan, disamping siswa harus melaksanakan
-            Kegiatan Belajar Mengajar (KBM) di sekolah, siswa juga dituntut melaksanakan praktik kerja di
-            Dunia Usaha / Dunia Industri, yang dikenal dengan istilah PKL (Praktik Kerja Lapangan).
-        </p>
+    <p>
+        Berdasarkan kurikulum merdeka dilaksanakan selama <strong>6 bulan</strong>, untuk itu kami mohon dengan sangat agar
+        Bapak/Ibu Pimpinan <strong><?= htmlspecialchars($row["tempat_pkl"] ?? "-") ?></strong> berkenan menerima siswa kami untuk melaksanakan PKL:
+    </p>
 
-        <p>
-            Berdasarkan kurikulum merdeka dilaksanakan selama <strong>6 bulan</strong>, untuk itu kami mohon dengan sangat agar
-            Bapak/Ibu Pimpinan <strong><?= htmlspecialchars($row["tempat_pkl_final"]) ?></strong> berkenan menerima siswa kami untuk
-            melaksanakan PKL:
-        </p>
+    <p><strong>Konsentrasi Keahlian:</strong> <?= htmlspecialchars($row["konsentrasi_keahlian"] ?? "Tidak tersedia") ?></p>
 
-        <p><strong>Konsentrasi Keahlian:</strong> <?= htmlspecialchars($row["konsentrasi_keahlian"]) ?></p>
-
-        <?php if (!empty($row["siswa"])): ?>
-            <table class="table table-bordered" style="border: 100px;">
-                <thead>
-                    <tr class="text-dark">
-                        <th>No</th>
-                        <th>Nama</th>
-                        <th>NISN</th>
-                    </tr>
-                </thead>
-                <tbody class="text-dark">
-                    <?php
-                    $siswaList = explode("\n", $row["siswa"]);
-                    $no = 1;
-                    foreach ($siswaList as $siswa) {  
-                        $data = explode(" - ", trim($siswa));
-                        if (count($data) == 2) {
-                            echo "<tr><td>$no</td><td>" . htmlspecialchars($data[0]) . "</td><td>" . htmlspecialchars($data[1]) . "</td></tr>";
-                            $no++;
-                        }
+    <?php if (!empty($row["siswa"])): ?>
+        <table class="table table-bordered">
+            <thead>
+                <tr class="text-dark">
+                    <th>No</th>
+                    <th>Nama</th>
+                    <th>NISN</th>
+                </tr>
+            </thead>
+            <tbody class="text-dark">
+                <?php
+                $siswaList = explode("\n", trim($row["siswa"]));
+                $no = 1;
+                foreach ($siswaList as $siswa) {  
+                    $data = explode(" - ", trim($siswa));
+                    if (count($data) === 2) {
+                        echo "<tr><td>$no</td><td>" . htmlspecialchars($data[0]) . "</td><td>" . htmlspecialchars($data[1]) . "</td></tr>";
+                        $no++;
                     }
-                    ?>
-                </tbody>
-            </table>
-        <?php else: ?>
-            <p><em>Belum ada data siswa.</em></p>
-        <?php endif; ?>
-
-        <p>
-            Jika berkenan, kami berharap PKL ini dapat dilaksanakan mulai tanggal <strong><?= htmlspecialchars($row["tanggal_mulai"]) ?></strong> 
-            sampai dengan tanggal <strong><?= htmlspecialchars($row["tanggal_berakhir"]) ?></strong>.
-            Kami mengharapkan jawaban/informasi mengenai waktu dan durasi pelaksanaan PKL agar dapat kami koordinasikan lebih lanjut.
-            Atas perhatian dan kerja sama yang diberikan, kami ucapkan terima kasih.
-        </p>
-        <p><em>Wassalamu'alaikum Wr. Wb.</em></p>
-
-        <div class="text-end">
-            <p>Hormat Kami,</p>
-            <p>Kepala SMK Negeri 2 Bangkalan</p>
-            <br><br><br>
-            <p><strong>Nur Hazizah, S.Pd., M.Pd.</strong></p>
-        </div>
-
-    </hr>
+                }
+                ?>
+            </tbody>
+        </table>
+    <?php else: ?>
+        <p><em>Belum ada data siswa.</em></p>
+    <?php endif; ?>
 </div>
 
-<head>
-    <style>
-        @media print {
-            body {
-                margin: 0;
-                padding: 0;
-            }
-
-            body * {
-                visibility: hidden; /* Sembunyikan semua elemen */
-            }
-
-            #surat, #surat * {
-                visibility: visible; /* Tampilkan hanya bagian surat */
-            }
-
-            #surat {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100vh; /* Paksa tinggi sesuai layar */
-                page-break-before: avoid;
-                page-break-after: avoid;
-                page-break-inside: avoid;
-            }
-
-            table {
-                page-break-inside: avoid; /* Cegah tabel terpotong */
-            }
-
-            * {
-                font-size: 12px !important; /* Kecilkan font biar muat */
-            }
-        }
-    </style>
-</head>
+</body>
+</html>
 
         <!-- Footer Start -->
         <div class="container-fluid pt-4 px-4">

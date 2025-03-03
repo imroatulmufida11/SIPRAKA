@@ -58,17 +58,16 @@
                     <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
                 </div>
                 <div class="ms-3">
-                    <h6 class="mb-0">Admin</h6>
+                    <h6 class="mb-0">Guru</h6>
                     <span>Online</span>
                 </div>
             </div>
             <div class="navbar-nav w-100">
-                <a href="dasboard_admin.php" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
-                <a href="tambahdata_admin.php" class="nav-item nav-link"><i class="fa-solid fa-calendar-plus me-2"></i>Tambah Data</a>
-                <a href="form_permohonan.php" class="nav-item nav-link"><i class="fa-solid fa-th me-2"></i>Permohonan</a>
-                <a href="from_monitoring.php" class="nav-item nav-link"><i class="fa-solid fa-eye me-2"></i>Monitoring</a>
-                <a href="from_penarikan.php" class="nav-item nav-link"><i class="fa-solid fa-hand-holding-heart me-2"></i>Penarikan</a>
-                <a href="absensi_admin.php" class="nav-item nav-link"><i class="fa-solid fa-pen me-2"></i>Absensi</a>
+                <a href="dasboard_guru.php" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                <a href="permohonan_guru.php" class="nav-item nav-link active"><i class="fa fa-th me-2"></i>Permohonan</a>
+                <a href="monitoring_guru.php" class="nav-item nav-link"><i class="fa-solid fa-eye me-2"></i>Monitoring</a>
+                <a href="penarikan_guru.php" class="nav-item nav-link"><i class="fa-solid fa-hand-holding-heart me-2"></i>Penarikan</a>
+
             </div>
         </nav>
     </div>
@@ -87,7 +86,7 @@
             <div class="nav-item dropdown ms-auto">
                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                     <img class="rounded-circle me-lg-2" src="img/foto.jpg" alt="" style="width: 40px; height: 40px;">
-                    <span class="d-none d-lg-inline-flex">Admin</span>
+                    <span class="d-none d-lg-inline-flex">Guru</span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
                     <a href="login.php" class="dropdown-item">Keluar</a>
@@ -96,106 +95,95 @@
         </nav>
         <!-- Navbar End -->
 
-        <!-- Welcome Message -->
-        <div class="container-fluid pt-4 px-4">
-            <div class="row">
-                <div class="col-12">
-                    <div class="bg-light rounded p-4 text-center">
-                        <h3 class="text-primary">SELAMAT DATANG DI SIPRAKA</h3>
-                    </div>
-                </div>
+<div id="surat" class="card p-4 text-dark">
+        <div class="row">
+            <div class="col-2">
+                <img src="img/jatim.png" alt="Logo" style="width: 100px;">
+            </div>
+            <div class="col-10 text-center">
+                <h5 class="fw-normal">PEMERINTAH PROVINSI JAWA TIMUR</h5>
+                <h6 class="fw-normal">DINAS PENDIDIKAN</h6>
+                <h6 class="fw-normal">SMK NEGERI 2 BANGKALAN</h6>
+                <h6 class="fw-normal">NPSN/NSS: 20531223 / 321052901002</h6>
+                <p>Jalan. Halim Perdana Kusuma, Bangkalan, Jawa Timur 69116</p>
+                <p>Telepon (031) 3092223, Email: smkn2_bkl@yahoo.com</p>
             </div>
         </div>
+        <div style="height: 3px; background-color: black; width:100%;"></div>
 
-        <!-- Sale & Revenue Start -->
-        <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "db_sipraka";
+        <p class="text-end">Bangkalan, <?= date("d F Y") ?></p>
+        <p>Nomor: <?= htmlspecialchars($row["nomor_surat"]) ?></p>
+        <p>Hal: Permohonan Praktik Kerja Lapangan</p>
+        <p>Lampiran: - </p>
 
-$conn = new mysqli($servername, $username, $password, $dbname);
+        <p><strong>Yth : Pimpinan / Direktur</strong></p>
+        <p><strong><?= htmlspecialchars($row["tempat_pkl_final"]) ?></strong></p>
+        <p><?= nl2br(htmlspecialchars($row["alamat_pkl_final"])) ?></p>
 
-if ($conn->connect_error) {
-    die("Koneksi gagal: " . $conn->connect_error);
-}
+        <p><em>Assalamu'alaikum Wr. Wb.</em></p>
+        <p>Dengan Hormat,</p>
 
-// Total Siswa PKL
-$sql_total_siswa = "SELECT COUNT(*) AS total FROM siswa";
-$result_total_siswa = $conn->query($sql_total_siswa);
-$row_total = $result_total_siswa->fetch_assoc();
-$total_siswa_pkl = $row_total['total'];
+        <p>
+            Dalam penyelenggaraan sistem pendidikan tingkat kejuruan, disamping siswa harus melaksanakan
+            Kegiatan Belajar Mengajar (KBM) di sekolah, siswa juga dituntut melaksanakan praktik kerja di
+            Dunia Usaha / Dunia Industri, yang dikenal dengan istilah PKL (Praktik Kerja Lapangan).
+        </p>
 
-// Total Guru Pembimbing
-$sql_total_pembimbing = "SELECT COUNT(*) AS total FROM data_pembimbing";
-$result_total_pembimbing = $conn->query($sql_total_pembimbing);
-$row_pembimbing = $result_total_pembimbing->fetch_assoc();
-$total_pembimbing = $row_pembimbing['total'];
+        <p>
+            Berdasarkan kurikulum merdeka dilaksanakan selama <strong>6 bulan</strong>, untuk itu kami mohon dengan sangat agar
+            Bapak/Ibu Pimpinan <strong><?= htmlspecialchars($row["tempat_pkl_final"]) ?></strong> berkenan menerima siswa kami untuk
+            melaksanakan PKL:
+        </p>
 
-// Total Du/Di
-$sql_total_dudi = "SELECT COUNT(*) AS total FROM data_dudi";
-$result_total_dudi = $conn->query($sql_total_dudi);
-$row_dudi = $result_total_dudi->fetch_assoc();
-$total_dudi = $row_dudi['total'];
+        <p><strong>Konsentrasi Keahlian:</strong> <?= htmlspecialchars($row["konsentrasi_keahlian"]) ?></p>
 
-$conn->close();
-?>
+        <?php if (!empty($row["siswa"])): ?>
+            <table class="table table-bordered" style="border: 100px;">
+                <thead>
+                    <tr class="text-dark">
+                        <th>No</th>
+                        <th>Nama</th>
+                        <th>NISN</th>
+                    </tr>
+                </thead>
+                <tbody class="text-dark">
+                    <?php
+                    $siswaList = explode("\n", $row["siswa"]);
+                    $no = 1;
+                    foreach ($siswaList as $siswa) {  
+                        $data = explode(" - ", trim($siswa));
+                        if (count($data) == 2) {
+                            echo "<tr><td>$no</td><td>" . htmlspecialchars($data[0]) . "</td><td>" . htmlspecialchars($data[1]) . "</td></tr>";
+                            $no++;
+                        }
+                    }
+                    ?>
+                </tbody>
+            </table>
+        <?php else: ?>
+            <p><em>Belum ada data siswa.</em></p>
+        <?php endif; ?>
 
-<div class="container-fluid pt-4 px-4">
-    <div class="row row-cols-1 row-cols-md-3 g-4">
-        <!-- Total Siswa PKL -->
-        <div class="col">
-            <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
-                <i class="fa fa-chart-line fa-3x text-primary"></i>
-                <div class="ms-3">
-                    <p class="mb-2">Total Siswa PKL</p>
-                    <h6 class="mb-0"><?= $total_siswa_pkl; ?></h6>
-                </div>
-            </div>
+        <p>
+            Jika berkenan, kami berharap PKL ini dapat dilaksanakan mulai tanggal <strong><?= htmlspecialchars($row["tanggal_mulai"]) ?></strong> 
+            sampai dengan tanggal <strong><?= htmlspecialchars($row["tanggal_berakhir"]) ?></strong>.
+            Kami mengharapkan jawaban/informasi mengenai waktu dan durasi pelaksanaan PKL agar dapat kami koordinasikan lebih lanjut.
+            Atas perhatian dan kerja sama yang diberikan, kami ucapkan terima kasih.
+        </p>
+        <p><em>Wassalamu'alaikum Wr. Wb.</em></p>
+
+        <div class="text-end">
+            <p>Hormat Kami,</p>
+            <p>Kepala SMK Negeri 2 Bangkalan</p>
+            <br><br><br>
+            <p><strong>Nur Hazizah, S.Pd., M.Pd.</strong></p>
         </div>
 
-        <!-- Total Guru Pembimbing -->
-        <div class="col">
-            <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
-                <i class="fa fa-chart-bar fa-3x text-primary"></i>
-                <div class="ms-3">
-                    <p class="mb-2">Guru Pembimbing</p>
-                    <h6 class="mb-0"><?= $total_pembimbing; ?></h6>
-                </div>
-            </div>
-        </div>
-
-        <!-- Total Du/Di -->
-        <div class="col">
-            <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
-                <i class="fa fa-chart-area fa-3x text-primary"></i>
-                <div class="ms-3">
-                    <p class="mb-2">Total Du/Di</p>
-                    <h6 class="mb-0"><?= $total_dudi; ?></h6>
-                </div>
-            </div>
-        </div>
-    </div>
+    </hr>
 </div>
 
-        <!-- Panduan Pengguna -->
-        <div class="container-fluid pt-4 px-4">
-            <div class="row">
-                <div class="col-12">
-                    <div class="bg-light rounded p-4">
-                        <h5 class="text-primary mb-3">Panduan Pengguna</h5>
-                        <ul class="list-unstyled">
-                            <li><strong>Siswa:</strong> Melakukan absensi harian.</li>
-                            <li><strong>Guru:</strong> Mengisi data monitoring dan memberi penilaian.</li>
-                            <li><strong>Admin:</strong> Mengelola seluruh data.</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Footer Start -->
-        <div class="container-fluid pt-4 px-4">
+  <!-- Footer Start -->
+  <div class="container-fluid pt-4 px-4">
             <div class="bg-light rounded-top p-4">
                 <div class="row">
                     <div class="col-12 col-sm-6 text-center text-sm-start">

@@ -46,8 +46,7 @@ $data = $result->fetch_assoc();
                 <p>Telepon (031) 3092223, Email: smkn2_bkl@yahoo.com</p>
             </div>
         </div>
-        <div style="height: 3px; background-color: black; width:100%;"></div>
-
+        <hr>
         
         <h5 class="text-center"><u>SURAT TUGAS</u></h5>
         <p class="text-end">Bangkalan, <?= date("d F Y", strtotime($data['tanggal_surat'])) ?></p>
@@ -63,11 +62,11 @@ $data = $result->fetch_assoc();
         
         <p>Untuk: Monitoring siswa PKL ke <strong><?= htmlspecialchars($data['tempat_pkl']) ?></strong></p>
         <p>Alamat: <?= nl2br(htmlspecialchars($data['alamat_pkl'])) ?></p>
-        <p>Pada tanggal: </p>
+        <p>Pada tanggal: <?= date("d F Y", strtotime($data['tanggal_mulai'])) ?> s/d <?= date("d F Y", strtotime($data['tanggal_berakhir'])) ?></p>
         <p>Konsentrasi Keahlian: <strong><?= htmlspecialchars($data['konsentrasi_keahlian']) ?></strong></p>
 
         <!-- Tabel Siswa -->
-        <table class="table table-bordered" style="border: 100px;">
+        <table class="table table-bordered mt-4">
             <thead>
                 <tr>
                     <th>No</th>
@@ -118,4 +117,3 @@ $data = $result->fetch_assoc();
     <script src="js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-

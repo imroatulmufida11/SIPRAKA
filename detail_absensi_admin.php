@@ -63,12 +63,12 @@
                 </div>
             </div>
             <div class="navbar-nav w-100">
-                <a href="dasboard_admin.php" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                <a href="dasboard_admin.php" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
                 <a href="tambahdata_admin.php" class="nav-item nav-link"><i class="fa-solid fa-calendar-plus me-2"></i>Tambah Data</a>
                 <a href="form_permohonan.php" class="nav-item nav-link"><i class="fa-solid fa-th me-2"></i>Permohonan</a>
                 <a href="from_monitoring.php" class="nav-item nav-link"><i class="fa-solid fa-eye me-2"></i>Monitoring</a>
                 <a href="from_penarikan.php" class="nav-item nav-link"><i class="fa-solid fa-hand-holding-heart me-2"></i>Penarikan</a>
-                <a href="absensi_admin.php" class="nav-item nav-link"><i class="fa-solid fa-pen me-2"></i>Absensi</a>
+                <a href="absensi_admin.php" class="nav-item nav-link active"><i class="fa-solid fa-pen me-2"></i>Absensi</a>
             </div>
         </nav>
     </div>
@@ -96,120 +96,91 @@
         </nav>
         <!-- Navbar End -->
 
-        <!-- Welcome Message -->
-        <div class="container-fluid pt-4 px-4">
-            <div class="row">
-                <div class="col-12">
-                    <div class="bg-light rounded p-4 text-center">
-                        <h3 class="text-primary">SELAMAT DATANG DI SIPRAKA</h3>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Sale & Revenue Start -->
         <?php
-$servername = "localhost";
-$username = "root";
+// Konfigurasi koneksi database
+$host = "localhost";
+$user = "root";
 $password = "";
-$dbname = "db_sipraka";
+$database = "db_sipraka";
 
-$conn = new mysqli($servername, $username, $password, $dbname);
-
+$conn = new mysqli($host, $user, $password, $database);
 if ($conn->connect_error) {
     die("Koneksi gagal: " . $conn->connect_error);
 }
 
-// Total Siswa PKL
-$sql_total_siswa = "SELECT COUNT(*) AS total FROM siswa";
-$result_total_siswa = $conn->query($sql_total_siswa);
-$row_total = $result_total_siswa->fetch_assoc();
-$total_siswa_pkl = $row_total['total'];
+// Pastikan parameter jurusan tersedia dan aman dari SQL Injection
+if (!isset($_GET['jurusan']) || empty(trim($_GET['jurusan']))) {
+    die("<div class='alert alert-danger text-center'>Jurusan tidak ditemukan.</div>");
+}
 
-// Total Guru Pembimbing
-$sql_total_pembimbing = "SELECT COUNT(*) AS total FROM data_pembimbing";
-$result_total_pembimbing = $conn->query($sql_total_pembimbing);
-$row_pembimbing = $result_total_pembimbing->fetch_assoc();
-$total_pembimbing = $row_pembimbing['total'];
+$jurusan = htmlspecialchars(trim($_GET['jurusan']));
 
-// Total Du/Di
-$sql_total_dudi = "SELECT COUNT(*) AS total FROM data_dudi";
-$result_total_dudi = $conn->query($sql_total_dudi);
-$row_dudi = $result_total_dudi->fetch_assoc();
-$total_dudi = $row_dudi['total'];
-
-$conn->close();
+// Ambil semua data absensi berdasarkan jurusan, kecuali yang tanggalnya '0000-00-00'
+$sql_absensi = "SELECT nama, tanggal, keterangan FROM absensi WHERE jurusan = ? AND tanggal != '0000-00-00' ORDER BY tanggal DESC";
+$stmt = $conn->prepare($sql_absensi);
+if (!$stmt) {
+    die("<div class='alert alert-danger text-center'>Query error: " . $conn->error . "</div>");
+}
+$stmt->bind_param("s", $jurusan);
+$stmt->execute();
+$result_absensi = $stmt->get_result();
 ?>
 
 <div class="container-fluid pt-4 px-4">
-    <div class="row row-cols-1 row-cols-md-3 g-4">
-        <!-- Total Siswa PKL -->
-        <div class="col">
-            <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
-                <i class="fa fa-chart-line fa-3x text-primary"></i>
-                <div class="ms-3">
-                    <p class="mb-2">Total Siswa PKL</p>
-                    <h6 class="mb-0"><?= $total_siswa_pkl; ?></h6>
-                </div>
-            </div>
-        </div>
-
-        <!-- Total Guru Pembimbing -->
-        <div class="col">
-            <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
-                <i class="fa fa-chart-bar fa-3x text-primary"></i>
-                <div class="ms-3">
-                    <p class="mb-2">Guru Pembimbing</p>
-                    <h6 class="mb-0"><?= $total_pembimbing; ?></h6>
-                </div>
-            </div>
-        </div>
-
-        <!-- Total Du/Di -->
-        <div class="col">
-            <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
-                <i class="fa fa-chart-area fa-3x text-primary"></i>
-                <div class="ms-3">
-                    <p class="mb-2">Total Du/Di</p>
-                    <h6 class="mb-0"><?= $total_dudi; ?></h6>
-                </div>
+    <!-- Header -->
+    <div class="row">
+        <div class="col-12">
+            <div class="bg-light rounded p-4 text-center mb-3">
+                <h3 class="text-primary">DATA ABSENSI SISWA - <?php echo $jurusan; ?></h3>
             </div>
         </div>
     </div>
-</div>
 
-        <!-- Panduan Pengguna -->
-        <div class="container-fluid pt-4 px-4">
-            <div class="row">
-                <div class="col-12">
-                    <div class="bg-light rounded p-4">
-                        <h5 class="text-primary mb-3">Panduan Pengguna</h5>
-                        <ul class="list-unstyled">
-                            <li><strong>Siswa:</strong> Melakukan absensi harian.</li>
-                            <li><strong>Guru:</strong> Mengisi data monitoring dan memberi penilaian.</li>
-                            <li><strong>Admin:</strong> Mengelola seluruh data.</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+    <?php if ($result_absensi->num_rows > 0) { ?>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead class="table-primary text-center">
+                    <tr>
+                        <th>Nama</th>
+                        <th>Tanggal</th>
+                        <th>Keterangan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php while ($absensi = $result_absensi->fetch_assoc()) { ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($absensi['nama']); ?></td>
+                            <td><?php echo htmlspecialchars($absensi['tanggal']); ?></td>
+                            <td><?php echo htmlspecialchars($absensi['keterangan']); ?></td>
+                        </tr>
+                    <?php } ?>
+                </tbody>
+            </table>
         </div>
+    <?php } else { ?>
+        <div class="alert alert-warning text-center">Tidak ada data absensi untuk jurusan ini.</div>
+    <?php } ?>
 
-        <!-- Footer Start -->
-        <div class="container-fluid pt-4 px-4">
-            <div class="bg-light rounded-top p-4">
-                <div class="row">
-                    <div class="col-12 col-sm-6 text-center text-sm-start">
-                        &copy; <a href="#">2025 SIPRAKA</a>, All Right Reserved.
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="text-center mt-3">
+        <a href="absensi_admin.php" class="btn btn-secondary">Kembali</a>
     </div>
-    <!-- Content End -->
 </div>
 
-<!-- Footer End -->
+<?php
+$stmt->close();
+$conn->close();
+?>
 
+<!-- Footer Start -->
+<div class="container-fluid pt-4 px-4">
+                <div class="bg-light rounded-top p-4">
+                    <div class="row">
+                        <div class="col-12 col-sm-6 text-center text-sm-start">
+                            &copy; <a href="#">2025 SIPRAKA</a>, SMK Negeri 2 Bangkalan 
+                        </div>
+                    </div>
+                </div>
+            </div>
             <!-- Footer End -->
         </div>
         <!-- Content End -->

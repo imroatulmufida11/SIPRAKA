@@ -120,45 +120,39 @@ $result = $conn->query($sql);
     <div class="row g-4">
         <div class="col-12">
             <div class="bg-light rounded p-4 shadow-sm">
-                <h2 class="mb-4">Data Pembimbing</h2>
                 <table class="table table-bordered table-striped">
                     <thead class="table-light">
                         <tr>
                             <th>No</th>
-                            <th>Nama Pembimbing</th>
-                            <th>Jurusan</th>
                             <th>Du/Di</th>
                             <th class="text-center">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php
-                        if ($result->num_rows > 0) {
-                            $no = 1;
-                            while ($row = $result->fetch_assoc()) {
-                                echo "<tr>";
-                                echo "<td>" . $no++ . "</td>";
-                                echo "<td>" . htmlspecialchars($row['nama_pembimbing']) . "</td>";
-                                echo "<td>" . htmlspecialchars($row['jurusan']) . "</td>";
-                                echo "<td>" . htmlspecialchars($row['du_di']) . "</td>"; 
-                                echo "<td class='text-center'>
-                                        <div class='d-flex justify-content-center gap-2'>
-<a href='keluar_surat.php?id=" . $row['id'] . "' class='btn btn-info btn-sm'>
-    <i class='fa fa-calendar-alt text-white'></i> 
-</a>
-<a href='upload_surat.php?id=" . $row['id'] . "' class='btn btn-warning btn-sm'>
-    <i class='fa fa-calendar-alt text-white'></i> 
-</a>
+                    <?php
+if ($result->num_rows > 0) {
+    $no = 1;
+    while ($row = $result->fetch_assoc()) {
+        echo "<tr>";
+        echo "<td>" . $no++ . "</td>";
+        echo "<td>" . htmlspecialchars($row['du_di']) . "</td>"; 
+        echo "<td class='text-center'>
+                <div class='d-flex justify-content-center gap-2'>
+                    <a href='keluar_surat.php?nama_dudi=" . urlencode($row['du_di']) . "' class='btn btn-info btn-sm'>
+                        <i class='fa fa-file-alt text-white'></i> Surat
+                    </a>
+                    <a href='upload_surat.php?id=" . urlencode($row['id']) . "' class='btn btn-warning btn-sm'>
+                        <i class='fa fa-upload text-white'></i> Upload
+                    </a>
+                </div>
+              </td>";
+        echo "</tr>";
+    }
+} else {
+    echo "<tr><td colspan='3' class='text-center'>Tidak ada data</td></tr>";
+}
+?>
 
-                            
-                                        </div>
-                                      </td>";
-                                echo "</tr>";
-                            }
-                        } else {
-                            echo "<tr><td colspan='4' class='text-center'>Tidak ada data</td></tr>"; // Sesuaikan colspan dengan jumlah kolom
-                        }
-                        ?>
                     </tbody>
                 </table>
             </div>
