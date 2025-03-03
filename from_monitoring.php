@@ -14,17 +14,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $tempat_pkl = $_POST['tempatPkl'];
     $alamat_pkl = $_POST['alamatPkl'];
     $tanggal_surat = $_POST['tanggalSurat'];
+    $tanggal_mulai = $_POST['tanggalMulai'];
+    $tanggal_berakhir = $_POST['tanggalBerakhir'];
     $konsentrasi_keahlian = $_POST['konsentrasiKeahlian'];
     $siswa = $_POST['siswaList'];
 
     // Query insert
     $sql = "INSERT INTO monitoring_pkl (nomor_surat, nama_guru, nip_guru, jabatan_guru, tempat_pkl, 
-            alamat_pkl, tanggal_surat, konsentrasi_keahlian, siswa) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            alamat_pkl, tanggal_surat, tanggal_mulai, tanggal_berakhir, konsentrasi_keahlian, siswa) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sssssssss", $nomor_surat, $nama_guru, $nip_guru, $jabatan_guru, $tempat_pkl, 
-                      $alamat_pkl, $tanggal_surat, $konsentrasi_keahlian, $siswa);
+    $stmt->bind_param("sssssssssss", $nomor_surat, $nama_guru, $nip_guru, $jabatan_guru, $tempat_pkl, 
+                      $alamat_pkl, $tanggal_surat, $tanggal_mulai, $tanggal_berakhir, $konsentrasi_keahlian, $siswa);
     
     if ($stmt->execute()) {
         $message = '<div class="alert alert-success">Data berhasil disimpan!</div>';
@@ -106,8 +108,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <a href="tambahdata_admin.php" class="nav-item nav-link"><i class="fa-solid fa-calendar-plus me-2"></i>Tambah Data</a>
                 <a href="form_permohonan.php" class="nav-item nav-link active"><i class="fa-solid fa-th me-2"></i>Permohonan</a>
                 <a href="from_monitoring.php" class="nav-item nav-link"><i class="fa-solid fa-eye me-2"></i>Monitoring</a>
-                <a href="from_penarikan.php" class="nav-item nav-link"><i class="fa-solid fa-hand-holding-heart me-2"></i>Penarikan</a>
-                <a href="absensi_admin.php" class="nav-item nav-link"><i class="fa-solid fa-pen me-2"></i>Absensi</a>
+                <a href="chart.html" class="nav-item nav-link"><i class="fa-solid fa-hand-holding-heart me-2"></i>Penarikan</a>
+                <a href="chart.html" class="nav-item nav-link"><i class="fa-solid fa-pen me-2"></i>Absensi</a>
             </div>
         </nav>
     </div>
@@ -136,38 +138,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         
     <?php
-require 'proses.php'; // Pastikan koneksi database hanya di satu tempat
-
-$message = "";
-
-// Jika form dikirim
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $nomor_surat = $_POST['nomorSurat'];
-    $nama_guru = $_POST['namaGuru'];
-    $nip_guru = $_POST['nipGuru'];
-    $jabatan_guru = $_POST['jabatanGuru'];
-    $tempat_pkl = $_POST['tempatPkl'];
-    $alamat_pkl = $_POST['alamatPkl'];
-    $tanggal_surat = $_POST['tanggalSurat'];
-    $konsentrasi_keahlian = $_POST['konsentrasiKeahlian'];
-    $siswa = implode("\n", explode("\r\n", $_POST['siswaList'])); // Format data siswa jadi satu string
-
-    $sql = "INSERT INTO monitoring_pkl (nomor_surat, nama_guru, nip_guru, jabatan_guru, tempat_pkl, alamat_pkl, tanggal_surat, konsentrasi_keahlian, siswa) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sssssssss", $nomor_surat, $nama_guru, $nip_guru, $jabatan_guru, $tempat_pkl, $alamat_pkl, $tanggal_surat, $konsentrasi_keahlian, $siswa);
-
-    if ($stmt->execute()) {
-        header("Location: surat_monitoring.php?id=" . $stmt->insert_id);
-        exit();
-    } else {
-        $message = "<div class='alert alert-danger mt-3'>Error: " . $stmt->error . "</div>";
-    }
-
-    $stmt->close();
-}
-
 // Ambil data DU/DI
 $sqlDudi = "SELECT id, nama_dudi, alamat FROM data_dudi";
 $resultDudi = $conn->query($sqlDudi);
@@ -260,6 +230,14 @@ $resultJurusan = $conn->query($sqlJurusan);{
                         <div class="mb-3">
                             <label class="form-label">Tanggal Surat:</label>
                             <input type="date" class="form-control" name="tanggalSurat" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Tanggal Mulai PKL:</label>
+                            <input type="date" class="form-control" name="tanggalMulai" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Tanggal Berakhir PKL:</label>
+                            <input type="date" class="form-control" name="tanggalBerakhir" required>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Nama Siswa (Setiap Nama di Baris Baru):</label>
