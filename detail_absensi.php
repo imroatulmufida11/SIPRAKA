@@ -92,135 +92,72 @@
                 </div>
             </div>
         </nav>
-            <!-- Navbar End -->
 
-
-            <!-- Form Start -->
-       <!-- Form Start -->
-<div class="container-fluid pt-4 px-4">
-    <div class="row g-4">
-        <div class="col-12">
-            <div class="bg-light rounded h-100 p-4">
-                <h6 class="mb-4">Absensi</h6>
-                <form action="absensi_siswa.php" method="POST">
-                    <!-- Input Nama -->
-                    <div class="form-floating mb-3">
-                        <input type="text" class="form-control" id="namaInput" name="nama" placeholder="Masukkan Nama" required>
-                        <label for="namaInput">Nama   </label>
-                    </div>
-                    <!-- Input Tanggal -->
-                    <div class="form-floating mb-3">
-                        <input type="date" class="form-control" id="tanggalInput" name="tanggal" required>
-                        <label for="tanggalInput">Tanggal</label>
-                    </div>
-                    <!-- Pilihan Jurusan -->
-                    <div class="form-floating mb-3">
-                        <select class="form-select" id="jurusanSelect" name="jurusan" required>
-                            <option selected disabled>Pilih Jurusan</option>
-                            <option value="XII DPIB">XII DPIB</option>
-                            <option value="XII TITL">XII TITL</option>
-                            <option value="XII TPM 1">XII TPM 1</option>
-                            <option value="XII TPM 2">XII TPM 2</option>
-                            <option value="XII TBSM 1">XII TBSM 1</option>
-                            <option value="XII TBSM 2">XII TBSM 2</option>
-                            <option value="XII TKRO 1">XII TKRO 1</option>
-                            <option value="XII TKRO 2">XII TKRO 2</option>
-                            <option value="XII TKJ 1">XII TKJ 1</option>
-                            <option value="XII TKJ 2">XII TKJ 2</option>
-                            <option value="XII RPL 1">XII RPL 1</option>
-                            <option value="XII RPL 2">XII RPL 2</option>
-                            <option value="XII KI">XII KI</option>
-                        </select>
-                        <label for="jurusanSelect">Jurusan</label>
-                    </div>
-                    <!-- Keterangan -->
-                    <div class="form-floating">
-                        <textarea class="form-control" placeholder="Masukkan keterangan" id="keteranganTextarea" name="keterangan" style="height: 150px;"></textarea>
-                        <label for="keteranganTextarea">Keterangan</label>
-                    </div>
-                    <!-- Tombol Submit -->
-                    <div class="mt-3">
-                        <button type="submit" class="btn btn-primary w-100">Submit</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
- <!-- Form End -->
- <?php
+<?php
 // Konfigurasi koneksi ke database
 $host = "localhost";
-$user = "root"; // Sesuaikan dengan username database
-$password = ""; // Sesuaikan dengan password database
-$database = "db_sipraka"; // Nama database
+$user = "root";
+$password = "";
+$database = "db_sipraka";
 
-// Membuat koneksi ke database
 $conn = new mysqli($host, $user, $password, $database);
-
-// Periksa koneksi
 if ($conn->connect_error) {
     die("Koneksi gagal: " . $conn->connect_error);
 }
 
-// Periksa apakah form dikirim dengan metode POST
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Ambil data dari form
-    $nama = trim($_POST['nama']);
-    $tanggal = trim($_POST['tanggal']);
-    $jurusan = trim($_POST['jurusan']);
-    $keterangan = trim($_POST['keterangan']);
-
-    // Validasi: Pastikan semua field telah diisi
-    if (empty($nama) || empty($tanggal) || empty($jurusan)) {
-        echo "<script>
-                alert('Semua kolom wajib diisi!');
-                window.location.href='data_absensi.php';
-              </script>";
-        exit();
-    }
-
-    // Periksa apakah siswa sudah absen pada tanggal yang sama
-    $cek_sql = "SELECT id FROM absensi WHERE nama = ? AND tanggal = ?";
-    $stmt = $conn->prepare($cek_sql);
-    $stmt->bind_param("ss", $nama, $tanggal);
-    $stmt->execute();
-    $stmt->store_result();
-
-    if ($stmt->num_rows > 0) {
-        // Jika sudah absen, tampilkan peringatan
-        echo "<script>
-                alert('Anda sudah absen hari ini!');
-                window.location.href='data_absensi.php';
-              </script>";
-    } else {
-        // Jika belum absen, simpan ke database
-        $sql = "INSERT INTO absensi (nama, tanggal, jurusan, keterangan) VALUES (?, ?, ?, ?)";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ssss", $nama, $tanggal, $jurusan, $keterangan);
-
-        if ($stmt->execute()) {
-            echo "<script>
-                    alert('Absensi berhasil disimpan!');
-                    window.location.href='data_absensi.php';
-                  </script>";
-        } else {
-            echo "Error: " . $stmt->error;
-        }
-    }
-
-    // Tutup statement
-    $stmt->close();
+// Pastikan parameter jurusan tersedia
+if (!isset($_GET['jurusan'])) {
+    die("Jurusan tidak ditemukan.");
 }
 
-// Tutup koneksi
+$jurusan = urldecode($_GET['jurusan']);
+
+// Ambil semua data absensi berdasarkan jurusan
+$sql_absensi = "SELECT nama, tanggal, keterangan FROM absensi WHERE jurusan = ? AND tanggal != '0000-00-00' ORDER BY tanggal DESC";
+$stmt = $conn->prepare($sql_absensi);
+$stmt->bind_param("s", $jurusan);
+$stmt->execute();
+$result_absensi = $stmt->get_result();
+?>
+
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Data Absensi - <?php echo htmlspecialchars($jurusan); ?></h2>
+
+    <?php if ($result_absensi->num_rows > 0) { ?>
+        <table class="table table-bordered">
+            <thead class="table-primary">
+                <tr>
+                    <th>Nama</th>
+                    <th>Tanggal</th>
+                    <th>Keterangan</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php while ($absensi = $result_absensi->fetch_assoc()) { ?>
+                    <tr>
+                        <td><?php echo htmlspecialchars($absensi['nama']); ?></td>
+                        <td><?php echo htmlspecialchars($absensi['tanggal']); ?></td>
+                        <td><span class="badge bg-info"><?php echo htmlspecialchars($absensi['keterangan']); ?></span></td>
+                    </tr>
+                <?php } ?>
+            </tbody>
+        </table>
+    <?php } else { ?>
+        <p class="text-center">Tidak ada data absensi untuk jurusan ini.</p>
+    <?php } ?>
+
+    <div class="text-center mt-3">
+        <a href="data_absensi.php" class="btn btn-secondary">Kembali</a>
+    </div>
+</div>
+
+<?php
+$stmt->close();
 $conn->close();
 ?>
 
-
-
-            <!-- Footer Start -->
-            <div class="container-fluid pt-4 px-4">
+  <!-- Footer Start -->
+  <div class="container-fluid pt-4 px-4">
                 <div class="bg-light rounded-top p-4">
                     <div class="row">
                         <div class="col-12 col-sm-6 text-center text-sm-start">

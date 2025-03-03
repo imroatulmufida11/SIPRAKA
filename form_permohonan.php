@@ -67,8 +67,8 @@
                 <a href="tambahdata_admin.php" class="nav-item nav-link"><i class="fa-solid fa-calendar-plus me-2"></i>Tambah Data</a>
                 <a href="form_permohonan.php" class="nav-item nav-link active"><i class="fa-solid fa-th me-2"></i>Permohonan</a>
                 <a href="from_monitoring.php" class="nav-item nav-link"><i class="fa-solid fa-eye me-2"></i>Monitoring</a>
-                <a href="chart.html" class="nav-item nav-link"><i class="fa-solid fa-hand-holding-heart me-2"></i>Penarikan</a>
-                <a href="chart.html" class="nav-item nav-link"><i class="fa-solid fa-pen me-2"></i>Absensi</a>
+                <a href="from_penarikan.php" class="nav-item nav-link"><i class="fa-solid fa-hand-holding-heart me-2"></i>Penarikan</a>
+                <a href="absensi_admin.php" class="nav-item nav-link"><i class="fa-solid fa-pen me-2"></i>Absensi</a>
             </div>
         </nav>
     </div>
@@ -94,8 +94,8 @@
                 </div>
             </div>
         </nav>
-<body>
-<?php
+
+        <?php
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -110,7 +110,7 @@ if ($conn->connect_error) {
 // Ambil data Du/Di dari database
 $sql = "SELECT id, nama_dudi, alamat FROM data_dudi";
 $result = $conn->query($sql);
-?>
+?>  
 
 <div class="container-fluid pt-4 px-4">
     <div class="row g-4">
@@ -125,15 +125,18 @@ $result = $conn->query($sql);
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Tempat PKL:</label>
-                            <select class="form-control" name="tempatPkl" id="tempatPkl" required>
+                            <select class="form-control" name="dudiId" id="tempatPkl" required>
                                 <option value="">Pilih Du/Di</option>
                                 <?php while ($row = $result->fetch_assoc()) : ?>
-                                    <option value="<?= $row['id'] ?>" data-alamat="<?= htmlspecialchars($row['alamat']) ?>">
+                                    <option value="<?= $row['id'] ?>" data-nama="<?= htmlspecialchars($row['nama_dudi']) ?>" data-alamat="<?= htmlspecialchars($row['alamat']) ?>">
                                         <?= htmlspecialchars($row['nama_dudi']) ?>
                                     </option>
                                 <?php endwhile; ?>
                             </select>
                         </div>
+                        <!-- Input hidden untuk menyimpan nama_dudi -->
+                        <input type="hidden" name="tempatPkl" id="namaDudi">
+
                         <div class="mb-3">
                             <label class="form-label">Alamat PKL:</label>
                             <textarea class="form-control" name="alamatPkl" id="alamatPkl" required readonly></textarea>
@@ -164,8 +167,9 @@ $result = $conn->query($sql);
 
 <script>
 document.getElementById("tempatPkl").addEventListener("change", function() {
-    var alamat = this.options[this.selectedIndex].getAttribute("data-alamat");
-    document.getElementById("alamatPkl").value = alamat;
+    var selectedOption = this.options[this.selectedIndex];
+    document.getElementById("alamatPkl").value = selectedOption.getAttribute("data-alamat");
+    document.getElementById("namaDudi").value = selectedOption.getAttribute("data-nama"); // Set nama DU/DI
 });
 </script>
 

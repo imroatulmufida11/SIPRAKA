@@ -67,8 +67,8 @@
                 <a href="tambahdata_admin.php" class="nav-item nav-link"><i class="fa-solid fa-calendar-plus me-2"></i>Tambah Data</a>
                 <a href="form_permohonan.php" class="nav-item nav-link active"><i class="fa-solid fa-th me-2"></i>Permohonan</a>
                 <a href="from_monitoring.php" class="nav-item nav-link"><i class="fa-solid fa-eye me-2"></i>Monitoring</a>
-                <a href="chart.html" class="nav-item nav-link"><i class="fa-solid fa-hand-holding-heart me-2"></i>Penarikan</a>
-                <a href="chart.html" class="nav-item nav-link"><i class="fa-solid fa-pen me-2"></i>Absensi</a>
+                <a href="from_penarikan.php" class="nav-item nav-link"><i class="fa-solid fa-hand-holding-heart me-2"></i>Penarikan</a>
+                <a href="absensi_admin.php" class="nav-item nav-link"><i class="fa-solid fa-pen me-2"></i>Absensi</a>
             </div>
         </nav>
     </div>
@@ -97,7 +97,7 @@
 
         
     <?php
-require 'proses.php'; // Pastikan koneksi database hanya di satu tempat
+include 'config.php'; // Pastikan koneksi database hanya di satu tempat
 
 $message = "";
 
@@ -111,7 +111,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $alamat_pkl = $_POST['alamatPkl'];
     $tanggal_surat = $_POST['tanggalSurat'];
     $konsentrasi_keahlian = $_POST['konsentrasiKeahlian'];
-    $siswa = implode("\n", explode("\r\n", $_POST['siswaList'])); // Format data siswa jadi satu string
+    $siswa = trim($_POST['siswaList']); // Ambil data siswa langsung
+
 
     $sql = "INSERT INTO monitoring_pkl (nomor_surat, nama_guru, nip_guru, jabatan_guru, tempat_pkl, alamat_pkl, tanggal_surat, konsentrasi_keahlian, siswa) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";

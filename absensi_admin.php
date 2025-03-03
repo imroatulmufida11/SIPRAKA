@@ -63,12 +63,12 @@
                 </div>
             </div>
             <div class="navbar-nav w-100">
-                <a href="dasboard_admin.php" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                <a href="dasboard_admin.php" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
                 <a href="tambahdata_admin.php" class="nav-item nav-link"><i class="fa-solid fa-calendar-plus me-2"></i>Tambah Data</a>
                 <a href="form_permohonan.php" class="nav-item nav-link"><i class="fa-solid fa-th me-2"></i>Permohonan</a>
                 <a href="from_monitoring.php" class="nav-item nav-link"><i class="fa-solid fa-eye me-2"></i>Monitoring</a>
                 <a href="from_penarikan.php" class="nav-item nav-link"><i class="fa-solid fa-hand-holding-heart me-2"></i>Penarikan</a>
-                <a href="absensi_admin.php" class="nav-item nav-link"><i class="fa-solid fa-pen me-2"></i>Absensi</a>
+                <a href="absensi_admin.php" class="nav-item nav-link active"><i class="fa-solid fa-pen me-2"></i>Absensi</a>
             </div>
         </nav>
     </div>
@@ -96,124 +96,114 @@
         </nav>
         <!-- Navbar End -->
 
-        <!-- Welcome Message -->
-        <div class="container-fluid pt-4 px-4">
-            <div class="row">
-                <div class="col-12">
-                    <div class="bg-light rounded p-4 text-center">
-                        <h3 class="text-primary">SELAMAT DATANG DI SIPRAKA</h3>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Sale & Revenue Start -->
-        <?php
-$servername = "localhost";
-$username = "root";
+<?php
+// Konfigurasi koneksi database
+$host = "localhost";
+$user = "root";
 $password = "";
-$dbname = "db_sipraka";
+$database = "db_sipraka";
 
-$conn = new mysqli($servername, $username, $password, $dbname);
-
+$conn = new mysqli($host, $user, $password, $database);
 if ($conn->connect_error) {
     die("Koneksi gagal: " . $conn->connect_error);
 }
 
-// Total Siswa PKL
-$sql_total_siswa = "SELECT COUNT(*) AS total FROM siswa";
-$result_total_siswa = $conn->query($sql_total_siswa);
-$row_total = $result_total_siswa->fetch_assoc();
-$total_siswa_pkl = $row_total['total'];
-
-// Total Guru Pembimbing
-$sql_total_pembimbing = "SELECT COUNT(*) AS total FROM data_pembimbing";
-$result_total_pembimbing = $conn->query($sql_total_pembimbing);
-$row_pembimbing = $result_total_pembimbing->fetch_assoc();
-$total_pembimbing = $row_pembimbing['total'];
-
-// Total Du/Di
-$sql_total_dudi = "SELECT COUNT(*) AS total FROM data_dudi";
-$result_total_dudi = $conn->query($sql_total_dudi);
-$row_dudi = $result_total_dudi->fetch_assoc();
-$total_dudi = $row_dudi['total'];
-
-$conn->close();
+// Ambil daftar jurusan unik
+$sql_jurusan = "SELECT DISTINCT jurusan FROM absensi";
+$result_jurusan = $conn->query($sql_jurusan);
 ?>
 
 <div class="container-fluid pt-4 px-4">
-    <div class="row row-cols-1 row-cols-md-3 g-4">
-        <!-- Total Siswa PKL -->
-        <div class="col">
-            <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
-                <i class="fa fa-chart-line fa-3x text-primary"></i>
-                <div class="ms-3">
-                    <p class="mb-2">Total Siswa PKL</p>
-                    <h6 class="mb-0"><?= $total_siswa_pkl; ?></h6>
-                </div>
-            </div>
-        </div>
-
-        <!-- Total Guru Pembimbing -->
-        <div class="col">
-            <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
-                <i class="fa fa-chart-bar fa-3x text-primary"></i>
-                <div class="ms-3">
-                    <p class="mb-2">Guru Pembimbing</p>
-                    <h6 class="mb-0"><?= $total_pembimbing; ?></h6>
-                </div>
-            </div>
-        </div>
-
-        <!-- Total Du/Di -->
-        <div class="col">
-            <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
-                <i class="fa fa-chart-area fa-3x text-primary"></i>
-                <div class="ms-3">
-                    <p class="mb-2">Total Du/Di</p>
-                    <h6 class="mb-0"><?= $total_dudi; ?></h6>
-                </div>
+    <!-- Header -->
+    <div class="row">
+        <div class="col-12">
+            <div class="bg-light rounded p-4 text-center mb-3">
+                <h3 class="text-primary">DATA ABSENSI SISWA</h3>
             </div>
         </div>
     </div>
-</div>
 
-        <!-- Panduan Pengguna -->
-        <div class="container-fluid pt-4 px-4">
-            <div class="row">
-                <div class="col-12">
-                    <div class="bg-light rounded p-4">
-                        <h5 class="text-primary mb-3">Panduan Pengguna</h5>
-                        <ul class="list-unstyled">
-                            <li><strong>Siswa:</strong> Melakukan absensi harian.</li>
-                            <li><strong>Guru:</strong> Mengisi data monitoring dan memberi penilaian.</li>
-                            <li><strong>Admin:</strong> Mengelola seluruh data.</li>
+    <!-- Card List -->
+    <div class="row g-4">
+        <?php while ($row_jurusan = $result_jurusan->fetch_assoc()) { 
+            $jurusan = $row_jurusan['jurusan'];
+
+            // Ambil 2 data absensi terbaru berdasarkan jurusan, kecuali yang tanggalnya '0000-00-00'
+            $sql_absensi = "SELECT nama, tanggal, keterangan FROM absensi WHERE jurusan = ? AND tanggal != '0000-00-00' ORDER BY tanggal DESC LIMIT 2";
+            $stmt = $conn->prepare($sql_absensi);
+            $stmt->bind_param("s", $jurusan);
+            $stmt->execute();
+            $result_absensi = $stmt->get_result();
+
+            // Cek apakah ada data valid dalam jurusan ini
+            if ($result_absensi->num_rows == 0) {
+                continue; // Lewati jurusan jika tidak ada data valid
+            }
+        ?>
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100">
+                    <div class="card-header bg-primary text-white text-center">
+                        <h5 class="mb-0 text-white"><?php echo htmlspecialchars($jurusan); ?></h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                            <?php while ($absensi = $result_absensi->fetch_assoc()) { ?>
+                                <li class="list-group-item">
+                                    <strong><?php echo htmlspecialchars($absensi['nama']); ?></strong> <br>
+                                    <small class="text-muted"><?php echo htmlspecialchars($absensi['tanggal']); ?></small> <br>
+                                    <span class="badge bg-info"><?php echo htmlspecialchars($absensi['keterangan']); ?></span>
+                                </li>
+                            <?php } ?>
                         </ul>
                     </div>
-                </div>
-            </div>
-        </div>
+                    <div class="card-footer text-center">
+                        <a href="detail_absensi_admin.php?jurusan=<?php echo urlencode($jurusan); ?>" class="btn btn-outline-secondary">
+                            Lihat Semua
+                        </a>
 
-        <!-- Footer Start -->
-        <div class="container-fluid pt-4 px-4">
-            <div class="bg-light rounded-top p-4">
-                <div class="row">
-                    <div class="col-12 col-sm-6 text-center text-sm-start">
-                        &copy; <a href="#">2025 SIPRAKA</a>, All Right Reserved.
                     </div>
                 </div>
             </div>
-        </div>
+        <?php 
+            $stmt->close();
+        } ?>
     </div>
-    <!-- Content End -->
+
+    <!-- Tombol Download Semua -->
+
 </div>
 
-<!-- Footer End -->
+<?php
+$conn->close();
+?>
 
+<!-- Footer Start -->
+<div class="container-fluid pt-4 px-4">
+                <div class="bg-light rounded-top p-4">
+                    <div class="row">
+                        <div class="col-12 col-sm-6 text-center text-sm-start">
+                            &copy; <a href="#">2025 SIPRAKA</a>, SMK Negeri 2 Bangkalan 
+                        </div>
+                    </div>
+                </div>
+            </div>
             <!-- Footer End -->
         </div>
         <!-- Content End -->
 
+        <style>
+    .list-group-item {
+        word-wrap: break-word; /* Memastikan teks tidak keluar */
+        overflow-wrap: break-word;
+        white-space: normal;
+    }
+
+    .badge {
+        word-break: break-word; /* Mencegah teks panjang keluar */
+        max-width: 100%; /* Batasi agar tetap di dalam card */
+        display: inline-block;
+    }
+</style>
 
         <!-- Back to Top -->
         <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
