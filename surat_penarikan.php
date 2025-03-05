@@ -105,25 +105,34 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 
 $id = intval($_GET["id"]); 
 
-$sql = "SELECT p.*, 
-               CASE 
-                   WHEN p.tempat_pkl REGEXP '^[0-9]+$' THEN d.nama_dudi 
-                   ELSE p.tempat_pkl 
-               END AS tempat_pkl_final,
-               CASE 
-                   WHEN p.alamat_pkl = '' OR p.alamat_pkl IS NULL THEN d.alamat 
-                   ELSE p.alamat_pkl 
-               END AS alamat_pkl_final
-        FROM permohonan_pkl p
-        LEFT JOIN data_dudi d ON p.tempat_pkl = d.id
-        WHERE p.id = $id";
+// Query untuk mengambil data penarikan
+$sql = "SELECT * FROM penarikan_pkl WHERE id = ?";
+$stmt = mysqli_prepare($conn, $sql);
+mysqli_stmt_bind_param($stmt, "i", $id);
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
+$data = mysqli_fetch_assoc($result);
 
-$result = mysqli_query($conn, $sql);
-
-if ($row = mysqli_fetch_assoc($result)) {
+if (!$data) {
+    echo "Data tidak ditemukan!";
+    exit;
 }
 
+// Debug untuk melihat data yang masuk
 
+
+// Konversi string siswa_list menjadi array dengan memperhatikan line breaks
+$siswa_list = [];
+if (!empty($data['siswa_list'])) {
+    // Coba deteksi line breaks yang mungkin berbeda
+    $siswa_list = preg_split('/\r\n|\r|\n/', $data['siswa_list']);
+}
+
+// Debug untuk melihat array yang dihasilkan
+
+
+// Format tanggal
+$tanggal_surat = date("d F Y", strtotime($data['tanggal_berakhir']));
 ?>
 
 
@@ -141,14 +150,19 @@ if ($row = mysqli_fetch_assoc($result)) {
         </div>
     </div>
     <hr>
-    <p class="text-end">Bangkalan, <?= date("d F Y", strtotime($data['tanggal_surat'])); ?></p>
-    <p>Nomor: <?= $data['nomor_surat']; ?></p>
+    <p class="text-end">Bangkalan, <?= $tanggal_surat ?></p>
+    <p>Nomor: <?= htmlspecialchars($data['nomor_surat']) ?></p>
     <p>Hal: Penarikan siswa PKL</p>
     <p>Kepada Yth: <strong>Bapak/Ibu Pimpinan</strong></p>
-    <p><strong><?= $data['nama_dudi']; ?></strong></p>
-    <p><?= $data['alamat_pkl']; ?></p>
+    <p><strong><?= htmlspecialchars($data['tempat_pkl']) ?></strong></p>
+    <p><?= htmlspecialchars($data['alamat_pkl']) ?></p>
+    <p><em>Assalamu'alaikum Wr. Wb.</em></p>
+     <p>Dengan Hormat,</p>
+     <p>
+        Dengan ini Tim Praktek Kerja Lapangan (PKL) SMK Negeri 2 Bangkalan, menginformasikan siswa:
+        </p>
+    <p><strong>Konsentrasi Keahlian: </strong><?= htmlspecialchars($data['konsentrasi_keahlian']) ?></p>
     
-    <p><strong>Konsentrasi Keahlian: </strong><?= $data['konsentrasi_keahlian']; ?></p>
     <table class="table table-bordered text-center">
         <thead>
             <tr>
@@ -159,17 +173,41 @@ if ($row = mysqli_fetch_assoc($result)) {
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($siswa_list as $index => $siswa): 
-                $siswa_data = explode(",", $siswa); ?>
+            <?php if (!empty($siswa_list)): ?>
+                <?php foreach ($siswa_list as $index => $siswa): ?>
+                    <?php 
+                    // Debug untuk melihat data per siswa
+                    echo "<!-- Data siswa: " . htmlspecialchars($siswa) . " -->";
+                    
+                    $siswa_data = explode(",", trim($siswa));
+                    ?>
+                    <tr>
+                        <td><?= $index + 1 ?></td>
+                        <td><?= isset($siswa_data[0]) ? htmlspecialchars(trim($siswa_data[0])) : '' ?></td>
+                        <td><?= isset($siswa_data[1]) ? htmlspecialchars(trim($siswa_data[1])) : '' ?></td>
+                        <td><?= isset($siswa_data[2]) ? htmlspecialchars(trim($siswa_data[2])) : '' ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
                 <tr>
-                    <td><?= $index + 1; ?></td>
-                    <td><?= $siswa_data[0]; ?></td>
-                    <td><?= $siswa_data[1]; ?></td>
-                    <td><?= $siswa_data[2]; ?></td>
+                    <td colspan="4">Tidak ada data siswa</td>
                 </tr>
-            <?php endforeach; ?>
+            <?php endif; ?>
         </tbody>
     </table>
+    <p>
+    Peserta Praktik Kerja Lapangan pada perusahaan Bapak/Ibu akan kami tarik, karena masa pelaksanaan PKL Berakhir Tanggal 
+    <strong><?= htmlspecialchars($data["tanggal_berakhir"]) ?></strong>.
+    
+    Selanjutnya kami menyampaikan terima kasih atas kerjasamanya dalam membimbing serta membina siswa kami selama ini.
+    Besar harapan kami untuk dapat melanjutkan kerjasama ini di masa mendatang.
+</p>
+<p><em>Wassalamu'alaikum Wr. Wb.</em></p>
+        <div class="text-end">
+            <p>Hormat Kami,</p>
+            <p>Kepala SMK Negeri 2 Bangkalan</p>
+            <br><br><br>
+            <p><strong>Nur Hazizah, S.Pd., M.Pd.</strong></p>
 </div>
 <!-- Footer Start -->
 <div class="container-fluid pt-4 px-4">
