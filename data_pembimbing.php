@@ -116,11 +116,11 @@ $message = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nama_pembimbing = $_POST['nama']; // Sesuai dengan name di input form
     $jurusan = $_POST['jurusan'];
-    $du_di = $_POST['du_di']; // Nama Du/Di dari dropdown
+    $du_di = $_POST['du_di']; // ID Du/Di dari dropdown
 
     // Simpan data ke tabel data_pembimbing
     $stmt = $conn->prepare("INSERT INTO data_pembimbing (nama_pembimbing, jurusan, du_di) VALUES (?, ?, ?)");
-    $stmt->bind_param("sss", $nama_pembimbing, $jurusan, $du_di);
+    $stmt->bind_param("ssi", $nama_pembimbing, $jurusan, $du_di);
 
     if ($stmt->execute()) {
         $message = "<div class='alert alert-success mt-3'>Data berhasil disimpan.</div>";
@@ -163,9 +163,7 @@ $conn->close();
                         <select class="form-select" id="duDiSelect" name="du_di" required>
                             <option selected disabled>Pilih Du/Di</option>
                             <?php while ($row = $result_du_di->fetch_assoc()) : ?>
-                                <option value="<?= htmlspecialchars($row['nama_dudi']); ?>">
-                                    <?= htmlspecialchars($row['nama_dudi']); ?>
-                                </option>
+                                <option value="<?= $row['id']; ?>"><?= htmlspecialchars($row['nama_dudi']); ?></option>
                             <?php endwhile; ?>
                         </select>
                         <label for="duDiSelect">Nama Du/Di</label>
@@ -177,9 +175,8 @@ $conn->close();
                 <?= $message; ?> <!-- Menampilkan pesan sukses atau error -->
             </div>
         </div>
-    </div>
+    </div>
 </div>
-
 
                     
             <!-- Other Elements End -->

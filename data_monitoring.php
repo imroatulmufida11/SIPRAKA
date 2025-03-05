@@ -1,3 +1,14 @@
+<?php
+require_once __DIR__ . '/config.php';
+
+if ($conn->connect_error) {
+    die("Koneksi gagal: " . $conn->connect_error);
+}
+
+// Ambil data dari tabel monitoring_guru
+$result = $conn->query("SELECT * FROM monitoring_guru");
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -13,6 +24,7 @@
     <!-- Favicon -->
     <link href="img/favicon.ico" rel="icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -35,20 +47,19 @@
 </head>
 
 <body>
-    <div class="container-xxl position-relative bg-white d-flex p-0">
-        <!-- Spinner Start -->
-        <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
-            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
-                <span class="sr-only">Loading...</span>
-            </div>
+<div class="container-xxl position-relative bg-white d-flex p-0">
+    <!-- Spinner Start -->
+    <!-- <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
         </div>
-        <!-- Spinner End -->
+    </div> -->
+    <!-- Spinner End -->
 
-
-        <!-- Sidebar Start -->
-        <div class="sidebar pe-4 pb-3">
+    <!-- Sidebar Start -->
+    <div class="sidebar pe-4 pb-3">
         <nav class="navbar bg-light navbar-light">
-            <a href="tambahdata_admin.php" class="navbar-brand mx-4 mb-3">
+            <a href="index.html" class="navbar-brand mx-4 mb-3">
                 <h3 class="text-primary">SIPRAKA</h3>
             </a>
 
@@ -62,18 +73,17 @@
                     <span>Online</span>
                 </div>
             </div>
-        <div class="navbar-nav w-100">
-            <a href="dasboard_admin.php" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
-            <a href="tambahdata_admin.php" class="nav-item nav-link active"><i class="fa fa-calendar-plus me-2"></i>Tambah Data</a>
-            <a href="form_permohonan.php" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Permohonan</a>
-            <a href="from_monitoring.php" class="nav-item nav-link"><i class="fa fa-eye me-2"></i>Monitoring</a>
-            <a href="from_penarikan.php" class="nav-item nav-link"><i class="fa-solid fa-hand-holding-heart me-2"></i>Penarikan</a>
-            <a href="absensi_admin.php" class="nav-item nav-link"><i class="fa fa-pen me-2"></i>Absensi</a>
-        </div>
-    </nav>
-</div>
-
-<div class="content">
+            <div class="navbar-nav w-100">
+                <a href="dasboard_admin.php" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                <a href="tambahdata_admin.php" class="nav-item nav-link"><i class="fa-solid fa-calendar-plus me-2"></i>Tambah Data</a>
+                <a href="form_permohonan.php" class="nav-item nav-link"><i class="fa-solid fa-th me-2"></i>Permohonan</a>
+                <a href="from_monitoring.php" class="nav-item nav-link active"><i class="fa-solid fa-eye me-2"></i>Monitoring</a>
+                <a href="from_penarikan.php" class="nav-item nav-link"><i class="fa-solid fa-hand-holding-heart me-2"></i>Penarikan</a>
+                <a href="absensi_admin.php" class="nav-item nav-link"><i class="fa-solid fa-pen me-2"></i>Absensi</a>
+            </div>
+        </nav>
+    </div>
+    <div class="content">
     <!-- Navbar Start -->
     <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0" style="height: 56px;">
         <!-- Tombol Kembali (pojok kiri) -->
@@ -82,55 +92,48 @@
         </button>
     </nav>
 
-        </nav>
-<?php
-include 'config.php'; // Hubungkan dengan file koneksi database
-
-// Query untuk mengambil semua data siswa beserta relasi dari tabel lain
-$sql = "SELECT 
-            siswa.id, 
-            siswa.nama_siswa, 
-            siswa.jurusan,  
-            data_dudi.nama_dudi,  
-            COALESCE(data_pembimbing.nama_pembimbing, 'Belum Ditentukan') AS nama_pembimbing
-        FROM siswa  
-        JOIN data_dudi ON siswa.du_di = data_dudi.id  
-        LEFT JOIN data_pembimbing ON siswa.pembimbing_id = data_pembimbing.id";
-
-$result = $conn->query($sql);
-?>
-
-
+        </nav> 
+        
 <div class="container-fluid pt-4 px-4">
     <div class="row g-4">
         <div class="col-12">
             <div class="bg-light rounded h-100 p-4">
-                <h2 class="mb-4">Data Siswa</h2>
+                <h2 class="mb-4">Hasil Monitoring Guru</h2>
                 <div class="table-responsive">
-                    <table class="table table-bordered table-striped table-hover">
+                    <table class="table table-bordered table-striped table-hover w-100">
                         <thead class="table-light">
                             <tr>
                                 <th>ID</th>
+                                <th>Guru Pembimbing</th>
                                 <th>Nama Siswa</th>
-                                <th>Jurusan</th>
-                                <th>Nama DUDI</th>
-                                <th>Nama Pembimbing</th>
+                                <th>Tempat DUDI</th>
+                                <th>Tanggal Pelaksanaan</th>
+                                <th>Catatan</th>
+                                <th>Dokumentasi</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php
-                            if (isset($result) && $result->num_rows > 0) {
+                            if ($result->num_rows > 0) {
                                 while ($row = $result->fetch_assoc()) {
                                     echo "<tr>
                                             <td>{$row['id']}</td>
-                                            <td>{$row['nama_siswa']}</td>
-                                            <td>{$row['jurusan']}</td>
-                                            <td>{$row['nama_dudi']}</td>
-                                            <td>{$row['nama_pembimbing']}</td>
+                                            <td>{$row['guru_pembimbing']}</td>
+                                            <td>{$row['siswa_pkl']}</td>
+                                            <td>{$row['tempat_dudi']}</td>
+                                            <td>{$row['tanggal_pelaksanaan']}</td>
+                                            <td>{$row['catatan_monitoring']}</td>
+                                            <td>";
+                                    if (!empty($row['dokumentasi'])) {
+                                        echo "<img src='{$row['dokumentasi']}' alt='Dokumentasi' class='img-fluid' style='max-width: 100px;'>";
+                                    } else {
+                                        echo "Tidak ada dokumentasi";
+                                    }
+                                    echo "</td>
                                           </tr>";
                                 }
                             } else {
-                                echo "<tr><td colspan='5' class='text-center'>Tidak ada data</td></tr>";
+                                echo "<tr><td colspan='7' class='text-center'>Tidak ada data</td></tr>";
                             }
                             ?>
                         </tbody>
@@ -141,11 +144,7 @@ $result = $conn->query($sql);
     </div>
 </div>
 
-<?php
-$conn->close(); // Tutup koneksi database
-?>
-
-<!-- Footer -->
+<!-- Footer Start -->
 <div class="container-fluid pt-4 px-4">
             <div class="bg-light rounded-top p-4">
                 <div class="row">
@@ -156,26 +155,6 @@ $conn->close(); // Tutup koneksi database
             </div>
         </div>
     </div>
+    
     <!-- Content End -->
 </div>
-
-        <!-- Back to Top -->
-        <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
-    </div>
-
-    <!-- JavaScript Libraries -->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="lib/chart/chart.min.js"></script>
-    <script src="lib/easing/easing.min.js"></script>
-    <script src="lib/waypoints/waypoints.min.js"></script>
-    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
-    <script src="lib/tempusdominus/js/moment.min.js"></script>
-    <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
-    <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
-
-    <!-- Template Javascript -->
-    <script src="js/main.js"></script>
-</body>
-
-</html>

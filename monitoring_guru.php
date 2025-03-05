@@ -1,3 +1,58 @@
+<?php
+session_start();
+require_once __DIR__ . '/config.php';
+
+if ($conn->connect_error) {
+    die("Koneksi gagal: " . $conn->connect_error);
+}
+
+// Ambil data Guru Pembimbing
+$pembimbing_result = $conn->query("SELECT id, nama_pembimbing FROM data_pembimbing");
+
+// Ambil data Tempat DUDI
+$dudi_result = $conn->query("SELECT id, nama_dudi FROM data_dudi");
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $guru_pembimbing = $_POST["guru_pembimbing"];
+    
+    // Ambil siswa dari textarea, pecah per baris, hapus spasi kosong, lalu gabungkan dengan koma
+    $siswaArray = array_map('trim', explode("\n", $_POST["siswaList"]));
+    $siswa_pkl = implode(", ", $siswaArray); 
+
+    $tempat_dudi = $_POST["tempat_dudi"];
+    $tanggal_pelaksanaan = $_POST["tanggal_pelaksanaan"];
+    $catatan_monitoring = $_POST["catatan_monitoring"];
+
+    $dokumentasi = "";
+
+    // Proses unggah gambar
+    if (!empty($_FILES["dokumentasi"]["name"])) {
+        $target_dir = "uploads/";
+        if (!is_dir($target_dir)) {
+            mkdir($target_dir, 0777, true);
+        }
+        $dokumentasi = $target_dir . basename($_FILES["dokumentasi"]["name"]);
+        move_uploaded_file($_FILES["dokumentasi"]["tmp_name"], $dokumentasi);
+    }
+
+    $sql = "INSERT INTO monitoring_guru (guru_pembimbing, siswa_pkl, tempat_dudi, tanggal_pelaksanaan, catatan_monitoring, dokumentasi)
+            VALUES (?, ?, ?, ?, ?, ?)";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ssssss", $guru_pembimbing, $siswa_pkl, $tempat_dudi, $tanggal_pelaksanaan, $catatan_monitoring, $dokumentasi);
+
+    if ($stmt->execute()) {
+        $success_message = "Data berhasil disimpan!";
+    } else {
+        $error_message = "Error: " . $stmt->error;
+    }
+
+    $stmt->close();
+    $conn->close();
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -63,9 +118,9 @@
                 </div>
             </div>
             <div class="navbar-nav w-100">
-                <a href="dasboard_guru.php" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                <a href="dasboard_guru.php" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
                 <a href="permohonan_guru.php" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Permohonan</a>
-                <a href="monitoring_guru.php" class="nav-item nav-link"><i class="fa-solid fa-eye me-2"></i>Monitoring</a>
+                <a href="monitoring_guru.php" class="nav-item nav-link active"><i class="fa-solid fa-eye me-2"></i>Monitoring</a>
                 <a href="penarikan_guru.php" class="nav-item nav-link"><i class="fa-solid fa-hand-holding-heart me-2"></i>Penarikan</a>
 
             </div>
@@ -95,8 +150,79 @@
         </nav>
         <!-- Navbar End -->
 
+        <div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+        <div class="col-12">
+            <div class="bg-light rounded h-100 p-4">
+                <div class="container mt-4">
 
-        
+                <?php if (isset($success_message)): ?>
+    <div class="alert alert-success" id="notif-alert"><?= $success_message ?></div>
+<?php elseif (isset($error_message)): ?>
+    <div class="alert alert-danger" id="notif-alert"><?= $error_message ?></div>
+<?php endif; ?>
+
+
+        <form action="" method="POST" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label class="form-label">Guru Pembimbing</label>
+                <select name="guru_pembimbing" class="form-control" required>
+                    <option value="">-- Pilih Guru Pembimbing --</option>
+                    <?php while ($row = $pembimbing_result->fetch_assoc()): ?>
+                        <option value="<?= $row['nama_pembimbing'] ?>"><?= $row['nama_pembimbing'] ?></option>
+                    <?php endwhile; ?>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Nama Siswa (Setiap Nama di Baris Baru):</label>
+                <textarea class="form-control" name="siswaList" rows="3" required></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Tempat DUDI</label>
+                <select name="tempat_dudi" class="form-control" required>
+                    <option value="">-- Pilih Tempat DUDI --</option>
+                    <?php while ($row = $dudi_result->fetch_assoc()): ?>
+                        <option value="<?= $row['nama_dudi'] ?>"><?= $row['nama_dudi'] ?></option>
+                    <?php endwhile; ?>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Tanggal Pelaksanaan</label>
+                <input type="date" name="tanggal_pelaksanaan" class="form-control" required>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label">Catatan Monitoring</label>
+                <textarea name="catatan_monitoring" class="form-control" rows="3"></textarea>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label">Dokumentasi (Gambar)</label>
+                <input type="file" name="dokumentasi" class="form-control" accept="image/*">
+            </div>
+            
+            <button type="submit" class="btn btn-outline-primary">Simpan</button>
+        </form>
+        </div>
+            </div>
+        </div>
+    </div>
+</div>
+    
+<script>
+    setTimeout(function() {
+        var alert = document.getElementById("notif-alert");
+        if (alert) {
+            alert.style.transition = "opacity 0.5s";
+            alert.style.opacity = "0";
+            setTimeout(() => alert.style.display = "none", 500);
+        }
+    }, 3000); // Notif hilang dalam 3 detik
+</script>
+
           <!-- Footer Start -->
      <div class="container-fluid pt-4 px-4">
             <div class="bg-light rounded-top p-4">

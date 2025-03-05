@@ -21,12 +21,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Query insert
     $sql = "INSERT INTO monitoring_pkl (nomor_surat, nama_guru, nip_guru, jabatan_guru, tempat_pkl, 
-            alamat_pkl, tanggal_surat, tanggal_mulai, tanggal_berakhir, konsentrasi_keahlian, siswa) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            alamat_pkl, tanggal_surat, konsentrasi_keahlian, siswa) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
     
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sssssssssss", $nomor_surat, $nama_guru, $nip_guru, $jabatan_guru, $tempat_pkl, 
-                      $alamat_pkl, $tanggal_surat, $tanggal_mulai, $tanggal_berakhir, $konsentrasi_keahlian, $siswa);
+    $stmt->bind_param("sssssssss", $nomor_surat, $nama_guru, $nip_guru, $jabatan_guru, $tempat_pkl, 
+                      $alamat_pkl, $tanggal_surat, $konsentrasi_keahlian, $siswa);
     
     if ($stmt->execute()) {
         $message = '<div class="alert alert-success">Data berhasil disimpan!</div>';
@@ -106,10 +106,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="navbar-nav w-100">
                 <a href="dasboard_admin.php" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
                 <a href="tambahdata_admin.php" class="nav-item nav-link"><i class="fa-solid fa-calendar-plus me-2"></i>Tambah Data</a>
-                <a href="form_permohonan.php" class="nav-item nav-link active"><i class="fa-solid fa-th me-2"></i>Permohonan</a>
-                <a href="from_monitoring.php" class="nav-item nav-link"><i class="fa-solid fa-eye me-2"></i>Monitoring</a>
-                <a href="chart.html" class="nav-item nav-link"><i class="fa-solid fa-hand-holding-heart me-2"></i>Penarikan</a>
-                <a href="chart.html" class="nav-item nav-link"><i class="fa-solid fa-pen me-2"></i>Absensi</a>
+                <a href="form_permohonan.php" class="nav-item nav-link"><i class="fa-solid fa-th me-2"></i>Permohonan</a>
+                <a href="from_monitoring.php" class="nav-item nav-link active"><i class="fa-solid fa-eye me-2"></i>Monitoring</a>
+                <a href="from_penarikan.php" class="nav-item nav-link"><i class="fa-solid fa-hand-holding-heart me-2"></i>Penarikan</a>
+                <a href="absensi_admin.php" class="nav-item nav-link"><i class="fa-solid fa-pen me-2"></i>Absensi</a>
             </div>
         </nav>
     </div>
@@ -118,22 +118,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <!-- Content Start -->
     <div class="content">
         <!-- Navbar Start -->
-        <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0">
-            <a href="index.html" class="navbar-brand d-flex d-lg-none me-4">
-                <h2 class="text-primary mb-0"><i class="fa fa-hashtag"></i></h2>
+        <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0" style="height: 56px;">
+        <div class="ms-auto">
+            <!-- Tombol Lihat Data (pojok kanan) -->
+            <a href="data_monitoring.php" class="btn btn-primary px-3 py-2">
+                Lihat Data
             </a>
-            <a href="#" class="sidebar-toggler flex-shrink-0">
-                <i class="fa fa-bars"></i>
-            </a>
-            <div class="nav-item dropdown ms-auto">
-                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                    <img class="rounded-circle me-lg-2" src="img/foto.jpg" alt="" style="width: 40px; height: 40px;">
-                    <span class="d-none d-lg-inline-flex">Admin</span>
-                </a>
-                <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
-                    <a href="login.php" class="dropdown-item">Keluar</a>
-                </div>
-            </div>
+        </div>
+    </nav>
+
         </nav>
 
         

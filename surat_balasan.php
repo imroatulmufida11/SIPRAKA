@@ -1,3 +1,78 @@
+<?php
+session_start();
+require_once __DIR__ . '/config.php'; // Koneksi ke database
+
+$success_message = $error_message = "";
+$file_surat = "";
+
+// Ambil daftar DUDI dari database
+$dudi_list = [];
+$result_dudi = $conn->query("SELECT id, nama_dudi FROM data_dudi ORDER BY nama_dudi ASC");
+while ($row = $result_dudi->fetch_assoc()) {
+    $dudi_list[] = $row;
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $id_dudi = $_POST["id"] ?? "";
+
+    if (empty($id_dudi)) {
+        $error_message = "Pilih Nama DUDI!";
+    } else {
+        // Ambil nama_dudi berdasarkan id_dudi
+        $query = $conn->prepare("SELECT nama_dudi FROM data_dudi WHERE id = ?");
+        $query->bind_param("i", $id_dudi);
+        $query->execute();
+        $query->bind_result($nama_dudi);
+        $query->fetch();
+        $query->close();
+
+        if (!$nama_dudi) {
+            $error_message = "DUDI tidak ditemukan!";
+        } elseif (!empty($_FILES["file_surat"]["name"])) {
+            $target_dir = "uploads/surat_permohonan/";
+            if (!is_dir($target_dir)) {
+                mkdir($target_dir, 0777, true);
+            }
+
+            $file_extension = pathinfo($_FILES["file_surat"]["name"], PATHINFO_EXTENSION);
+            $allowed_extensions = ["jpg", "jpeg", "png"];
+
+            if (in_array(strtolower($file_extension), $allowed_extensions)) {
+                $new_file_name = time() . "_" . basename($_FILES["file_surat"]["name"]);
+                $file_surat = $target_dir . $new_file_name;
+
+                if (move_uploaded_file($_FILES["file_surat"]["tmp_name"], $file_surat)) {
+                    // Simpan data ke database
+                    $stmt = $conn->prepare("INSERT INTO upload_surat (nama_dudi, file_surat) VALUES (?, ?)");
+                    $stmt->bind_param("ss", $nama_dudi, $file_surat);
+
+                    if ($stmt->execute()) {
+                        $success_message = "Surat berhasil diunggah!";
+                    } else {
+                        $error_message = "Gagal menyimpan ke database: " . $stmt->error;
+                    }
+
+                    $stmt->close();
+                } else {
+                    $error_message = "Gagal mengunggah surat.";
+                }
+            } else {
+                $error_message = "Format file tidak didukung! Harap unggah JPG, JPEG, atau PNG.";
+            }
+        } else {
+            $error_message = "Silakan pilih file untuk diunggah.";
+        }
+    }
+}
+
+
+// Ambil data dari database untuk tabel tampilan
+$result = $conn->query("SELECT us.*, dd.nama_dudi 
+                        FROM upload_surat us
+                        JOIN data_dudi dd ON us.id = dd.id
+                        ORDER BY us.tanggal_upload DESC");
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -73,103 +148,62 @@
         </nav>
     </div>
     <!-- Sidebar End -->
-
-    <!-- Content Start -->
     <div class="content">
-        <!-- Navbar Start -->
-        <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0" style="height: 56px;">
-        <div class="ms-auto">
-            <!-- Tombol Lihat Data (pojok kanan) -->
-            <a href="surat_balasan.php" class="btn btn-primary px-3 py-2">
-                Lihat Data
-            </a>
-        </div>
+    <!-- Navbar Start -->
+    <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0" style="height: 56px;">
+        <!-- Tombol Kembali (pojok kiri) -->
+        <button onclick="history.back()" class="btn btn-secondary px-3 py-2">
+            Kembali
+        </button>
     </nav>
 
-        </nav>
+        </nav> 
 
-        
-
-        <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "db_sipraka";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-if ($conn->connect_error) {
-    die("Koneksi gagal: " . $conn->connect_error);
-}
-
-// Ambil data Du/Di dari database
-$sql = "SELECT id, nama_dudi, alamat FROM data_dudi";
-$result = $conn->query($sql);
-?>  
-
-<div class="container-fluid pt-4 px-4">
+ <!-- Tabel Data Surat -->
+ <div class="container-fluid pt-4 px-4">
     <div class="row g-4">
         <div class="col-12">
             <div class="bg-light rounded h-100 p-4">
-                <div class="container mt-4">
-                    <h2 class="text-center">Formulir Surat Permohonan PKL</h2>
-                    <form action="proses.php" method="POST">
-                        <div class="mb-3">
-                            <label class="form-label">Nomor Surat:</label>
-                            <input type="text" class="form-control" name="nomorSurat" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Tempat PKL:</label>
-                            <select class="form-control" name="dudiId" id="tempatPkl" required>
-                                <option value="">Pilih Du/Di</option>
-                                <?php while ($row = $result->fetch_assoc()) : ?>
-                                    <option value="<?= $row['id'] ?>" data-nama="<?= htmlspecialchars($row['nama_dudi']) ?>" data-alamat="<?= htmlspecialchars($row['alamat']) ?>">
-                                        <?= htmlspecialchars($row['nama_dudi']) ?>
-                                    </option>
-                                <?php endwhile; ?>
-                            </select>
-                        </div>
-                        <!-- Input hidden untuk menyimpan nama_dudi -->
-                        <input type="hidden" name="tempatPkl" id="namaDudi">
-
-                        <div class="mb-3">
-                            <label class="form-label">Alamat PKL:</label>
-                            <textarea class="form-control" name="alamatPkl" id="alamatPkl" required readonly></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Konsentrasi Keahlian:</label>
-                            <input type="text" class="form-control" name="konsentrasiKeahlian" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Nama dan NISN Siswa:</label>
-                            <textarea class="form-control" name="siswaList" rows="3" placeholder="Nama - NISN" required></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Tanggal Mulai PKL:</label>
-                            <input type="date" class="form-control" name="tanggalMulai" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Tanggal Berakhir PKL:</label>
-                            <input type="date" class="form-control" name="tanggalBerakhir" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Buat Surat</button>
-                    </form>
-                </div>
-            </div>
-        </div>
+        <h4 class="text-center">Surat Balasan </h4>
+        <table class="table table-bordered">
+            <thead>
+                <tr class="table-primary text-center">
+                    <th>No</th>
+                    <th>Nama DUDI</th>
+                    <th>Nama File</th>
+                    <th>Pratinjau</th>
+                    <th>Tanggal Upload</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if ($result->num_rows > 0): ?>
+                    <?php $no = 1; while ($row = $result->fetch_assoc()): ?>
+                        <tr>
+                            <td class="text-center"><?= $no++; ?></td>
+                            <td><?= $row['nama_dudi']; ?></td>
+                            <td><?= $row['file_surat']; ?></td>
+                            <td class="text-center">
+                                <img src="uploads/surat_permohonan/<?= $row['file_surat']; ?>" alt="Surat" width="100">
+                            </td>
+                            <td class="text-center"><?= $row['tanggal_upload']; ?></td>
+                        </tr>
+                    <?php endwhile; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="5" class="text-center">Belum ada surat yang diunggah.</td>
+                    </tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
     </div>
-</div>
+</div> 
+ </div>
+            </div>
+        <!-- </div>
+    </div> -->
 
-<script>
-document.getElementById("tempatPkl").addEventListener("change", function() {
-    var selectedOption = this.options[this.selectedIndex];
-    document.getElementById("alamatPkl").value = selectedOption.getAttribute("data-alamat");
-    document.getElementById("namaDudi").value = selectedOption.getAttribute("data-nama"); // Set nama DU/DI
-});
-</script>
-
-       <!-- Footer Start -->
-       <div class="container-fluid pt-4 px-4">
+<!-- Footer Start -->
+<div class="container-fluid pt-4 px-4">
             <div class="bg-light rounded-top p-4">
                 <div class="row">
                     <div class="col-12 col-sm-6 text-center text-sm-start">

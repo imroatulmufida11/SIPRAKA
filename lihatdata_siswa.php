@@ -81,83 +81,81 @@
                 <button onclick="history.back()" class="btn btn-secondary px-3 py-2">
                     Kembali
                 </button>
-
-                <!-- <div class="ms-auto">
-                    <a href="lihatdata_siswa.php" class="btn btn-primary px-3 py-2">
-                        Lihat Data
-                    </a>
-                </div> -->
             </nav>
             <!-- Navbar End -->
 
             <!-- Tampilan Tabel -->
             <?php
-            $servername = "localhost";
-            $username = "root";
-            $password = "";
-            $dbname = "db_sipraka";
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "db_sipraka";
 
-            $conn = new mysqli($servername, $username, $password, $dbname);
+$conn = new mysqli($servername, $username, $password, $dbname);
 
-            if ($conn->connect_error) {
-                die("Koneksi gagal: " . $conn->connect_error);
-            }
+if ($conn->connect_error) {
+    die("Koneksi gagal: " . $conn->connect_error);
+}
 
-            $sql = "SELECT id, nama_siswa, jurusan, du_di FROM siswa";
-            $result = $conn->query($sql);
-            ?>
+// Query untuk mengambil data siswa dengan nama DUDI (bukan ID)
+$sql = "SELECT siswa.id, siswa.nama_siswa, siswa.jurusan, data_dudi.nama_dudi 
+        FROM siswa 
+        JOIN data_dudi ON siswa.du_di = data_dudi.id";
 
-            <body>
-                <div class="container-fluid pt-4 px-4">
-                    <div class="row g-4">
-                        <div class="col-12">
-                            <div class="bg-light rounded h-100 p-4">
-                                <h2 class="mb-4">Data Siswa</h2>
-                                <div class="card">
-                                 
-                                        <table class="table table-bordered table-striped">
-                                            <thead>
-                                                <tr>
-                                                    <th>No</th>
-                                                    <th>Nama Siswa</th>
-                                                    <th>Jurusan</th>
-                                                    <th>Du/Di</th>
-                                                    <th>Aksi</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                            <?php
-        if ($result->num_rows > 0) {
-            $no = 1;
-            while ($row = $result->fetch_assoc()) {
-                echo "<tr>";
-                echo "<td>" . $no++ . "</td>";
-                echo "<td>" . htmlspecialchars($row['nama_siswa']) . "</td>";
-                echo "<td>" . htmlspecialchars($row['jurusan']) . "</td>";
-                echo "<td>" . htmlspecialchars($row['du_di']) . "</td>";
-                echo "<td class='text-center'>
-                        <div class='d-flex justify-content-center gap-2'>
-                            <a href='edit_siswa.php?id=" . $row['id'] . "' class='btn btn-warning btn-sm'>
-                                <i class='fa fa-edit'></i>
-                            </a>
-                            <a href='hapus_siswa.php?id=" . $row['id'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"Yakin ingin menghapus?\")'>
-                                <i class='fa fa-trash'></i>
-                            </a>
-                        </div>
-                      </td>";
-                echo "</tr>";
-            }
-        } else {
-            echo "<tr><td colspan='5' class='text-center'>Tidak ada data</td></tr>";
-        }
-        ?>
-                                            </tbody>
-                                        </table>
+$result = $conn->query($sql);
+?>
 
-                        </div>
+<body>
+    <div class="container-fluid pt-4 px-4">
+        <div class="row g-4">
+            <div class="col-12">
+                <div class="bg-light rounded h-100 p-4">
+                    <h2 class="mb-4">Data Siswa</h2>
+                    <div class="card">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Nama Siswa</th>
+                                    <th>Jurusan</th>
+                                    <th>Du/Di</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <?php
+                            if ($result->num_rows > 0) {
+                                $no = 1;
+                                while ($row = $result->fetch_assoc()) {
+                                    echo "<tr>";
+                                    echo "<td>" . $no++ . "</td>";
+                                    echo "<td>" . htmlspecialchars($row['nama_siswa']) . "</td>";
+                                    echo "<td>" . htmlspecialchars($row['jurusan']) . "</td>";
+                                    echo "<td>" . htmlspecialchars($row['nama_dudi']) . "</td>"; // Menampilkan nama Du/Di
+                                    echo "<td class='text-center'>
+                                            <div class='d-flex justify-content-center gap-2'>
+                                                <a href='edit_siswa.php?id=" . $row['id'] . "' class='btn btn-warning btn-sm'>
+                                                    <i class='fa fa-edit'></i>
+                                                </a>
+                                                <a href='hapus_siswa.php?id=" . $row['id'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"Yakin ingin menghapus?\")'>
+                                                    <i class='fa fa-trash'></i>
+                                                </a>
+                                            </div>
+                                          </td>";
+                                    echo "</tr>";
+                                }
+                            } else {
+                                echo "<tr><td colspan='5' class='text-center'>Tidak ada data</td></tr>";
+                            }
+                            ?>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
+            </div>
         </div>
+    </div>
+
 </body>
 
 

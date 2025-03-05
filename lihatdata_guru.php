@@ -85,87 +85,86 @@ if ($conn->connect_error) {
     die("Koneksi gagal: " . $conn->connect_error);
 }
 
-$sql = "SELECT id, nama_pembimbing, jurusan, du_di FROM data_pembimbing";
+// Query untuk mengambil data pembimbing dengan nama DUDI (bukan ID)
+$sql = "SELECT data_pembimbing.id, data_pembimbing.nama_pembimbing, data_pembimbing.jurusan, data_dudi.nama_dudi 
+        FROM data_pembimbing 
+        JOIN data_dudi ON data_pembimbing.du_di = data_dudi.id";
+
 $result = $conn->query($sql);
 ?>
 
-
-
 <div class="content">
-    <!-- Navbar Start -->
-    <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0" style="height: 56px;">
-        <!-- Tombol Kembali (pojok kiri) -->
-        <button onclick="history.back()" class="btn btn-secondary px-3 py-2">
-            Kembali
-        </button>
-    </nav>
-    <!-- Navbar End -->
+            <!-- Navbar Start -->
+            <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0" style="height: 56px;">
+                <!-- Tombol Kembali (pojok kiri) -->
+                <button onclick="history.back()" class="btn btn-secondary px-3 py-2">
+                    Kembali
+                </button>
+            </nav>
 
     <!-- Tampilan Tabel -->
     <div class="container-fluid pt-4 px-4">
-    <div class="row g-4">
-        <div class="col-12">
-            <div class="bg-light rounded p-4 shadow-sm">
-                <h2 class="mb-4">Data Pembimbing</h2>
-                <table class="table table-bordered table-striped">
-                    <thead class="table-light">
-                        <tr>
-                            <th>No</th>
-                            <th>Nama Pembimbing</th>
-<<<<<<< HEAD
-=======
-                            <th>Jurusan</th>
-                            <th>Du/Di</th>
->>>>>>> cba6263cca518a1d44ac66f5e1da2041d7994a32
-                            <th class="text-center">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        if ($result->num_rows > 0) {
-                            $no = 1;
-                            while ($row = $result->fetch_assoc()) {
-                                echo "<tr>";
-                                echo "<td>" . $no++ . "</td>";
-                                echo "<td>" . htmlspecialchars($row['nama_pembimbing']) . "</td>";
-                                echo "<td>" . htmlspecialchars($row['jurusan']) . "</td>";
-                                echo "<td>" . htmlspecialchars($row['du_di']) . "</td>"; 
-                                echo "<td class='text-center'>
-                                        <div class='d-flex justify-content-center gap-2'>
-                                            <a href='edit_guru.php?id=" . $row['id'] . "' class='btn btn-warning btn-sm'>
-                                                <i class='fa fa-edit'></i>
-                                            </a>
-                                            <a href='hapus_guru.php?id=" . $row['id'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"Yakin ingin menghapus?\")'>
-                                                <i class='fa fa-trash'></i>
-                                            </a>
-                                        </div>
-                                      </td>";
-                                echo "</tr>";
+        <div class="row g-4">
+            <div class="col-12">
+                <div class="bg-light rounded p-4 shadow-sm">
+                    <h2 class="mb-4">Data Pembimbing</h2>
+                    <table class="table table-bordered table-striped">
+                        <thead class="table-light">
+                            <tr>
+                                <th>No</th>
+                                <th>Nama Pembimbing</th>
+                                <th>Jurusan</th>
+                                <th>Du/Di</th>
+                                <th class="text-center">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            if ($result->num_rows > 0) {
+                                $no = 1;
+                                while ($row = $result->fetch_assoc()) {
+                                    echo "<tr>";
+                                    echo "<td>" . $no++ . "</td>";
+                                    echo "<td>" . htmlspecialchars($row['nama_pembimbing']) . "</td>";
+                                    echo "<td>" . htmlspecialchars($row['jurusan']) . "</td>";
+                                    echo "<td>" . htmlspecialchars($row['nama_dudi']) . "</td>"; // Menampilkan nama Du/Di
+                                    echo "<td class='text-center'>
+                                            <div class='d-flex justify-content-center gap-2'>
+                                                <a href='edit_guru.php?id=" . $row['id'] . "' class='btn btn-warning btn-sm'>
+                                                    <i class='fa fa-edit'></i>
+                                                </a>
+                                                <a href='hapus_guru.php?id=" . $row['id'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"Yakin ingin menghapus?\")'>
+                                                    <i class='fa fa-trash'></i>
+                                                </a>
+                                            </div>
+                                          </td>";
+                                    echo "</tr>";
+                                }
+                            } else {
+                                echo "<tr><td colspan='5' class='text-center'>Tidak ada data</td></tr>"; // Sesuaikan colspan dengan jumlah kolom
                             }
-                        } else {
-                            echo "<tr><td colspan='4' class='text-center'>Tidak ada data</td></tr>"; // Sesuaikan colspan dengan jumlah kolom
-                        }
-                        ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
-
-    <!-- Content End -->
-
- <!-- Footer Start -->
- <div class="container-fluid pt-4 px-4">
-            <div class="bg-light rounded-top p-4">
-                <div class="row">
-                    <div class="col-12 col-sm-6 text-center text-sm-start">
-                        &copy; <a href="#">2025 SIPRAKA</a>, All Right Reserved.
-                    </div>
+                            ?>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
+
+
+    <!-- Content End -->
+
+    <div class="container-fluid pt-4 px-4">
+    <div class="bg-light rounded-top p-4">
+        <div class="row">
+            <div class="col-12 col-sm-6 text-center text-sm-start">
+                &copy; <a href="#">2025 SIPRAKA</a>, All Right Reserved.
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!-- Content End -->
 </div>
 <!-- Footer End -->
 

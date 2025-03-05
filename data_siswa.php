@@ -104,30 +104,38 @@ if ($conn->connect_error) {
     die("Koneksi gagal: " . $conn->connect_error);
 }
 
-// Ambil semua data Du/Di dari database
+// Ambil semua data Du/Di
 $sql_du_di = "SELECT id, nama_dudi FROM data_dudi";
 $result_du_di = $conn->query($sql_du_di);
+if (!$result_du_di) {
+    die("Error: " . $conn->error);
+}
+
+// Ambil semua data Pembimbing
+$sql_pembimbing = "SELECT id, nama_pembimbing FROM data_pembimbing";
+$result_pembimbing = $conn->query($sql_pembimbing);
+if (!$result_pembimbing) {
+    die("Error: " . $conn->error);
+}
 
 $message = "";
 
 // Jika form disubmit
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Mengambil data dari form dengan nama field yang benar
-    $nama = $_POST["nama"];  // Sesuaikan dengan name="nama" di form
+    $nama = $_POST["nama"];
     $jurusan = $_POST["jurusan"];
     $du_di = $_POST["du_di"];
+    $pembimbing_id = $_POST["pembimbing_id"];
 
-    // Validasi input tidak boleh kosong
-    if (!empty($nama) && !empty($jurusan) && !empty($du_di)) {
-        // Query untuk menyimpan data ke tabel siswa
-        $sql_insert = "INSERT INTO siswa (nama_siswa, jurusan, du_di) VALUES (?, ?, ?)";
+    if (!empty($nama) && !empty($jurusan) && !empty($du_di) && !empty($pembimbing_id)) {
+        $sql_insert = "INSERT INTO siswa (nama_siswa, jurusan, du_di, pembimbing_id) VALUES (?, ?, ?, ?)";
         $stmt = $conn->prepare($sql_insert);
-        $stmt->bind_param("sss", $nama, $jurusan, $du_di);
+        $stmt->bind_param("ssii", $nama, $jurusan, $du_di, $pembimbing_id);
 
         if ($stmt->execute()) {
             $message = "<div class='alert alert-success'>Data berhasil disimpan!</div>";
         } else {
-            $message = "<div class='alert alert-danger'>Gagal menyimpan data: " . $conn->error . "</div>";
+            $message = "<div class='alert alert-danger'>Gagal menyimpan data: " . $stmt->error . "</div>";
         }
 
         $stmt->close();
@@ -136,7 +144,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
-  
+
 <!-- Form Input -->
 <div class="container-fluid pt-4 px-4">
     <div class="row g-4">
@@ -172,19 +180,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <select class="form-select" id="duDiSelect" name="du_di" required>
                             <option selected disabled>Pilih Du/Di</option>
                             <?php while ($row = $result_du_di->fetch_assoc()) : ?>
-                                <option value="<?= $row['nama_dudi']; ?>"><?= $row['nama_dudi']; ?></option>
+                                <option value="<?= htmlspecialchars($row['id']); ?>"><?= htmlspecialchars($row['nama_dudi']); ?></option>
                             <?php endwhile; ?>
                         </select>
                         <label for="duDiSelect">Nama Du/Di</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <select class="form-select" id="pembimbingSelect" name="pembimbing_id" required>
+                            <option selected disabled>Pilih Pembimbing</option>
+                            <?php while ($row = $result_pembimbing->fetch_assoc()) : ?>
+                                <option value="<?= htmlspecialchars($row['id']); ?>"><?= htmlspecialchars($row['nama_pembimbing']); ?></option>
+                            <?php endwhile; ?>
+                        </select>
+                        <label for="pembimbingSelect">Nama Pembimbing</label>
                     </div>
                     <div class="mt-3">
                         <button type="submit" class="btn btn-primary w-100">Simpan</button>
                     </div>
                 </form>
-                
             </div>
         </div>
-    </div>
+</div>
 </div>
 
 

@@ -1,3 +1,78 @@
+<?php
+session_start();
+require_once __DIR__ . '/config.php'; // Koneksi ke database
+
+$success_message = $error_message = "";
+$file_surat = "";
+
+// Ambil daftar DUDI dari database
+$dudi_list = [];
+$result_dudi = $conn->query("SELECT id, nama_dudi FROM data_dudi ORDER BY nama_dudi ASC");
+while ($row = $result_dudi->fetch_assoc()) {
+    $dudi_list[] = $row;
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $id_dudi = $_POST["id"] ?? "";
+
+    if (empty($id_dudi)) {
+        $error_message = "Pilih Nama DUDI!";
+    } else {
+        // Ambil nama_dudi berdasarkan id_dudi
+        $query = $conn->prepare("SELECT nama_dudi FROM data_dudi WHERE id = ?");
+        $query->bind_param("i", $id_dudi);
+        $query->execute();
+        $query->bind_result($nama_dudi);
+        $query->fetch();
+        $query->close();
+
+        if (!$nama_dudi) {
+            $error_message = "DUDI tidak ditemukan!";
+        } elseif (!empty($_FILES["file_surat"]["name"])) {
+            $target_dir = "uploads/surat_permohonan/";
+            if (!is_dir($target_dir)) {
+                mkdir($target_dir, 0777, true);
+            }
+
+            $file_extension = pathinfo($_FILES["file_surat"]["name"], PATHINFO_EXTENSION);
+            $allowed_extensions = ["jpg", "jpeg", "png"];
+
+            if (in_array(strtolower($file_extension), $allowed_extensions)) {
+                $new_file_name = time() . "_" . basename($_FILES["file_surat"]["name"]);
+                $file_surat = $target_dir . $new_file_name;
+
+                if (move_uploaded_file($_FILES["file_surat"]["tmp_name"], $file_surat)) {
+                    // Simpan data ke database
+                    $stmt = $conn->prepare("INSERT INTO upload_surat (nama_dudi, file_surat) VALUES (?, ?)");
+                    $stmt->bind_param("ss", $nama_dudi, $file_surat);
+
+                    if ($stmt->execute()) {
+                        $success_message = "Surat berhasil diunggah!";
+                    } else {
+                        $error_message = "Gagal menyimpan ke database: " . $stmt->error;
+                    }
+
+                    $stmt->close();
+                } else {
+                    $error_message = "Gagal mengunggah surat.";
+                }
+            } else {
+                $error_message = "Format file tidak didukung! Harap unggah JPG, JPEG, atau PNG.";
+            }
+        } else {
+            $error_message = "Silakan pilih file untuk diunggah.";
+        }
+    }
+}
+
+
+// Ambil data dari database untuk tabel tampilan
+$result = $conn->query("SELECT us.*, dd.nama_dudi 
+                        FROM upload_surat us
+                        JOIN data_dudi dd ON us.id = dd.id
+                        ORDER BY us.tanggal_upload DESC");
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -46,57 +121,119 @@
     <!-- Spinner End -->
 
     <!-- Sidebar Start -->
-    <div class="sidebar pe-4 pb-3">
-        <nav class="navbar bg-light navbar-light">
-            <a href="index.html" class="navbar-brand mx-4 mb-3">
-                <h3 class="text-primary">SIPRAKA</h3>
-            </a>
-
-            <div class="d-flex align-items-center ms-4 mb-4">
-                <div class="position-relative">
-                    <img class="rounded-circle" src="img/foto.jpg" alt="" style="width: 40px; height: 40px;">
-                    <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
-                </div>
-                <div class="ms-3">
-                    <h6 class="mb-0">Guru</h6>
-                    <span>Online</span>
-                </div>
+<div class="sidebar pe-4 pb-3 bg-light position-fixed h-100 overflow-auto" style="width: 250px; z-index: 1040;">
+    <nav class="navbar navbar-light">
+        <a href="index.html" class="navbar-brand mx-4 mb-3">
+            <h3 class="text-primary">SIPRAKA</h3>
+        </a>
+        <div class="d-flex align-items-center ms-4 mb-4">
+            <div class="position-relative">
+                <img class="rounded-circle" src="img/foto.jpg" alt="" style="width: 40px; height: 40px;">
+                <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
             </div>
-            <div class="navbar-nav w-100">
-                <a href="dasboard_guru.php" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
-                <a href="permohonan_guru.php" class="nav-item nav-link active"><i class="fa fa-th me-2"></i>Permohonan</a>
-                <a href="monitoring_guru.php" class="nav-item nav-link"><i class="fa-solid fa-eye me-2"></i>Monitoring</a>
-                <a href="penarikan_guru.php" class="nav-item nav-link"><i class="fa-solid fa-hand-holding-heart me-2"></i>Penarikan</a>
-
+            <div class="ms-3">
+                <h6 class="mb-0">Guru</h6>
+                <span>Online</span>
             </div>
-        </nav>
+        </div>
+        <div class="navbar-nav w-100">
+            <a href="dasboard_guru.php" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+            <a href="permohonan_guru.php" class="nav-item nav-link active"><i class="fa fa-th me-2"></i>Permohonan</a>
+            <a href="monitoring_guru.php" class="nav-item nav-link"><i class="fa-solid fa-eye me-2"></i>Monitoring</a>
+            <a href="penarikan_guru.php" class="nav-item nav-link"><i class="fa-solid fa-hand-holding-heart me-2"></i>Penarikan</a>
+        </div>
+    </nav>
+</div>
+<!-- Sidebar End -->
+
+<div class="content">
+    <!-- Navbar Start -->
+    <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0" style="height: 56px;">
+        <!-- Tombol Kembali (pojok kiri) -->
+        <button onclick="history.back()" class="btn btn-secondary px-3 py-2">
+            Kembali
+        </button>
+    </nav>
+
+        </nav> 
+
+
+<!-- Container Form Upload -->
+<div class="container mt-5">
+    <h2 class="text-center">Upload Surat Permohonan</h2>
+
+    <!-- Notifikasi -->
+<?php if ($success_message) : ?>
+    <div id="alert-success" class="alert alert-success"><?= $success_message; ?></div>
+<?php elseif ($error_message) : ?>
+    <div id="alert-error" class="alert alert-danger"><?= $error_message; ?></div>
+<?php endif; ?>
+
+    <!-- Form Upload -->
+    <form action="" method="post" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label for="nama_dudi" class="form-label">Pilih DUDI</label>
+            <select name="id" id="nama_dudi" class="form-control" required>
+                <option value="">-- Pilih DUDI --</option>
+                <?php foreach ($dudi_list as $dudi) : ?>
+                    <option value="<?= $dudi['id']; ?>"><?= $dudi['nama_dudi']; ?></option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Unggah Surat (JPG, JPEG, PNG)</label>
+            <input type="file" name="file_surat" class="form-control" accept=".jpg,.jpeg,.png" required>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Unggah</button>
+    </form>
+
+    <!-- Tabel Data Surat -->
+    <div class="mt-5">
+        <h4 class="text-center">Daftar Surat yang Diunggah</h4>
+        <table class="table table-bordered">
+            <thead>
+                <tr class="table-primary text-center">
+                    <th>No</th>
+                    <th>Nama DUDI</th>
+                    <th>Nama File</th>
+                    <th>Pratinjau</th>
+                    <th>Tanggal Upload</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if ($result->num_rows > 0): ?>
+                    <?php $no = 1; while ($row = $result->fetch_assoc()): ?>
+                        <tr>
+                            <td class="text-center"><?= $no++; ?></td>
+                            <td><?= $row['nama_dudi']; ?></td>
+                            <td><?= $row['file_surat']; ?></td>
+                            <td class="text-center">
+                                <img src="uploads/surat_permohonan/<?= $row['file_surat']; ?>" alt="Surat" width="100">
+                            </td>
+                            <td class="text-center"><?= $row['tanggal_upload']; ?></td>
+                        </tr>
+                    <?php endwhile; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="5" class="text-center">Belum ada surat yang diunggah.</td>
+                    </tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
     </div>
-    <!-- Sidebar End -->
+</div>
 
-    <!-- Content Start -->
-    <div class="content">
-        <!-- Navbar Start -->
-        <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0">
-            <a href="index.html" class="navbar-brand d-flex d-lg-none me-4">
-                <h2 class="text-primary mb-0"><i class="fa fa-hashtag"></i></h2>
-            </a>
-            <a href="#" class="sidebar-toggler flex-shrink-0">
-                <i class="fa fa-bars"></i>
-            </a>
-            <div class="nav-item dropdown ms-auto">
-                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                    <img class="rounded-circle me-lg-2" src="img/foto.jpg" alt="" style="width: 40px; height: 40px;">
-                    <span class="d-none d-lg-inline-flex">Guru</span>
-                </a>
-                <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
-                    <a href="login.php" class="dropdown-item">Keluar</a>
-                </div>
-            </div>
-        </nav>
-        <!-- Navbar End -->
-
-    
-
+<script>
+    // Jalankan hanya jika ada notifikasi
+    setTimeout(() => {
+        document.querySelectorAll(".alert").forEach(alert => {
+            alert.style.transition = "opacity 0.5s";
+            alert.style.opacity = "0";
+            setTimeout(() => alert.remove(), 500); // Hapus setelah animasi selesai
+        });
+    }, 3000);
+</script>
         <!-- Footer Start -->
         <div class="container-fluid pt-4 px-4">
             <div class="bg-light rounded-top p-4">
