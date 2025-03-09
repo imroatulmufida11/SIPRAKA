@@ -107,31 +107,32 @@ if ($conn->connect_error) {
 }
 
 // Ambil nama_dudi dari URL
-$nama_dudi = isset($_GET['nama_dudi']) ? trim($_GET['nama_dudi']) : '';
+$id_dudi = isset($_GET['id_dudi']) ? trim($_GET['id_dudi']) : '';
 
 $row = null;
-if (!empty($nama_dudi)) {
-    $query = "SELECT * FROM permohonan_pkl 
-          JOIN data_dudi ON permohonan_pkl.dudi_id = data_dudi.dudi_id 
-          WHERE TRIM(data_dudi.nama_dudi)=?";
+if (!empty($id_dudi)) {
+    $query = "SELECT * FROM permohonan_pkl
+              WHERE permohonan_pkl.dudi_id = ?";
+    
     $stmt = $conn->prepare($query);
-    $stmt->bind_param("s", $nama_dudi);
+    $stmt->bind_param("i", $id_dudi); // Gunakan "i" karena dudi_id biasanya bertipe integer
     $stmt->execute();
     $result = $stmt->get_result();
     $row = $result->fetch_assoc();
     $stmt->close();
 }
 
+
 $conn->close();
 ?>
 
-<?php if ($row): ?>
+<!-- <?php if ($row): ?>
     <p>Data ditemukan: <?= htmlspecialchars($row["nama_dudi"]) ?></p>
 <?php else: ?>
     <div class="alert alert-warning" role="alert">
         Data tidak ditemukan. Pastikan nama_dudi sudah benar.
     </div>
-<?php endif; ?>
+<?php endif; ?> -->
 
 <div id="surat" class="card p-4 text-dark">
     <div class="row">
@@ -182,7 +183,7 @@ $conn->close();
                 $siswaList = explode("\n", trim($row["siswa"]));
                 $no = 1;
                 foreach ($siswaList as $siswa) {  
-                    $data = explode(" - ", trim($siswa));
+                    $data = explode("-", trim($siswa));
                     if (count($data) === 2) {
                         echo "<tr><td>$no</td><td>" . htmlspecialchars($data[0]) . "</td><td>" . htmlspecialchars($data[1]) . "</td></tr>";
                         $no++;
@@ -191,6 +192,20 @@ $conn->close();
                 ?>
             </tbody>
         </table>
+        <p>
+            Jika berkenan, kami berharap PKL ini dapat dilaksanakan mulai tanggal <strong><?= htmlspecialchars($row["tanggal_mulai"]) ?></strong> 
+            sampai dengan tanggal <strong><?= htmlspecialchars($row["tanggal_berakhir"]) ?></strong>.
+            Kami mengharapkan jawaban/informasi mengenai waktu dan durasi pelaksanaan PKL agar dapat kami koordinasikan lebih lanjut.
+            Atas perhatian dan kerja sama yang diberikan, kami ucapkan terima kasih.
+        </p>
+        <p><em>Wassalamu'alaikum Wr. Wb.</em></p>
+
+        <div class="text-end">
+            <p>Hormat Kami,</p>
+            <p>Kepala SMK Negeri 2 Bangkalan</p>
+            <br><br><br>
+            <p><strong>Nur Hazizah, S.Pd., M.Pd.</strong></p>
+        </div>
     <?php else: ?>
         <p><em>Belum ada data siswa.</em></p>
     <?php endif; ?>

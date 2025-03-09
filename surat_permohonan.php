@@ -188,7 +188,7 @@ if ($row = mysqli_fetch_assoc($result)) {
                     $siswaList = explode("\n", $row["siswa"]);
                     $no = 1;
                     foreach ($siswaList as $siswa) {  
-                        $data = explode(" - ", trim($siswa));
+                        $data = explode("-", trim($siswa));
                         if (count($data) == 2) {
                             echo "<tr><td>$no</td><td>" . htmlspecialchars($data[0]) . "</td><td>" . htmlspecialchars($data[1]) . "</td></tr>";
                             $no++;

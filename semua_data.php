@@ -73,22 +73,14 @@
     </nav>
 </div>
 
-<div class="content">
-    <!-- Navbar Start -->
-    <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0" style="height: 56px;">
-        <!-- Tombol Kembali (pojok kiri) -->
-        <button onclick="history.back()" class="btn btn-secondary px-3 py-2">
-            Kembali
-        </button>
-    </nav>
-
-        </nav>
 <?php
-include 'config.php'; // Hubungkan dengan file koneksi database
+include 'config.php'; // Hubungkan dengan database
 
-// Query untuk mengambil semua data siswa beserta relasi dari tabel lain
+// Cek apakah ada pencarian
+$search = isset($_GET['search']) ? $_GET['search'] : '';
+
+// Query untuk mengambil data berdasarkan pencarian DUDI
 $sql = "SELECT 
-            siswa.id, 
             siswa.nama_siswa, 
             siswa.jurusan,  
             data_dudi.nama_dudi,  
@@ -97,54 +89,74 @@ $sql = "SELECT
         JOIN data_dudi ON siswa.du_di = data_dudi.id  
         LEFT JOIN data_pembimbing ON siswa.pembimbing_id = data_pembimbing.id";
 
+if (!empty($search)) {
+    $sql .= " WHERE data_dudi.nama_dudi LIKE '%$search%'";
+}
+
 $result = $conn->query($sql);
 ?>
 
+<div class="content">
+    <!-- Navbar Start -->
+    <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0" style="height: 56px;">
+        <!-- Tombol Kembali (pojok kiri) -->
+        <button onclick="history.back()" class="btn btn-secondary px-3 py-2">Kembali</button>
 
-<div class="container-fluid pt-4 px-4">
-    <div class="row g-4">
-        <div class="col-12">
-            <div class="bg-light rounded h-100 p-4">
-                <h2 class="mb-4">Data Siswa</h2>
-                <div class="table-responsive">
-                    <table class="table table-bordered table-striped table-hover">
-                        <thead class="table-light">
-                            <tr>
-                                <th>ID</th>
-                                <th>Nama Siswa</th>
-                                <th>Jurusan</th>
-                                <th>Nama DUDI</th>
-                                <th>Nama Pembimbing</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            if (isset($result) && $result->num_rows > 0) {
-                                while ($row = $result->fetch_assoc()) {
-                                    echo "<tr>
-                                            <td>{$row['id']}</td>
-                                            <td>{$row['nama_siswa']}</td>
-                                            <td>{$row['jurusan']}</td>
-                                            <td>{$row['nama_dudi']}</td>
-                                            <td>{$row['nama_pembimbing']}</td>
-                                          </tr>";
+        <!-- Form Pencarian di Pojok Kanan -->
+        <form method="GET" action="" class="d-flex ms-auto">
+            <input type="text" class="form-control me-2" name="search" placeholder="Cari Nama DUDI" value="<?= htmlspecialchars($search) ?>" style="width: 250px;">
+            <button type="submit" class="btn btn-primary">Cari</button>
+        </form>
+    </nav>
+    <!-- Navbar End -->
+
+    <!-- Tabel Data -->
+    <div class="container-fluid pt-4 px-4">
+        <div class="row g-4">
+            <div class="col-12">
+                <div class="bg-light rounded p-4 shadow-sm">
+                    <h2 class="mb-4">Data Siswa Berdasarkan DUDI</h2>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>No</th>
+                                    <th>Nama Siswa</th>
+                                    <th>Jurusan</th>
+                                    <th>Nama DUDI</th>
+                                    <th>Nama Pembimbing</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                if ($result->num_rows > 0) {
+                                    $no = 1;
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo "<tr>
+                                                <td>{$no}</td>
+                                                <td>{$row['nama_siswa']}</td>
+                                                <td>{$row['jurusan']}</td>
+                                                <td>{$row['nama_dudi']}</td>
+                                                <td>{$row['nama_pembimbing']}</td>
+                                              </tr>";
+                                        $no++;
+                                    }
+                                } else {
+                                    echo "<tr><td colspan='5' class='text-center'>Tidak ada data</td></tr>";
                                 }
-                            } else {
-                                echo "<tr><td colspan='5' class='text-center'>Tidak ada data</td></tr>";
-                            }
-                            ?>
-                        </tbody>
-                    </table>
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+
                 </div>
             </div>
         </div>
     </div>
-</div>
 
 <?php
 $conn->close(); // Tutup koneksi database
 ?>
-
 <!-- Footer -->
 <div class="container-fluid pt-4 px-4">
             <div class="bg-light rounded-top p-4">

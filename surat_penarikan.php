@@ -137,8 +137,12 @@ $tanggal_surat = date("d F Y", strtotime($data['tanggal_berakhir']));
 
 
 <div class="container mt-4">
-    <div class="row">
-        <div class="col-2">
+<button class="btn btn-primary btn-print mb-3" onclick="printSurat()">🖨 Cetak Surat</button>
+
+
+    <div id="surat" class="card p-4 text-dark">
+        <div class="row">
+            <div class="col-2">
             <img src="img/jatim.png" alt="Logo" style="width: 100px;">
         </div>
         <div class="col-10 text-center">
@@ -209,6 +213,52 @@ $tanggal_surat = date("d F Y", strtotime($data['tanggal_berakhir']));
             <br><br><br>
             <p><strong>Nur Hazizah, S.Pd., M.Pd.</strong></p>
 </div>
+
+<head>
+    <style>
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+
+            body * {
+                visibility: hidden; /* Sembunyikan semua elemen */
+            }
+
+            #surat, #surat * {
+                visibility: visible; /* Tampilkan hanya bagian surat */
+            }
+
+            #surat {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100vh; /* Paksa tinggi sesuai layar */
+                page-break-before: avoid;
+                page-break-after: avoid;
+                page-break-inside: avoid;
+            }
+
+            table {
+                page-break-inside: avoid; /* Cegah tabel terpotong */
+            }
+
+            * {
+                font-size: 12px !important; /* Kecilkan font biar muat */
+            }
+        }
+    </style>
+</head>
+
+
+<script>
+function printSurat() {
+    window.print();
+}
+</script>
+
 <!-- Footer Start -->
 <div class="container-fluid pt-4 px-4">
             <div class="bg-light rounded-top p-4">

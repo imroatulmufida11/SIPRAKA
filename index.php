@@ -236,9 +236,8 @@
               <img src="assets/img/portfolio/adiluhung.jpg" class="img-fluid" alt="">
               <div class="portfolio-info">
                 <h4>PT.Adiluhung</h4>
-                <p>Monitoring ke 1</p>
+                <!-- <p>Monitoring ke 1</p> -->
                 <a href="assets/img/portfolio/adiluhung.jpg" title="PT. Adiluhung" data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
-                <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
               </div>
             </div><!-- End Portfolio Item -->
 
@@ -246,9 +245,8 @@
               <img src="assets/img/portfolio/dinsos.jpg" class="img-fluid" alt="">
               <div class="portfolio-info">
                 <h4>Dinas Sosial Bangkalan</h4>
-                <p>Monitoring ke 2</p>
+                <!-- <p>Monitoring ke 2</p> -->
                 <a href="assets/img/portfolio/dinsos.jpg" title="Dinsos" data-gallery="portfolio-gallery-product" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
-                <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
               </div>
             </div><!-- End Portfolio Item -->
 
@@ -256,9 +254,8 @@
               <img src="assets/img/portfolio/rsud.jpg" class="img-fluid" alt="">
               <div class="portfolio-info">
                 <h4>RSUD Syamrabu Bangkalan</h4>
-                <p>Foto Bersama</p>
+                <!-- <p>Foto Bersama</p> -->
                 <a href="assets/img/portfolio/rsud.jpg" title="RSUD Syamrabu" data-gallery="portfolio-gallery-branding" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
-                <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
               </div>
             </div><!-- End Portfolio Item -->
 
@@ -266,39 +263,35 @@
               <img src="assets/img/portfolio/mpstore2.jpg" class="img-fluid" alt="">
               <div class="portfolio-info">
                 <h4>MPStore </h4>
-                <p>Penarikan Siswa Magang</p>
+                <!-- <p>Penarikan Siswa Magang</p> -->
                 <a href="assets/img/portfolio/mpstore2.jpg" title="MPstore" data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
-                <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
-              </div>
-            </div><!-- End Portfolio Item -->
-
-            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-product">
-              <img src="assets/img/portfolio/maduratecno.jpg" class="img-fluid" alt="">
-              <div class="portfolio-info">
-                <h4>Madura Tecnovacion</h4>
-                <p>Foto bersama Pembimbing</p>
-                <a href="assets/img/portfolio/maduratecno.jpg" title="Madura Tecno" data-gallery="portfolio-gallery-product" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
-                <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
-              </div>
-            </div><!-- End Portfolio Item -->
-
-            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-branding">
-              <img src="assets/img/masonry-portfolio/masonry-portfolio-6.jpg" class="img-fluid" alt="">
-              <div class="portfolio-info">
-                <h4>Branding 2</h4>
-                <p>Lorem ipsum, dolor sit</p>
-                <a href="assets/img/masonry-portfolio/masonry-portfolio-6.jpg" title="Branding 2" data-gallery="portfolio-gallery-branding" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
-                <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
               </div>
             </div><!-- End Portfolio Item -->
 
             <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-app">
-              <img src="assets/img/portfolio/tanahmerah.jpg" class="img-fluid" alt="">
+              <img src="assets/img/portfolio/sumber.jpg" class="img-fluid" alt="">
               <div class="portfolio-info">
-                <h4>Kantor Kecamatan Tanah Merah</h4>
-                <p>Foto Bersama Pembimbing</p>
-                <a href="assets/img/portfolio/tanahmerah.jpg" title="Kecamatan Tanah Merah" data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
-                <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
+                <h4>Sumber Rejeki Baru</h4>
+                <!-- <p>Foto bersama Pembimbing</p> -->
+                <a href="assets/img/portfolio/sumber.jpg" title="Sumber Rejeki Baru" data-gallery="portfolio-gallery-product" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+              </div>
+            </div><!-- End Portfolio Item -->
+
+            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-branding">
+              <img src="assets/img/portfolio/maduratecno.jpg" class="img-fluid" alt="">
+              <div class="portfolio-info">
+                <h4>Madura Tecnovacion</h4>
+                <!-- <p> Jl. Clibri AA-32 Pangeranan Asri</p> -->
+                <a href="assets/img/portfolio/maduratecno.jpg" title="Madura Tecnovation" data-gallery="portfolio-gallery-branding" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+              </div>
+            </div><!-- End Portfolio Item -->
+
+            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-app">
+              <img src="assets/img/portfolio/fida.jpg" class="img-fluid" alt="">
+              <div class="portfolio-info">
+                <h4>Politehnik Perkapalan Negeri Surabaya</h4>
+                <!-- <p>Foto Bersama Pembimbing</p> -->
+                <a href="assets/img/portfolio/fida.jpg" title="PPNS" data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
               </div>
             </div><!-- End Portfolio Item -->
 
@@ -306,9 +299,8 @@
               <img src="assets/img/portfolio/fiesto.jpg" class="img-fluid" alt="">
               <div class="portfolio-info">
                 <h4>Vieto Surabaya</h4>
-                <p>foto Bersama Pembimbing</p>
+                <!-- <p>foto Bersama Pembimbing</p> -->
                 <a href="assets/img/portfolio/fiesto.jpg" title="Viesto" data-gallery="portfolio-gallery-product" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
-                <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
               </div>
             </div><!-- End Portfolio Item -->
 
@@ -316,9 +308,8 @@
               <img src="assets/img/portfolio/suryaagung.jpg" class="img-fluid" alt="">
               <div class="portfolio-info">
                 <h4>Surya Angung Motor</h4>
-                <p>Foto Bersama</p>
+                <!-- <p>Foto Bersama</p> -->
                 <a href="assets/img/portfolio/suryaagung.jpg" title="Surya Agung" data-gallery="portfolio-gallery-branding" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
-                <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
               </div>
             </div><!-- End Portfolio Item -->
 

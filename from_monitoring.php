@@ -115,19 +115,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
     <!-- Sidebar End -->
 
-    <!-- Content Start -->
-    <div class="content">
-        <!-- Navbar Start -->
-        <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0" style="height: 56px;">
-        <div class="ms-auto">
-            <!-- Tombol Lihat Data (pojok kanan) -->
-            <a href="data_monitoring.php" class="btn btn-primary px-3 py-2">
-                Lihat Data
-            </a>
-        </div>
-    </nav>
-
+        <!-- Content Start -->
+        <div class="content">
+            <!-- Navbar Start -->
+            <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0" style="height: 56px;">
+            <div class="ms-auto">
+                <!-- Tombol Lihat Data (pojok kanan) -->
+                <a href="data_monitoring.php" class="btn btn-primary px-3 py-2">
+                    Lihat Data
+                </a>
+            </div>
         </nav>
+
+            </nav>
 
         
     <?php
@@ -156,7 +156,7 @@ $resultJurusan = $conn->query($sqlJurusan);{
         <div class="col-12">
             <div class="bg-light rounded h-100 p-4">
                 <div class="container mt-4">
-                    <h2 class="text-center">Formulir Surat Tugas PKL</h2>
+                    <h2 class="text-center">Formulir Surat Monotoring</h2>
                     <?php
                     if(isset($_SESSION['error'])) {
                         echo '<div class="alert alert-danger">' . $_SESSION['error'] . '</div>';

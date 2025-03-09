@@ -107,7 +107,11 @@ if ($conn->connect_error) {
     die("Koneksi gagal: " . $conn->connect_error);
 }
 
-$sql = "SELECT id, nama_pembimbing, jurusan, du_di FROM data_pembimbing";
+$sql = "SELECT DISTINCT d.id, d.nama_dudi 
+        FROM data_dudi d 
+        LEFT JOIN data_pembimbing p ON d.id = p.du_di 
+        ORDER BY d.nama_dudi";
+
 $result = $conn->query($sql);
 ?>
 
@@ -130,28 +134,28 @@ $result = $conn->query($sql);
                     </thead>
                     <tbody>
                     <?php
-if ($result->num_rows > 0) {
-    $no = 1;
-    while ($row = $result->fetch_assoc()) {
-        echo "<tr>";
-        echo "<td>" . $no++ . "</td>";
-        echo "<td>" . htmlspecialchars($row['du_di']) . "</td>"; 
-        echo "<td class='text-center'>
-                <div class='d-flex justify-content-center gap-2'>
-                    <a href='keluar_surat.php?nama_dudi=" . urlencode($row['du_di']) . "' class='btn btn-info btn-sm'>
-                        <i class='fa fa-file-alt text-white'></i> Surat
-                    </a>
-                    <a href='upload_surat.php?id=" . urlencode($row['id']) . "' class='btn btn-warning btn-sm'>
-                        <i class='fa fa-upload text-white'></i> Upload
-                    </a>
-                </div>
-              </td>";
-        echo "</tr>";
-    }
-} else {
-    echo "<tr><td colspan='3' class='text-center'>Tidak ada data</td></tr>";
-}
-?>
+                    if ($result->num_rows > 0) {
+                        $no = 1;
+                        while ($row = $result->fetch_assoc()) {
+                            echo "<tr>";
+                            echo "<td>" . $no++ . "</td>";
+                            echo "<td>" . htmlspecialchars($row['nama_dudi']) . "</td>"; 
+                            echo "<td class='text-center'>
+                                    <div class='d-flex justify-content-center gap-2'>
+                                        <a href='keluar_surat.php?id_dudi=" . urlencode($row['id']) . "' class='btn btn-info btn-sm'>
+                                            <i class='fa fa-file-alt text-white'></i> Surat
+                                        </a>
+                                        <a href='upload_surat.php?id=" . urlencode($row['id']) . "' class='btn btn-warning btn-sm'>
+                                            <i class='fa fa-upload text-white'></i> Upload
+                                        </a>
+                                    </div>
+                                  </td>";
+                            echo "</tr>";
+                        }
+                    } else {
+                        echo "<tr><td colspan='3' class='text-center'>Tidak ada data</td></tr>";
+                    }
+                    ?>
 
                     </tbody>
                 </table>
