@@ -100,7 +100,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             } elseif ($user["role"] == "guru") {
                 header("Location: dasboard_guru.php");
             } elseif ($user["role"] == "siswa") {
-                header("Location: siswa_dashboard.php");
+                header("Location: dasboard_siswa.php");
             }
             exit();
         } else {
