@@ -139,7 +139,7 @@ $data = $result->fetch_assoc();
                 <p>Jalan. Halim Perdana Kusuma, Bangkalan, Jawa Timur 69116</p>
                 <p>Telepon (031) 3092223, Email: smkn2_bkl@yahoo.com</p>
             </div>
-        </div>
+            <div style="height: 3px; background-color: black; width:100%;"></div>
         <hr>
         
         <h5 class="text-center"><u>SURAT TUGAS</u></h5>

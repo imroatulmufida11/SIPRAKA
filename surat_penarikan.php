@@ -152,7 +152,7 @@ $tanggal_surat = date("d F Y", strtotime($data['tanggal_berakhir']));
             <h6>NPSN/NSS: 20531223 / 321052901002</h6>
             <p>Jalan. Halim Perdana Kusuma, Bangkalan, Jawa Timur 69116</p>
         </div>
-    </div>
+        <div style="height: 3px; background-color: black; width:100%;"></div>
     <hr>
     <p class="text-end">Bangkalan, <?= $tanggal_surat ?></p>
     <p>Nomor: <?= htmlspecialchars($data['nomor_surat']) ?></p>
@@ -169,14 +169,14 @@ $tanggal_surat = date("d F Y", strtotime($data['tanggal_berakhir']));
     
     <table class="table table-bordered text-center">
         <thead>
-            <tr>
+        <tr class="text-dark">
                 <th>No</th>
                 <th>Nama Siswa</th>
                 <th>NISN</th>
                 <th>Tingkat / Semester</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="text-dark">
             <?php if (!empty($siswa_list)): ?>
                 <?php foreach ($siswa_list as $index => $siswa): ?>
                     <?php 

@@ -85,7 +85,7 @@
             <div class="nav-item dropdown ms-auto">
                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                     <img class="rounded-circle me-lg-2" src="img/foto.jpg" alt="" style="width: 40px; height: 40px;">
-                    <span class="d-none d-lg-inline-flex">Admin</span>
+                    <span class="d-none d-lg-inline-flex">Siswa</span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
                     <a href="login.php" class="dropdown-item">Keluar</a>
@@ -110,8 +110,15 @@ $sql_jurusan = "SELECT DISTINCT jurusan FROM absensi";
 $result_jurusan = $conn->query($sql_jurusan);
 ?>
 
-<div class="container mt-4">
-    <h2 class="text-center mb-4">Data Absensi</h2>
+<div class="container-fluid pt-4 px-4">
+    <!-- Header -->
+    <div class="row">
+        <div class="col-12">
+            <div class="bg-light rounded p-4 text-center mb-3">
+                <h3 class="text-primary">DATA ABSENSI SISWA</h3>
+            </div>
+        </div>
+    </div>
 
     <div class="row">
         <?php while ($row_jurusan = $result_jurusan->fetch_assoc()) { 

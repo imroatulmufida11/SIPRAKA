@@ -97,7 +97,7 @@
         <!-- Navbar End -->
 
         <?php
-// Konfigurasi koneksi database
+// Konfigurasi koneksi ke database
 $host = "localhost";
 $user = "root";
 $password = "";
@@ -108,61 +108,59 @@ if ($conn->connect_error) {
     die("Koneksi gagal: " . $conn->connect_error);
 }
 
-// Pastikan parameter jurusan tersedia dan aman dari SQL Injection
-if (!isset($_GET['jurusan']) || empty(trim($_GET['jurusan']))) {
-    die("<div class='alert alert-danger text-center'>Jurusan tidak ditemukan.</div>");
+// Pastikan parameter jurusan tersedia
+if (!isset($_GET['jurusan'])) {
+    die("Jurusan tidak ditemukan.");
 }
 
-$jurusan = htmlspecialchars(trim($_GET['jurusan']));
+$jurusan = urldecode($_GET['jurusan']);
 
-// Ambil semua data absensi berdasarkan jurusan, kecuali yang tanggalnya '0000-00-00'
-$sql_absensi = "SELECT nama, tanggal, keterangan FROM absensi WHERE jurusan = ? AND tanggal != '0000-00-00' ORDER BY tanggal DESC";
+// Ambil semua data absensi berdasarkan jurusan
+$sql_absensi = "SELECT nama, tanggal, status, keterangan FROM absensi WHERE jurusan = ? AND tanggal != '0000-00-00' ORDER BY tanggal DESC";
 $stmt = $conn->prepare($sql_absensi);
-if (!$stmt) {
-    die("<div class='alert alert-danger text-center'>Query error: " . $conn->error . "</div>");
-}
 $stmt->bind_param("s", $jurusan);
 $stmt->execute();
 $result_absensi = $stmt->get_result();
 ?>
 
-<div class="container-fluid pt-4 px-4">
-    <!-- Header -->
-    <div class="row">
-        <div class="col-12">
-            <div class="bg-light rounded p-4 text-center mb-3">
-                <h3 class="text-primary">DATA ABSENSI SISWA - <?php echo $jurusan; ?></h3>
-            </div>
-        </div>
-    </div>
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Data Absensi - <?php echo htmlspecialchars($jurusan); ?></h2>
 
     <?php if ($result_absensi->num_rows > 0) { ?>
-        <div class="table-responsive">
-            <table class="table table-bordered table-striped">
-                <thead class="table-primary text-center">
+        <table class="table table-bordered table-striped">
+            <thead class="table-primary text-center">
+                <tr>
+                    <th>Nama</th>
+                    <th>Tanggal</th>
+                    <th>Status</th>
+                    <th>Keterangan</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php while ($absensi = $result_absensi->fetch_assoc()) { ?>
                     <tr>
-                        <th>Nama</th>
-                        <th>Tanggal</th>
-                        <th>Keterangan</th>
+                        <td><?php echo htmlspecialchars($absensi['nama']); ?></td>
+                        <td><?php echo htmlspecialchars($absensi['tanggal']); ?></td>
+                        <td>
+                            <?php
+                            $status = $absensi['status'];
+                            $badge_class = ($status == 'Hadir') ? 'bg-success' : (($status == 'Izin') ? 'bg-warning' : 'bg-danger');
+                            ?>
+                            <span class="badge <?php echo $badge_class; ?>">
+                                <?php echo htmlspecialchars($status); ?>
+                            </span>
+                        </td>
+                        <td><?php echo !empty($absensi['keterangan']) ? htmlspecialchars($absensi['keterangan']) : '-'; ?></td>
                     </tr>
-                </thead>
-                <tbody>
-                    <?php while ($absensi = $result_absensi->fetch_assoc()) { ?>
-                        <tr>
-                            <td><?php echo htmlspecialchars($absensi['nama']); ?></td>
-                            <td><?php echo htmlspecialchars($absensi['tanggal']); ?></td>
-                            <td><?php echo htmlspecialchars($absensi['keterangan']); ?></td>
-                        </tr>
-                    <?php } ?>
-                </tbody>
-            </table>
-        </div>
+                <?php } ?>
+            </tbody>
+        </table>
     <?php } else { ?>
-        <div class="alert alert-warning text-center">Tidak ada data absensi untuk jurusan ini.</div>
+        <p class="text-center">Tidak ada data absensi untuk jurusan ini.</p>
     <?php } ?>
 
     <div class="text-center mt-3">
-        <a href="absensi_admin.php" class="btn btn-secondary">Kembali</a>
+        <a href="data_absensi.php" class="btn btn-secondary">Kembali</a>
     </div>
 </div>
 
@@ -170,6 +168,7 @@ $result_absensi = $stmt->get_result();
 $stmt->close();
 $conn->close();
 ?>
+
 
 <!-- Footer Start -->
 <div class="container-fluid pt-4 px-4">

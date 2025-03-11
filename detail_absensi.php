@@ -85,7 +85,7 @@
             <div class="nav-item dropdown ms-auto">
                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                     <img class="rounded-circle me-lg-2" src="img/foto.jpg" alt="" style="width: 40px; height: 40px;">
-                    <span class="d-none d-lg-inline-flex">Admin</span>
+                    <span class="d-none d-lg-inline-flex">Siswa</span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
                     <a href="login.php" class="dropdown-item">Keluar</a>
@@ -93,7 +93,7 @@
             </div>
         </nav>
 
-<?php
+        <?php
 // Konfigurasi koneksi ke database
 $host = "localhost";
 $user = "root";
@@ -113,7 +113,7 @@ if (!isset($_GET['jurusan'])) {
 $jurusan = urldecode($_GET['jurusan']);
 
 // Ambil semua data absensi berdasarkan jurusan
-$sql_absensi = "SELECT nama, tanggal, keterangan FROM absensi WHERE jurusan = ? AND tanggal != '0000-00-00' ORDER BY tanggal DESC";
+$sql_absensi = "SELECT nama, tanggal, status, keterangan FROM absensi WHERE jurusan = ? AND tanggal != '0000-00-00' ORDER BY tanggal DESC";
 $stmt = $conn->prepare($sql_absensi);
 $stmt->bind_param("s", $jurusan);
 $stmt->execute();
@@ -124,11 +124,12 @@ $result_absensi = $stmt->get_result();
     <h2 class="text-center mb-4">Data Absensi - <?php echo htmlspecialchars($jurusan); ?></h2>
 
     <?php if ($result_absensi->num_rows > 0) { ?>
-        <table class="table table-bordered">
-            <thead class="table-primary">
+        <table class="table table-bordered table-striped">
+            <thead class="table-primary text-center">
                 <tr>
                     <th>Nama</th>
                     <th>Tanggal</th>
+                    <th>Status</th>
                     <th>Keterangan</th>
                 </tr>
             </thead>
@@ -137,7 +138,16 @@ $result_absensi = $stmt->get_result();
                     <tr>
                         <td><?php echo htmlspecialchars($absensi['nama']); ?></td>
                         <td><?php echo htmlspecialchars($absensi['tanggal']); ?></td>
-                        <td><span class="badge bg-info"><?php echo htmlspecialchars($absensi['keterangan']); ?></span></td>
+                        <td>
+                            <?php
+                            $status = $absensi['status'];
+                            $badge_class = ($status == 'Hadir') ? 'bg-success' : (($status == 'Izin') ? 'bg-warning' : 'bg-danger');
+                            ?>
+                            <span class="badge <?php echo $badge_class; ?>">
+                                <?php echo htmlspecialchars($status); ?>
+                            </span>
+                        </td>
+                        <td><?php echo !empty($absensi['keterangan']) ? htmlspecialchars($absensi['keterangan']) : '-'; ?></td>
                     </tr>
                 <?php } ?>
             </tbody>
@@ -155,7 +165,6 @@ $result_absensi = $stmt->get_result();
 $stmt->close();
 $conn->close();
 ?>
-
   <!-- Footer Start -->
   <div class="container-fluid pt-4 px-4">
                 <div class="bg-light rounded-top p-4">

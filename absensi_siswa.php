@@ -106,7 +106,7 @@
                     <!-- Input Nama -->
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control" id="namaInput" name="nama" placeholder="Masukkan Nama" required>
-                        <label for="namaInput">Nama   </label>
+                        <label for="namaInput">Nama</label>
                     </div>
                     <!-- Input Tanggal -->
                     <div class="form-floating mb-3">
@@ -134,53 +134,93 @@
                         <label for="jurusanSelect">Jurusan</label>
                     </div>
                     <!-- Keterangan -->
-                    <div class="form-floating">
-                        <textarea class="form-control" placeholder="Masukkan keterangan" id="keteranganTextarea" name="keterangan" style="height: 150px;"></textarea>
+                    <div class="form-floating mb-3">
+                        <textarea class="form-control" placeholder="Masukkan keterangan" id="keteranganTextarea" name="keterangan" style="height: 100px;"></textarea>
                         <label for="keteranganTextarea">Keterangan</label>
+                    </div>
+                    <!-- Pilihan Status Kehadiran -->
+                    <div class="mb-3">
+                        <label class="form-label d-block">Status Kehadiran:</label>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" id="hadir" name="status" value="Hadir" required>
+                            <label class="form-check-label" for="hadir">Hadir</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" id="izin" name="status" value="Izin">
+                            <label class="form-check-label" for="izin">Izin</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" id="sakit" name="status" value="Sakit">
+                            <label class="form-check-label" for="sakit">Sakit</label>
+                        </div>
+                    </div>
+                    <!-- Paraf (Tanda Tangan Digital) -->
+                    <div class="mb-3">
+                        <label class="form-label d-block">Paraf Pembimbing:</label>
+                        <canvas id="signature-pad" class="border rounded w-100" style="height: 150px;"></canvas>
+                        <button type="button" class="btn btn-danger btn-sm mt-2" onclick="clearSignature()">Hapus Paraf</button>
+                        <input type="hidden" name="paraf" id="paraf-input">
                     </div>
                     <!-- Tombol Submit -->
                     <div class="mt-3">
-                        <button type="submit" class="btn btn-primary w-100">Submit</button>
+                        <button type="submit" class="btn btn-primary w-100">Simpan</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
- <!-- Form End -->
- <?php
-// Konfigurasi koneksi ke database
-$host = "localhost";
-$user = "root"; // Sesuaikan dengan username database
-$password = ""; // Sesuaikan dengan password database
-$database = "db_sipraka"; // Nama database
 
-// Membuat koneksi ke database
+<!-- Signature Pad JS -->
+<script src="https://cdn.jsdelivr.net/npm/signature_pad"></script>
+<script>
+    var canvas = document.getElementById("signature-pad");
+    var signaturePad = new SignaturePad(canvas);
+
+    function clearSignature() {
+        signaturePad.clear();
+    }
+
+    document.querySelector("form").addEventListener("submit", function (e) {
+        if (!signaturePad.isEmpty()) {
+            document.getElementById("paraf-input").value = signaturePad.toDataURL();
+        } else {
+            alert("Harap isi tanda tangan terlebih dahulu!");
+            e.preventDefault();
+        }
+    });
+</script>
+ <!-- Form End -->
+
+ <?php
+
+$host = "localhost";
+$user = "root";
+$password = "";
+$database = "db_sipraka";
 $conn = new mysqli($host, $user, $password, $database);
 
-// Periksa koneksi
+
 if ($conn->connect_error) {
     die("Koneksi gagal: " . $conn->connect_error);
 }
 
-// Periksa apakah form dikirim dengan metode POST
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Ambil data dari form
+
     $nama = trim($_POST['nama']);
     $tanggal = trim($_POST['tanggal']);
     $jurusan = trim($_POST['jurusan']);
     $keterangan = trim($_POST['keterangan']);
+    $status = trim($_POST['status']); 
+    $paraf = trim($_POST['paraf']);
 
-    // Validasi: Pastikan semua field telah diisi
-    if (empty($nama) || empty($tanggal) || empty($jurusan)) {
-        echo "<script>
-                alert('Semua kolom wajib diisi!');
-                window.location.href='data_absensi.php';
-              </script>";
+    if (empty($nama) || empty($tanggal) || empty($jurusan) || empty($status) || empty($paraf)) {
+        echo "<script>alert('Semua kolom wajib diisi!'); window.location.href='data_absensi.php';</script>";
         exit();
     }
 
-    // Periksa apakah siswa sudah absen pada tanggal yang sama
+
     $cek_sql = "SELECT id FROM absensi WHERE nama = ? AND tanggal = ?";
     $stmt = $conn->prepare($cek_sql);
     $stmt->bind_param("ss", $nama, $tanggal);
@@ -188,32 +228,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->store_result();
 
     if ($stmt->num_rows > 0) {
-        // Jika sudah absen, tampilkan peringatan
-        echo "<script>
-                alert('Anda sudah absen hari ini!');
-                window.location.href='data_absensi.php';
-              </script>";
+        echo "<script>alert('Anda sudah absen hari ini!'); window.location.href='data_absensi.php';</script>";
     } else {
-        // Jika belum absen, simpan ke database
-        $sql = "INSERT INTO absensi (nama, tanggal, jurusan, keterangan) VALUES (?, ?, ?, ?)";
+        $sql = "INSERT INTO absensi (nama, tanggal, jurusan, keterangan, status, paraf) VALUES (?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ssss", $nama, $tanggal, $jurusan, $keterangan);
+        $stmt->bind_param("ssssss", $nama, $tanggal, $jurusan, $keterangan, $status, $paraf);
 
         if ($stmt->execute()) {
-            echo "<script>
-                    alert('Absensi berhasil disimpan!');
-                    window.location.href='data_absensi.php';
-                  </script>";
+            echo "<script>alert('Absensi berhasil disimpan!'); window.location.href='data_absensi.php';</script>";
         } else {
             echo "Error: " . $stmt->error;
         }
     }
 
-    // Tutup statement
+
     $stmt->close();
 }
 
-// Tutup koneksi
+
 $conn->close();
 ?>
 
