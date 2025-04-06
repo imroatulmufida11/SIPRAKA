@@ -63,11 +63,13 @@
                 </div>
             </div>
             <div class="navbar-nav w-100">
-                <a href="dasboard_admin.php" class="nav-item nav-link "><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                <a href="dasboard_admin.php" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
                 <a href="tambahdata_admin.php" class="nav-item nav-link"><i class="fa-solid fa-calendar-plus me-2"></i>Tambah Data</a>
                 <a href="form_permohonan.php" class="nav-item nav-link active"><i class="fa-solid fa-th me-2"></i>Permohonan</a>
                 <a href="from_monitoring.php" class="nav-item nav-link"><i class="fa-solid fa-eye me-2"></i>Monitoring</a>
                 <a href="from_penarikan.php" class="nav-item nav-link"><i class="fa-solid fa-hand-holding-heart me-2"></i>Penarikan</a>
+                <a href="form_surattugas.php" class="nav-item nav-link"><i class="fa-solid fa-envelope-open-text me-2"></i>Surat Tugas</a>
+                <a href="form_pengantar.php" class="nav-item nav-link"><i class="fa-solid fa-comment me-2"></i>Surat Pengantar</a>
                 <a href="absensi_admin.php" class="nav-item nav-link"><i class="fa-solid fa-pen me-2"></i>Absensi</a>
             </div>
         </nav>
@@ -103,39 +105,30 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
     exit;
 }
 
-$id = intval($_GET["id"]); 
+$id = intval($_GET["id"]);
 
+// Query untuk mengambil data surat permohonan PKL
 $sql = "SELECT p.*, 
-               CASE 
-                   WHEN p.tempat_pkl REGEXP '^[0-9]+$' THEN d.nama_dudi 
-                   ELSE p.tempat_pkl 
-               END AS tempat_pkl_final,
-               CASE 
-                   WHEN p.alamat_pkl = '' OR p.alamat_pkl IS NULL THEN d.alamat 
-                   ELSE p.alamat_pkl 
-               END AS alamat_pkl_final
+               COALESCE(NULLIF(p.tempat_pkl, ''), d.nama_dudi) AS tempat_pkl_final,
+               COALESCE(NULLIF(p.alamat_pkl, ''), d.alamat) AS alamat_pkl_final
         FROM permohonan_pkl p
         LEFT JOIN data_dudi d ON p.tempat_pkl = d.id
         WHERE p.id = $id";
 
 $result = mysqli_query($conn, $sql);
 
-if ($row = mysqli_fetch_assoc($result)) {
+if (!$row = mysqli_fetch_assoc($result)) {
+    echo "Data tidak ditemukan!";
+    exit;
+}
 ?>
 
-
-
-
-<body>
-
 <div class="container mt-4">
-<button class="btn btn-primary btn-print mb-3" onclick="printSurat()">🖨 Cetak Surat</button>
-
-
+    <button class="btn btn-primary btn-print mb-3" onclick="printSurat()">🖨 Cetak Surat</button>
     <div id="surat" class="card p-4 text-dark">
         <div class="row">
             <div class="col-2">
-                <img src="img/jatim.png" alt="Logo" style="width: 100px;">
+                <img src="img/jatim.png" alt="Logo" style="width: 90px;">
             </div>
             <div class="col-10 text-center">
                 <h5 class="fw-normal">PEMERINTAH PROVINSI JAWA TIMUR</h5>
@@ -149,48 +142,56 @@ if ($row = mysqli_fetch_assoc($result)) {
         <div style="height: 3px; background-color: black; width:100%;"></div>
 
         <p class="text-end">Bangkalan, <?= date("d F Y") ?></p>
-        <p>Nomor: <?= htmlspecialchars($row["nomor_surat"]) ?></p>
-        <p>Hal: Permohonan Praktik Kerja Lapangan</p>
-        <p>Lampiran: - </p>
+        <table>
+            <tr><td>No.</td> <td>: <?= htmlspecialchars($row["nomor_surat"]) ?></td></tr>
+            <tr><td>Hal</td> <td>: Permohonan Praktik Kerja Lapangan</td></tr>
+            <tr><td>Lamp</td> <td>: -</td></tr>
+        </table>
 
-        <p><strong>Yth : Pimpinan / Direktur</strong></p>
-        <p><strong><?= htmlspecialchars($row["tempat_pkl_final"]) ?></strong></p>
-        <p><?= nl2br(htmlspecialchars($row["alamat_pkl_final"])) ?></p>
+        <br>
 
-        <p><em>Assalamu'alaikum Wr. Wb.</em></p>
+        <table>
+            <tr><td><strong>Yth</strong></td> <td>: <strong>Pimpinan / Direktur</strong></td></tr>
+            <tr><td></td> <td><strong><?= htmlspecialchars($row["tempat_pkl_final"]) ?></strong></td></tr>
+            <tr><td></td> <td><?= nl2br(htmlspecialchars($row["alamat_pkl_final"])) ?></td></tr>
+        </table>
+
+        <p class="mt-3"><em>Assalamu'alaikum Wr. Wb.</em></p>
         <p>Dengan Hormat,</p>
 
         <p>
             Dalam penyelenggaraan sistem pendidikan tingkat kejuruan, disamping siswa harus melaksanakan
             Kegiatan Belajar Mengajar (KBM) di sekolah, siswa juga dituntut melaksanakan praktik kerja di
-            Dunia Usaha / Dunia Industri, yang dikenal dengan istilah PKL (Praktik Kerja Lapangan).
-        </p>
-
-        <p>
-            Berdasarkan kurikulum merdeka dilaksanakan selama <strong>6 bulan</strong>, untuk itu kami mohon dengan sangat agar
+            Dunia Usaha / Dunia Industri, yang dikenal dengan istilah PKL (Praktik Kerja Lapangan). Berdasarkan kurikulum merdeka dilaksanakan selama <strong>6 bulan</strong>, untuk itu kami mohon dengan sangat agar
             Bapak/Ibu Pimpinan <strong><?= htmlspecialchars($row["tempat_pkl_final"]) ?></strong> berkenan menerima siswa kami untuk
             melaksanakan PKL:
         </p>
-
+        
         <p><strong>Konsentrasi Keahlian:</strong> <?= htmlspecialchars($row["konsentrasi_keahlian"]) ?></p>
 
-        <?php if (!empty($row["siswa"])): ?>
-            <table class="table table-bordered" style="border: 100px;">
+        <?php if (!empty(trim($row["siswa"]))): ?>
+            <table class="table table-bordered" mt-4 style="border: 100px;">
                 <thead>
                     <tr class="text-dark">
                         <th>No</th>
                         <th>Nama</th>
                         <th>NISN</th>
+                        <th>Semester/Tingkat</th>
                     </tr>
                 </thead>
                 <tbody class="text-dark">
                     <?php
-                    $siswaList = explode("\n", $row["siswa"]);
+                    $siswaList = explode("\n", trim($row["siswa"]));
                     $no = 1;
                     foreach ($siswaList as $siswa) {  
-                        $data = explode("-", trim($siswa));
-                        if (count($data) == 2) {
-                            echo "<tr><td>$no</td><td>" . htmlspecialchars($data[0]) . "</td><td>" . htmlspecialchars($data[1]) . "</td></tr>";
+                        $data = array_map('trim', explode(",", $siswa));
+                        if (count($data) >= 2) {
+                            echo "<tr>
+                                    <td>$no</td>
+                                    <td>" . htmlspecialchars($data[0]) . "</td>
+                                    <td>" . htmlspecialchars($data[1]) . "</td>
+                                    <td>" . (isset($data[2]) ? htmlspecialchars($data[2]) : '-') . "</td>
+                                  </tr>";
                             $no++;
                         }
                     }
@@ -210,15 +211,18 @@ if ($row = mysqli_fetch_assoc($result)) {
         <p><em>Wassalamu'alaikum Wr. Wb.</em></p>
 
         <div class="text-end">
-            <p>Hormat Kami,</p>
-            <p>Kepala SMK Negeri 2 Bangkalan</p>
-            <br><br><br>
-            <p><strong>Nur Hazizah, S.Pd., M.Pd.</strong></p>
-        </div>
+    <div class="d-inline-block text-start">
+        <p class="mb-1">Hormat Kami,</p>
+        <p class="mb-5">Kepala SMK Negeri 2 Bangkalan</p> <!-- Tambah jarak di sini -->
 
-    </hr>
+        <p class="fw-bold mb-1">Nur Hazizah, S.Pd., M.Pd.</p>
+        <p class="mb-1">Pembina Tk. I / IV/b</p>
+        <p>NIP 196912181997032006</p>
+    </div>
 </div>
 
+    </div>
+</div>
 <head>
     <style>
         @media print {
@@ -263,19 +267,6 @@ function printSurat() {
     window.print();
 }
 </script>
-
-</body>
-</html>
-
-<?php
-} else {
-    echo "Data tidak ditemukan!";
-}
-?>
-
-
-
-
 
     <!-- Footer Start -->
     <div class="container-fluid pt-4 px-4">

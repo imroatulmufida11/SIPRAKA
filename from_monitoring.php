@@ -109,26 +109,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <a href="form_permohonan.php" class="nav-item nav-link"><i class="fa-solid fa-th me-2"></i>Permohonan</a>
                 <a href="from_monitoring.php" class="nav-item nav-link active"><i class="fa-solid fa-eye me-2"></i>Monitoring</a>
                 <a href="from_penarikan.php" class="nav-item nav-link"><i class="fa-solid fa-hand-holding-heart me-2"></i>Penarikan</a>
+                <a href="form_surattugas.php" class="nav-item nav-link"><i class="fa-solid fa-envelope-open-text me-2"></i>Surat Tugas</a>
+                <a href="form_pengantar.php" class="nav-item nav-link"><i class="fa-solid fa-comment me-2"></i>Surat Pengantar</a>
                 <a href="absensi_admin.php" class="nav-item nav-link"><i class="fa-solid fa-pen me-2"></i>Absensi</a>
             </div>
         </nav>
     </div>
     <!-- Sidebar End -->
 
-        <!-- Content Start -->
-        <div class="content">
-            <!-- Navbar Start -->
-            <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0" style="height: 56px;">
-            <div class="ms-auto">
-                <!-- Tombol Lihat Data (pojok kanan) -->
-                <a href="data_monitoring.php" class="btn btn-primary px-3 py-2">
-                    Lihat Data
-                </a>
-            </div>
-        </nav>
+        <!-- Navbar Start -->
+  <div class="content">
+<nav class="navbar navbar-expand bg-light navbar-light sticky-top px-3 py-2 d-flex align-items-center" style="height: 56px;">
+    <!-- Sidebar Toggler di Kiri -->
+    <a href="#" class="sidebar-toggler me-auto">
+        <i class="fa fa-bars"></i>
+    </a>
 
-            </nav>
-
+    <!-- Tombol Lihat Data di Kanan -->
+    <a href="data_monitoring.php" class="btn btn-primary btn-sm px-3">
+        Lihat Data
+    </a>
+</nav>
+<!-- Navbar End -->
         
     <?php
 // Ambil data DU/DI
@@ -210,27 +212,12 @@ $resultJurusan = $conn->query($sqlJurusan);{
                             <textarea class="form-control" name="alamatPkl" id="alamatPkl" rows="2" required readonly></textarea>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Konsentrasi Keahlian:</label>
-                            <select class="form-control" name="konsentrasiKeahlian" required>
-                                <option value="">Pilih Konsentrasi Keahlian</option>
-                                <?php while ($rowJurusan = mysqli_fetch_assoc($resultJurusan)) : ?>
-                                    <option value="<?= htmlspecialchars($rowJurusan['jurusan']) ?>">
-                                        <?= htmlspecialchars($rowJurusan['jurusan']) ?>
-                                    </option>
-                                <?php endwhile; ?>
-                            </select>
-                        </div>
+                        <label class="form-label">Konsentrasi Keahlian:</label>
+                        <input type="text" class="form-control" name="konsentrasiKeahlian" required>
+                    </div>
                         <div class="mb-3">
                             <label class="form-label">Tanggal Surat:</label>
                             <input type="date" class="form-control" name="tanggalSurat" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Tanggal Mulai PKL:</label>
-                            <input type="date" class="form-control" name="tanggalMulai" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Tanggal Berakhir PKL:</label>
-                            <input type="date" class="form-control" name="tanggalBerakhir" required>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Nama Siswa (Setiap Nama di Baris Baru):</label>

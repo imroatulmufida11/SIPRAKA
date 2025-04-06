@@ -40,6 +40,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $error_message = "Error: " . mysqli_error($conn);
     }
 }
+// Ambil data Du/Di dari database
+$sql = "SELECT id, nama_dudi, alamat FROM data_dudi";
+$result = $conn->query($sql);
 ?>
 
 <?php
@@ -62,13 +65,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <input type="text" class="form-control" name="nomorSurat" required>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Tempat PKL:</label>
-                        <input type="text" class="form-control" name="tempatPkl" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Alamat PKL:</label>
-                        <textarea class="form-control" name="alamatPkl" rows="2" required></textarea>
-                    </div>
+                            <label class="form-label">Tempat PKL:</label>
+                            <select class="form-control" name="dudiId" id="tempatPkl" required>
+                                <option value="">Pilih Du/Di</option>
+                                <?php while ($row = $result->fetch_assoc()) : ?>
+                                    <option value="<?= $row['id'] ?>" data-nama="<?= htmlspecialchars($row['nama_dudi']) ?>" data-alamat="<?= htmlspecialchars($row['alamat']) ?>">
+                                        <?= htmlspecialchars($row['nama_dudi']) ?>
+                                    </option>
+                                <?php endwhile; ?>
+                            </select>
+                        </div>
+                        <!-- Input hidden untuk menyimpan nama_dudi -->
+                        <input type="hidden" name="tempatPkl" id="namaDudi">
+                        <div class="mb-3">
+                            <label class="form-label">Alamat PKL:</label>
+                            <textarea class="form-control" name="alamatPkl" id="alamatPkl" required readonly></textarea>
+                        </div>
                     <div class="mb-3">
                         <label class="form-label">Tanggal Berakhir PKL:</label>
                         <input type="date" class="form-control" name="tanggalBerakhir" required>
@@ -108,7 +120,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
     </div>
 </div>
-
+<script>
+document.getElementById("tempatPkl").addEventListener("change", function() {
+    var selectedOption = this.options[this.selectedIndex];
+    document.getElementById("alamatPkl").value = selectedOption.getAttribute("data-alamat");
+    document.getElementById("namaDudi").value = selectedOption.getAttribute("data-nama"); // Set nama DU/DI
+});
+</script>
 
    <!-- Footer Start -->
 <div class="container-fluid pt-4 px-4">

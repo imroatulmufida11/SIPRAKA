@@ -68,6 +68,8 @@
                 <a href="form_permohonan.php" class="nav-item nav-link"><i class="fa-solid fa-th me-2"></i>Permohonan</a>
                 <a href="from_monitoring.php" class="nav-item nav-link"><i class="fa-solid fa-eye me-2"></i>Monitoring</a>
                 <a href="from_penarikan.php" class="nav-item nav-link active"><i class="fa-solid fa-hand-holding-heart me-2"></i>Penarikan</a>
+                <a href="form_surattugas.php" class="nav-item nav-link"><i class="fa-solid fa-envelope-open-text me-2"></i>Surat Tugas</a>
+                <a href="form_pengantar.php" class="nav-item nav-link"><i class="fa-solid fa-comment me-2"></i>Surat Pengantar</a>
                 <a href="absensi_admin.php" class="nav-item nav-link"><i class="fa-solid fa-pen me-2"></i>Absensi</a>
             </div>
         </nav>
@@ -136,127 +138,136 @@ $tanggal_surat = date("d F Y", strtotime($data['tanggal_berakhir']));
 ?>
 
 
+<!-- Tambahkan class "no-print" untuk elemen yang tidak perlu dicetak -->
 <div class="container mt-4">
-<button class="btn btn-primary btn-print mb-3" onclick="printSurat()">🖨 Cetak Surat</button>
-
+    <button class="btn btn-primary btn-print mb-3 no-print" onclick="printSurat()">🖨 Cetak Surat</button>
 
     <div id="surat" class="card p-4 text-dark">
         <div class="row">
             <div class="col-2">
-            <img src="img/jatim.png" alt="Logo" style="width: 100px;">
+                <img src="img/jatim.png" alt="Logo" style="width: 90px;">
+            </div>
+            <div class="col-10 text-center">
+                <h5>PEMERINTAH PROVINSI JAWA TIMUR</h5>
+                <h6>DINAS PENDIDIKAN</h6>
+                <h6>SMK NEGERI 2 BANGKALAN</h6>
+                <h6>NPSN/NSS: 20531223 / 321052901002</h6>
+                <p>Jalan. Halim Perdana Kusuma, Bangkalan, Jawa Timur 69116</p>
+            </div>
         </div>
-        <div class="col-10 text-center">
-            <h5>PEMERINTAH PROVINSI JAWA TIMUR</h5>
-            <h6>DINAS PENDIDIKAN</h6>
-            <h6>SMK NEGERI 2 BANGKALAN</h6>
-            <h6>NPSN/NSS: 20531223 / 321052901002</h6>
-            <p>Jalan. Halim Perdana Kusuma, Bangkalan, Jawa Timur 69116</p>
-        </div>
+        
         <div style="height: 3px; background-color: black; width:100%;"></div>
-    <hr>
-    <p class="text-end">Bangkalan, <?= $tanggal_surat ?></p>
-    <p>Nomor: <?= htmlspecialchars($data['nomor_surat']) ?></p>
-    <p>Hal: Penarikan siswa PKL</p>
-    <p>Kepada Yth: <strong>Bapak/Ibu Pimpinan</strong></p>
-    <p><strong><?= htmlspecialchars($data['tempat_pkl']) ?></strong></p>
-    <p><?= htmlspecialchars($data['alamat_pkl']) ?></p>
-    <p><em>Assalamu'alaikum Wr. Wb.</em></p>
-     <p>Dengan Hormat,</p>
-     <p>
-        Dengan ini Tim Praktek Kerja Lapangan (PKL) SMK Negeri 2 Bangkalan, menginformasikan siswa:
-        </p>
-    <p><strong>Konsentrasi Keahlian: </strong><?= htmlspecialchars($data['konsentrasi_keahlian']) ?></p>
-    
-    <table class="table table-bordered text-center">
-        <thead>
-        <tr class="text-dark">
-                <th>No</th>
-                <th>Nama Siswa</th>
-                <th>NISN</th>
-                <th>Tingkat / Semester</th>
-            </tr>
-        </thead>
-        <tbody class="text-dark">
-            <?php if (!empty($siswa_list)): ?>
-                <?php foreach ($siswa_list as $index => $siswa): ?>
-                    <?php 
-                    // Debug untuk melihat data per siswa
-                    echo "<!-- Data siswa: " . htmlspecialchars($siswa) . " -->";
-                    
-                    $siswa_data = explode(",", trim($siswa));
-                    ?>
-                    <tr>
-                        <td><?= $index + 1 ?></td>
-                        <td><?= isset($siswa_data[0]) ? htmlspecialchars(trim($siswa_data[0])) : '' ?></td>
-                        <td><?= isset($siswa_data[1]) ? htmlspecialchars(trim($siswa_data[1])) : '' ?></td>
-                        <td><?= isset($siswa_data[2]) ? htmlspecialchars(trim($siswa_data[2])) : '' ?></td>
-                    </tr>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <tr>
-                    <td colspan="4">Tidak ada data siswa</td>
+        
+        
+        <p class="text-end">Bangkalan, <?= $tanggal_surat ?></p>
+
+        <table>
+            <tr><td style="width: 100px;">No.</td> <td style="width: 10px;">:</td> <td><?= htmlspecialchars($data["nomor_surat"]) ?></td></tr>
+            <tr><td>Hal</td> <td>:</td> <td>Penarikan siswa PKL</td></tr>
+            <tr><td>Lamp</td> <td>:</td> <td>-</td></tr>
+        </table>
+
+        <br>
+
+        <table>
+            <tr><td style="width: 100px;"><strong>Yth</strong></td> <td style="width: 10px;">:</td> <td><strong>Bapak/Ibu Pimpinan</strong></td></tr>
+            <tr><td></td> <td></td> <td><strong><?= htmlspecialchars($data["tempat_pkl"]) ?></strong></td></tr>
+            <tr><td></td> <td></td> <td><?= nl2br(htmlspecialchars($data["alamat_pkl"])) ?></td></tr>
+        </table>
+
+        <p class="mt-3"><em>Assalamu'alaikum Wr. Wb.</em></p>
+        <p>Dengan Hormat,</p>
+        <p>Dengan ini Tim Praktek Kerja Lapangan (PKL) SMK Negeri 2 Bangkalan, menginformasikan siswa:</p>
+        <p><strong>Konsentrasi Keahlian: </strong><?= htmlspecialchars($data['konsentrasi_keahlian']) ?></p>
+
+        <table class="table table-bordered" mt-4 style="border: 100px;">
+            <thead>
+                <tr class="text-dark">
+                    <th>No</th>
+                    <th>Nama Siswa</th>
+                    <th>NISN</th>
+                    <th>Tingkat / Semester</th>
                 </tr>
-            <?php endif; ?>
-        </tbody>
-    </table>
-    <p>
-    Peserta Praktik Kerja Lapangan pada perusahaan Bapak/Ibu akan kami tarik, karena masa pelaksanaan PKL Berakhir Tanggal 
-    <strong><?= htmlspecialchars($data["tanggal_berakhir"]) ?></strong>.
-    
-    Selanjutnya kami menyampaikan terima kasih atas kerjasamanya dalam membimbing serta membina siswa kami selama ini.
-    Besar harapan kami untuk dapat melanjutkan kerjasama ini di masa mendatang.
-</p>
-<p><em>Wassalamu'alaikum Wr. Wb.</em></p>
+            </thead>
+            <tbody class="text-dark">
+                <?php if (!empty($siswa_list)): ?>
+                    <?php foreach ($siswa_list as $index => $siswa): ?>
+                        <?php $siswa_data = explode(",", trim($siswa)); ?>
+                        <tr>
+                            <td><?= $index + 1 ?></td>
+                            <td><?= isset($siswa_data[0]) ? htmlspecialchars(trim($siswa_data[0])) : '' ?></td>
+                            <td><?= isset($siswa_data[1]) ? htmlspecialchars(trim($siswa_data[1])) : '' ?></td>
+                            <td><?= isset($siswa_data[2]) ? htmlspecialchars(trim($siswa_data[2])) : '' ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="4">Tidak ada data siswa</td>
+                    </tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
+
+        <p>Peserta Praktik Kerja Lapangan pada perusahaan Bapak/Ibu akan kami tarik, karena masa pelaksanaan PKL Berakhir Tanggal 
+        <strong><?= htmlspecialchars($data["tanggal_berakhir"]) ?></strong>.
+        Selanjutnya kami menyampaikan terima kasih atas kerjasamanya dalam membimbing serta membina siswa kami selama ini.
+        Besar harapan kami untuk dapat melanjutkan kerjasama ini di masa mendatang.</p>
+
+        <p><em>Wassalamu'alaikum Wr. Wb.</em></p>
+
         <div class="text-end">
-            <p>Hormat Kami,</p>
-            <p>Kepala SMK Negeri 2 Bangkalan</p>
-            <br><br><br>
-            <p><strong>Nur Hazizah, S.Pd., M.Pd.</strong></p>
+            <div class="d-inline-block text-start">
+                <p class="mb-1">Hormat Kami,</p>
+                <p class="mb-5">Kepala SMK Negeri 2 Bangkalan</p> <!-- Tambah jarak di sini -->
+                <p class="fw-bold mb-1">Nur Hazizah, S.Pd., M.Pd.</p>
+                <p class="mb-1">Pembina Tk. I / IV/b</p>
+                <p>NIP 196912181997032006</p>
+            </div>
+        </div>
+    </div>
 </div>
 
+<!-- CSS untuk print -->
 <head>
     <style>
         @media print {
-            body {
-                margin: 0;
-                padding: 0;
-            }
+    /* Sembunyikan elemen selain surat */
+    body * {
+        visibility: hidden;
+    }
 
-            body * {
-                visibility: hidden; /* Sembunyikan semua elemen */
-            }
+    /* Tampilkan hanya bagian surat */
+    #surat, #surat * {
+        visibility: visible;
+    }
 
-            #surat, #surat * {
-                visibility: visible; /* Tampilkan hanya bagian surat */
-            }
+    /* Pastikan tata letak tetap rapi */
+    #surat {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding: 20px;
+    }
 
-            #surat {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100vh; /* Paksa tinggi sesuai layar */
-                page-break-before: avoid;
-                page-break-after: avoid;
-                page-break-inside: avoid;
-            }
+    /* Hindari tabel terpotong */
+    table {
+        page-break-inside: avoid;
+    }
 
-            table {
-                page-break-inside: avoid; /* Cegah tabel terpotong */
-            }
+    /* Sesuaikan ukuran font */
+    * {
+        font-size: 12px !important;
+    }
+}
 
-            * {
-                font-size: 12px !important; /* Kecilkan font biar muat */
-            }
-        }
     </style>
 </head>
-
-
+<!-- JavaScript untuk Print -->
 <script>
-function printSurat() {
-    window.print();
-}
+    function printSurat() {
+        window.print();
+    }
 </script>
 
 <!-- Footer Start -->

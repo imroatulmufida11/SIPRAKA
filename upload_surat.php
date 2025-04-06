@@ -5,73 +5,70 @@ require_once __DIR__ . '/config.php'; // Koneksi ke database
 $success_message = $error_message = "";
 $file_surat = "";
 
-// Ambil daftar DUDI dari database
+// Ambil daftar DUDI
 $dudi_list = [];
 $result_dudi = $conn->query("SELECT id, nama_dudi FROM data_dudi ORDER BY nama_dudi ASC");
 while ($row = $result_dudi->fetch_assoc()) {
     $dudi_list[] = $row;
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+// Proses upload jika tombol submit ditekan
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit_upload"])) {
     $id_dudi = $_POST["id"] ?? "";
 
     if (empty($id_dudi)) {
         $error_message = "Pilih Nama DUDI!";
-    } else {
-        // Ambil nama_dudi berdasarkan id_dudi
-        $query = $conn->prepare("SELECT nama_dudi FROM data_dudi WHERE id = ?");
-        $query->bind_param("i", $id_dudi);
-        $query->execute();
-        $query->bind_result($nama_dudi);
-        $query->fetch();
-        $query->close();
+    } elseif (!empty($_FILES["file_surat"]["name"])) {
+        // Ambil nama_dudi dari id
+        $stmt_dudi = $conn->prepare("SELECT nama_dudi FROM data_dudi WHERE id = ?");
+        $stmt_dudi->bind_param("i", $id_dudi);
+        $stmt_dudi->execute();
+        $stmt_dudi->bind_result($nama_dudi);
+        $stmt_dudi->fetch();
+        $stmt_dudi->close();
 
-        if (!$nama_dudi) {
-            $error_message = "DUDI tidak ditemukan!";
-        } elseif (!empty($_FILES["file_surat"]["name"])) {
-            $target_dir = "uploads/surat_permohonan/";
-            if (!is_dir($target_dir)) {
-                mkdir($target_dir, 0777, true);
-            }
+        $target_dir = "uploads/surat_permohonan/";
+        if (!is_dir($target_dir)) {
+            mkdir($target_dir, 0777, true);
+        }
 
-            $file_extension = pathinfo($_FILES["file_surat"]["name"], PATHINFO_EXTENSION);
-            $allowed_extensions = ["jpg", "jpeg", "png"];
+        $file_name = basename($_FILES["file_surat"]["name"]);
+        $file_extension = pathinfo($file_name, PATHINFO_EXTENSION);
+        $allowed_extensions = ["jpg", "jpeg", "png"];
 
-            if (in_array(strtolower($file_extension), $allowed_extensions)) {
-                $new_file_name = time() . "_" . basename($_FILES["file_surat"]["name"]);
-                $file_surat = $target_dir . $new_file_name;
+        if (in_array(strtolower($file_extension), $allowed_extensions)) {
+            $new_file_name = time() . "_" . $file_name;
+            $file_path = $target_dir . $new_file_name;
 
-                if (move_uploaded_file($_FILES["file_surat"]["tmp_name"], $file_surat)) {
-                    // Simpan data ke database
-                    $stmt = $conn->prepare("INSERT INTO upload_surat (nama_dudi, file_surat) VALUES (?, ?)");
-                    $stmt->bind_param("ss", $nama_dudi, $file_surat);
+            if (move_uploaded_file($_FILES["file_surat"]["tmp_name"], $file_path)) {
+                // Simpan ke database
+                $stmt_upload = $conn->prepare("INSERT INTO upload_surat (id, nama_dudi, file_surat) VALUES (?, ?, ?)");
+                $stmt_upload->bind_param("iss", $id_dudi, $nama_dudi, $new_file_name);
 
-                    if ($stmt->execute()) {
-                        $success_message = "Surat berhasil diunggah!";
-                    } else {
-                        $error_message = "Gagal menyimpan ke database: " . $stmt->error;
-                    }
-
-                    $stmt->close();
+                if ($stmt_upload->execute()) {
+                    $success_message = "Surat berhasil diunggah!";
                 } else {
-                    $error_message = "Gagal mengunggah surat.";
+                    $error_message = "Gagal menyimpan ke database.";
                 }
+                $stmt_upload->close();
             } else {
-                $error_message = "Format file tidak didukung! Harap unggah JPG, JPEG, atau PNG.";
+                $error_message = "Gagal mengunggah file.";
             }
         } else {
-            $error_message = "Silakan pilih file untuk diunggah.";
+            $error_message = "Format file tidak didukung (JPG, JPEG, PNG).";
         }
+    } else {
+        $error_message = "Silakan pilih file untuk diunggah.";
     }
 }
 
-
-// Ambil data dari database untuk tabel tampilan
+// Ambil data untuk ditampilkan di tabel
 $result = $conn->query("SELECT us.*, dd.nama_dudi 
                         FROM upload_surat us
                         JOIN data_dudi dd ON us.id = dd.id
                         ORDER BY us.tanggal_upload DESC");
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -158,16 +155,15 @@ $result = $conn->query("SELECT us.*, dd.nama_dudi
         </nav> 
 
 
-<!-- Container Form Upload -->
-<div class="container mt-5">
+        <div class="container mt-5">
     <h2 class="text-center">Upload Surat Permohonan</h2>
 
     <!-- Notifikasi -->
-<?php if ($success_message) : ?>
-    <div id="alert-success" class="alert alert-success"><?= $success_message; ?></div>
-<?php elseif ($error_message) : ?>
-    <div id="alert-error" class="alert alert-danger"><?= $error_message; ?></div>
-<?php endif; ?>
+    <?php if ($success_message): ?>
+        <div id="alert-success" class="alert alert-success"><?= $success_message; ?></div>
+    <?php elseif ($error_message): ?>
+        <div id="alert-error" class="alert alert-danger"><?= $error_message; ?></div>
+    <?php endif; ?>
 
     <!-- Form Upload -->
     <form action="" method="post" enctype="multipart/form-data">
@@ -175,7 +171,7 @@ $result = $conn->query("SELECT us.*, dd.nama_dudi
             <label for="nama_dudi" class="form-label">Pilih DUDI</label>
             <select name="id" id="nama_dudi" class="form-control" required>
                 <option value="">-- Pilih DUDI --</option>
-                <?php foreach ($dudi_list as $dudi) : ?>
+                <?php foreach ($dudi_list as $dudi): ?>
                     <option value="<?= $dudi['id']; ?>"><?= $dudi['nama_dudi']; ?></option>
                 <?php endforeach; ?>
             </select>
@@ -185,10 +181,10 @@ $result = $conn->query("SELECT us.*, dd.nama_dudi
             <label class="form-label">Unggah Surat (JPG, JPEG, PNG)</label>
             <input type="file" name="file_surat" class="form-control" accept=".jpg,.jpeg,.png" required>
         </div>
-        <button type="submit" class="btn btn-primary w-100">Unggah</button>
+        <button type="submit" name="submit_upload" class="btn btn-primary w-100">Unggah</button>
     </form>
 
-    <!-- Tabel Data Surat -->
+    <!-- Tabel Data -->
     <div class="mt-5">
         <h4 class="text-center">Daftar Surat yang Diunggah</h4>
         <table class="table table-bordered">
@@ -225,15 +221,15 @@ $result = $conn->query("SELECT us.*, dd.nama_dudi
 </div>
 
 <script>
-    // Jalankan hanya jika ada notifikasi
     setTimeout(() => {
         document.querySelectorAll(".alert").forEach(alert => {
             alert.style.transition = "opacity 0.5s";
             alert.style.opacity = "0";
-            setTimeout(() => alert.remove(), 500); // Hapus setelah animasi selesai
+            setTimeout(() => alert.remove(), 500);
         });
     }, 3000);
 </script>
+
         <!-- Footer Start -->
         <div class="container-fluid pt-4 px-4">
             <div class="bg-light rounded-top p-4">

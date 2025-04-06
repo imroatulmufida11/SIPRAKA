@@ -96,6 +96,8 @@ $data = $result->fetch_assoc();
                 <a href="form_permohonan.php" class="nav-item nav-link"><i class="fa-solid fa-th me-2"></i>Permohonan</a>
                 <a href="from_monitoring.php" class="nav-item nav-link active"><i class="fa-solid fa-eye me-2"></i>Monitoring</a>
                 <a href="from_penarikan.php" class="nav-item nav-link"><i class="fa-solid fa-hand-holding-heart me-2"></i>Penarikan</a>
+                <a href="form_surattugas.php" class="nav-item nav-link"><i class="fa-solid fa-envelope-open-text me-2"></i>Surat Tugas</a>
+                <a href="form_pengantar.php" class="nav-item nav-link"><i class="fa-solid fa-comment me-2"></i>Surat Pengantar</a>
                 <a href="absensi_admin.php" class="nav-item nav-link"><i class="fa-solid fa-pen me-2"></i>Absensi</a>
             </div>
         </nav>
@@ -129,7 +131,7 @@ $data = $result->fetch_assoc();
 <div id="surat" class="card p-4 text-dark">
         <div class="row">
             <div class="col-2">
-                <img src="img/jatim.png" alt="Logo" style="width: 100px;">
+                <img src="img/jatim.png" alt="Logo" style="width: 90px;">
             </div>
             <div class="col-10 text-center">
                 <h5>PEMERINTAH PROVINSI JAWA TIMUR</h5>
@@ -143,21 +145,61 @@ $data = $result->fetch_assoc();
         <hr>
         
         <h5 class="text-center"><u>SURAT TUGAS</u></h5>
-        <p class="text-end">Bangkalan, <?= date("d F Y", strtotime($data['tanggal_surat'])) ?></p>
         <p class="text-center">Nomor: <?= htmlspecialchars($data['nomor_surat']) ?></p>
         
         <p>Yang bertanda tangan di bawah ini, Kepala SMK Negeri 2 Bangkalan dengan ini:</p>
         <h6 class="text-center"><strong>MENUGASKAN</strong></h6>
         
-        <p><strong>Kepada:</strong></p>
-        <p>Nama: <?= htmlspecialchars($data['nama_guru']) ?></p>
-        <p>NIP: <?= htmlspecialchars($data['nip_guru']) ?></p>
-        <p>Jabatan: <?= htmlspecialchars($data['jabatan_guru']) ?></p>
-        
-        <p>Untuk: Monitoring siswa PKL ke <strong><?= htmlspecialchars($data['tempat_pkl']) ?></strong></p>
-        <p>Alamat: <?= nl2br(htmlspecialchars($data['alamat_pkl'])) ?></p>
-        <p>Pada tanggal: </p>
-        <p>Konsentrasi Keahlian: <strong><?= htmlspecialchars($data['konsentrasi_keahlian']) ?></strong></p>
+        <!-- <h4 class="text-center fw-bold">MENUGASKAN</h4> -->
+
+<table>
+    <tr>
+        <td style="width: 80px;">Kepada</td>
+        <td style="width: 10px;">:</td>
+        <td style="width: 80px;">Nama</td>
+        <td style="width: 10px;">:</td>
+        <td><?= htmlspecialchars($data['nama_guru']) ?></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td>NIP</td>
+        <td>:</td>
+        <td><?= htmlspecialchars($data['nip_guru']) ?></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td>Jabatan</td>
+        <td>:</td>
+        <td><?= htmlspecialchars($data['jabatan_guru']) ?></td>
+    </tr>
+</table>
+
+<br>
+
+<table>
+    <tr>
+        <td style="width: 80px;">Untuk</td>
+        <td style="width: 10px;">:</td>
+        <td>Monitoring siswa PKL ke <strong><?= htmlspecialchars($data['tempat_pkl']) ?></strong></td>
+    </tr>
+    <tr>
+    <td></td>
+    <td></td>
+    <td>
+    <?= nl2br(htmlspecialchars($data['alamat_pkl'])) ?> 
+    <span style="margin-left: 50px;">pada tanggal</span> 
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    <strong><?= date("F Y", strtotime($data['tanggal_surat'])) ?></strong>
+</td>
+
+</tr>
+
+</table>
+
+       <p class="mt-3 mb-2"><strong>Konsentrasi Keahlian:</strong> <?= htmlspecialchars($data['konsentrasi_keahlian']) ?></p>
+
 
         <!-- Tabel Siswa -->
         <table class="table table-bordered" mt-4 style="border: 100px;">
@@ -188,22 +230,32 @@ $data = $result->fetch_assoc();
             </tbody>
         </table>
 
-        <!-- Tanda Tangan -->
-        <div class="row mt-5">
-            <div class="col-6">
-                <p>Telah diketahui oleh:</p>
-                <p><strong>Pihak DU/DI</strong></p>
-                <br><br><br>
-                <p>.................................</p>
-                <p>(Nama Terang + Tanda tangan + Stempel)</p>
-            </div>
-            <div class="col-6 text-end">
-                <p>Bangkalan, <?= date("d F Y", strtotime($data['tanggal_surat'])) ?></p>
-                <p>Kepala SMK Negeri 2 Bangkalan</p>
-                <br><br><br>
-                <p><strong>Nur Hazizah, S.Pd., M.Pd.</strong></p>
-                <p>NIP. 19700417 199702 2 002</p>
-            </div>
+       <!-- Tanda Tangan -->
+<div class="row mt-5">
+    <!-- Bagian Kiri -->
+    <div class="col-6 text-start">
+        <p>Telah diketahui oleh:</p>
+        <p><strong>Pihak DU/DI</strong></p>
+        <br><br><br>
+        <p>.................................</p>
+        <p>(Nama Terang + Tanda tangan + Stempel)</p>
+    </div>
+
+    <!-- Bagian Kanan -->
+    <div class="col-6 d-flex justify-content-end"> <!-- Tetap di pojok kanan -->
+        <div class="text-start"> <!-- Agar teks tetap rata kiri -->
+            <p>Bangkalan, <?= date("d F Y", strtotime($data['tanggal_surat'])) ?></p>
+            <p>Kepala SMK Negeri 2 Bangkalan</p>
+            <br><br><br> <!-- Jarak untuk tanda tangan -->
+            <p class="fw-bold mb-1">Nur Hazizah, S.Pd., M.Pd.</p>
+            <p class="mb-1">Pembina Tk. I / IV/b</p>
+            <p>NIP 196912181997032006</p>
+        </div>
+    </div>
+</div>
+
+
+
         </div>
     </div>
 

@@ -74,46 +74,85 @@
 
         <!-- Content Start -->
         <div class="content">
-        <!-- Navbar Start -->
-        <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0">
-            <a href="index.html" class="navbar-brand d-flex d-lg-none me-4">
-                <h2 class="text-primary mb-0"><i class="fa fa-hashtag"></i></h2>
-            </a>
-            <a href="#" class="sidebar-toggler flex-shrink-0">
-                <i class="fa fa-bars"></i>
-            </a>
-            <div class="nav-item dropdown ms-auto">
-                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                    <img class="rounded-circle me-lg-2" src="img/foto.jpg" alt="" style="width: 40px; height: 40px;">
-                    <span class="d-none d-lg-inline-flex">Siswa</span>
-                </a>
-                <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
-                    <a href="login.php" class="dropdown-item">Keluar</a>
-                </div>
-            </div>
+<nav class="navbar navbar-expand bg-light navbar-light sticky-top px-3 py-2 d-flex align-items-center" style="height: 56px;">
+    <!-- Sidebar Toggler di Kiri -->
+    <a href="#" class="sidebar-toggler me-auto">
+        <i class="fa fa-bars"></i>
+    </a>
         </nav>
             <!-- Navbar End -->
 
+            
+            <?php
+$host = "localhost";
+$user = "root";
+$password = "";
+$database = "db_sipraka";
+$conn = new mysqli($host, $user, $password, $database);
 
-            <!-- Form Start -->
-       <!-- Form Start -->
+if ($conn->connect_error) {
+    die("Koneksi gagal: " . $conn->connect_error);
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $nama = trim($_POST['nama']);
+    $tanggal = trim($_POST['tanggal']);
+    $jurusan = trim($_POST['jurusan']);
+    $status = trim($_POST['status']);
+    $pembimbing = trim($_POST['pembimbing']);
+    $paraf = trim($_POST['paraf']);
+    $keterangan = !empty($_POST['keterangan']) ? trim($_POST['keterangan']) : NULL;
+
+    // Jika status "Hadir", pastikan paraf tidak kosong
+    if ($status === "Hadir" && empty($paraf)) {
+        echo "<script>alert('Paraf wajib diisi jika memilih Hadir!'); window.location.href='data_absensi.php';</script>";
+        exit();
+    }
+
+    // Cek apakah sudah absen hari ini
+    $cek_sql = "SELECT id FROM absensi WHERE nama = ? AND tanggal = ?";
+    $stmt = $conn->prepare($cek_sql);
+    $stmt->bind_param("ss", $nama, $tanggal);
+    $stmt->execute();
+    $stmt->store_result();
+
+    if ($stmt->num_rows > 0) {
+        echo "<script>alert('Anda sudah absen hari ini!'); window.location.href='data_absensi.php';</script>";
+    } else {
+        // Simpan ke database
+        $sql = "INSERT INTO absensi (nama, tanggal, jurusan, keterangan, status, paraf, pembimbing) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("sssssss", $nama, $tanggal, $jurusan, $keterangan, $status, $paraf, $pembimbing);
+
+        if ($stmt->execute()) {
+            echo "<script>alert('Absensi berhasil disimpan!'); window.location.href='data_absensi.php';</script>";
+        } else {
+            echo "Error: " . $stmt->error;
+        }
+    }
+
+    $stmt->close();
+}
+$conn->close();
+?>
+
+<!-- Form Absensi -->
 <div class="container-fluid pt-4 px-4">
     <div class="row g-4">
         <div class="col-12">
             <div class="bg-light rounded h-100 p-4">
                 <h6 class="mb-4">Absensi</h6>
-                <form action="absensi_siswa.php" method="POST">
-                    <!-- Input Nama -->
+                <form action="" method="POST">
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control" id="namaInput" name="nama" placeholder="Masukkan Nama" required>
                         <label for="namaInput">Nama</label>
                     </div>
-                    <!-- Input Tanggal -->
+
                     <div class="form-floating mb-3">
                         <input type="date" class="form-control" id="tanggalInput" name="tanggal" required>
                         <label for="tanggalInput">Tanggal</label>
                     </div>
-                    <!-- Pilihan Jurusan -->
+
                     <div class="form-floating mb-3">
                         <select class="form-select" id="jurusanSelect" name="jurusan" required>
                             <option selected disabled>Pilih Jurusan</option>
@@ -133,12 +172,12 @@
                         </select>
                         <label for="jurusanSelect">Jurusan</label>
                     </div>
-                    <!-- Keterangan -->
+
                     <div class="form-floating mb-3">
                         <textarea class="form-control" placeholder="Masukkan keterangan" id="keteranganTextarea" name="keterangan" style="height: 100px;"></textarea>
                         <label for="keteranganTextarea">Keterangan</label>
                     </div>
-                    <!-- Pilihan Status Kehadiran -->
+
                     <div class="mb-3">
                         <label class="form-label d-block">Status Kehadiran:</label>
                         <div class="form-check form-check-inline">
@@ -154,14 +193,19 @@
                             <label class="form-check-label" for="sakit">Sakit</label>
                         </div>
                     </div>
-                    <!-- Paraf (Tanda Tangan Digital) -->
+
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="pembimbingInput" name="pembimbing" placeholder="Masukkan Nama Pembimbing" required>
+                        <label for="pembimbingInput">Nama Pembimbing</label>
+                    </div>
+
                     <div class="mb-3">
                         <label class="form-label d-block">Paraf Pembimbing:</label>
                         <canvas id="signature-pad" class="border rounded w-100" style="height: 150px;"></canvas>
                         <button type="button" class="btn btn-danger btn-sm mt-2" onclick="clearSignature()">Hapus Paraf</button>
                         <input type="hidden" name="paraf" id="paraf-input">
                     </div>
-                    <!-- Tombol Submit -->
+
                     <div class="mt-3">
                         <button type="submit" class="btn btn-primary w-100">Simpan</button>
                     </div>
@@ -171,85 +215,35 @@
     </div>
 </div>
 
-<!-- Signature Pad JS -->
-<script src="https://cdn.jsdelivr.net/npm/signature_pad"></script>
 <script>
-    var canvas = document.getElementById("signature-pad");
-    var signaturePad = new SignaturePad(canvas);
+    document.addEventListener("DOMContentLoaded", function () {
+        let form = document.querySelector("form");
+        let statusRadios = document.querySelectorAll('input[name="status"]');
+        let parafInput = document.getElementById("paraf-input");
+        let canvas = document.getElementById("signature-pad");
+        let ctx = canvas.getContext("2d");
+        let isDrawing = false;
 
-    function clearSignature() {
-        signaturePad.clear();
-    }
+        canvas.addEventListener("mousedown", () => { isDrawing = true; ctx.beginPath(); });
+        canvas.addEventListener("mousemove", (event) => {
+            if (isDrawing) { ctx.lineTo(event.offsetX, event.offsetY); ctx.stroke(); }
+        });
+        canvas.addEventListener("mouseup", () => { isDrawing = false; parafInput.value = canvas.toDataURL(); });
 
-    document.querySelector("form").addEventListener("submit", function (e) {
-        if (!signaturePad.isEmpty()) {
-            document.getElementById("paraf-input").value = signaturePad.toDataURL();
-        } else {
-            alert("Harap isi tanda tangan terlebih dahulu!");
-            e.preventDefault();
-        }
+        form.addEventListener("submit", function (event) {
+            let selectedStatus = document.querySelector('input[name="status"]:checked');
+            if (selectedStatus && selectedStatus.value === "Hadir" && parafInput.value.trim() === "") {
+                alert("Paraf wajib diisi jika memilih 'Hadir'!");
+                event.preventDefault();
+            }
+        });
+
+        window.clearSignature = function () {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            parafInput.value = "";
+        };
     });
 </script>
- <!-- Form End -->
-
- <?php
-
-$host = "localhost";
-$user = "root";
-$password = "";
-$database = "db_sipraka";
-$conn = new mysqli($host, $user, $password, $database);
-
-
-if ($conn->connect_error) {
-    die("Koneksi gagal: " . $conn->connect_error);
-}
-
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-    $nama = trim($_POST['nama']);
-    $tanggal = trim($_POST['tanggal']);
-    $jurusan = trim($_POST['jurusan']);
-    $keterangan = trim($_POST['keterangan']);
-    $status = trim($_POST['status']); 
-    $paraf = trim($_POST['paraf']);
-
-    if (empty($nama) || empty($tanggal) || empty($jurusan) || empty($status) || empty($paraf)) {
-        echo "<script>alert('Semua kolom wajib diisi!'); window.location.href='data_absensi.php';</script>";
-        exit();
-    }
-
-
-    $cek_sql = "SELECT id FROM absensi WHERE nama = ? AND tanggal = ?";
-    $stmt = $conn->prepare($cek_sql);
-    $stmt->bind_param("ss", $nama, $tanggal);
-    $stmt->execute();
-    $stmt->store_result();
-
-    if ($stmt->num_rows > 0) {
-        echo "<script>alert('Anda sudah absen hari ini!'); window.location.href='data_absensi.php';</script>";
-    } else {
-        $sql = "INSERT INTO absensi (nama, tanggal, jurusan, keterangan, status, paraf) VALUES (?, ?, ?, ?, ?, ?)";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ssssss", $nama, $tanggal, $jurusan, $keterangan, $status, $paraf);
-
-        if ($stmt->execute()) {
-            echo "<script>alert('Absensi berhasil disimpan!'); window.location.href='data_absensi.php';</script>";
-        } else {
-            echo "Error: " . $stmt->error;
-        }
-    }
-
-
-    $stmt->close();
-}
-
-
-$conn->close();
-?>
-
-
 
             <!-- Footer Start -->
             <div class="container-fluid pt-4 px-4">

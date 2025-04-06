@@ -14,7 +14,9 @@
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com" rel="preconnect">
   <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
   <!-- Vendor CSS Files -->
   <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -33,65 +35,103 @@
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
+  <style>
+    .navbar .dropdown-menu {
+      margin-top: 0;
+      border-radius: 25;
+    }
+
+    .navbar .btn {
+      margin-left: 0.5rem;
+    }
+
+    @media (max-width: 991.98px) {
+      .navbar-nav .nav-link {
+        padding-left: 1rem;
+      }
+
+      .navbar-nav .dropdown-menu {
+        background-color: #f8f9fa;
+      }
+
+      .navbar .dropdown-menu {
+        position: static;
+        float: none;
+        background-color: #f8f9fa;
+        border: none;
+        box-shadow: none;
+        padding-left: 1rem;
+      }
+
+      .navbar .dropdown-menu .dropdown-item {
+        padding: 0.5rem 1rem;
+      }
+
+      .navbar .btn {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.875rem;
+      }
+    }
+  </style>
 </head>
 
 <body class="index-page">
-<style>
-  .mobile-nav-toggle {
-    display: none !important;
-}
+  <header id="header" class="header d-flex align-items-center sticky-top bg-light">
+    <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
 
-</style>
-<header id="header" class="header d-flex align-items-center sticky-top bg-light">
-<div class="container-fluid container-xl d-flex align-items-center justify-content-start">
-    
-    <!-- Logo di pojok kiri -->
-    <a href="index.html" class="logo d-flex align-items-center">
-      <img src="img/SMKN-2-BANGKALAN.png" alt="SMKLogo" height="50">
-    </a>
-</div>
-    <!-- Navbar -->
-    <nav id="navbar" class="navbar navbar-expand-lg navbar-light">
-      <div class="container-fluid">
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-  <ul class="navbar-nav">
-    <li class="nav-item"><a class="nav-link active" href="index.php">Home</a></li>
+      <!-- Navbar -->
+      <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow-sm">
+        <div class="container-fluid">
 
+          <!-- LOGO -->
+          <a class="navbar-brand" href="index.php">
+            <img src="img/SMKN-2-BANGKALAN.png" alt="Logo" height="40">
+          </a>
 
-    <!-- Dropdown Profil -->
-    <li class="nav-item dropdown">
-      <a class="nav-link dropdown-toggle" href="#" id="profilDropdown" role="button" data-bs-toggle="dropdown">
-        Profil
-      </a>
-      <ul class="dropdown-menu">
-        <li><a class="dropdown-item" href="visi_misi.php">Visi & Misi</a></li>
-        <li><a class="dropdown-item" href="struktur.php">Struktur Organisasi</a></li>
-      </ul>
-    </li>
+          <!-- Tombol Hamburger & SIPRAKA -->
+          <div class="d-lg-none d-flex align-items-center ms-auto">
+            <!-- Hamburger -->
+            <button class="navbar-toggler me-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <!-- SIPRAKA di Mobile -->
+            <a class="btn btn-primary btn-sm text-white" href="login.php">SIPRAKA</a>
+          </div>
 
-    <!-- Dropdown Kegiatan PKL -->
-    <li class="nav-item dropdown">
-      <a class="nav-link dropdown-toggle" href="#" id="kegiatanDropdown" role="button" data-bs-toggle="dropdown">
-        Kegiatan PKL
-      </a>
-      <ul class="dropdown-menu">
-        <li><a class="dropdown-item" href="alur.php">Alur Prakerin</a></li>
-        <li><a class="dropdown-item" href="rekanan.php">Du/Di Rekanan</a></li>
-      </ul>
-    </li>
-  </ul>
-</div>
+          <!-- NAV MENU -->
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+              <li class="nav-item"><a class="nav-link active" href="index.php">Home</a></li>
 
-      </div> <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
-      
+              <!-- Dropdown Profil -->
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Profil</a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="visi_misi.php">Visi & Misi</a></li>
+                  <li><a class="dropdown-item" href="struktur.php">Struktur Organisasi</a></li>
+                </ul>
+              </li>
+
+              <!-- Dropdown Kegiatan PKL -->
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Kegiatan PKL</a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="alur.php">Alur Prakerin</a></li>
+                  <li><a class="dropdown-item" href="rekanan.php">Du/Di Rekanan</a></li>
+                </ul>
+              </li>
+
+              <!-- SIPRAKA di Desktop -->
+              <li class="nav-item d-none d-lg-block">
+                <a class="btn btn-primary text-white ms-lg-3" href="login.php">SIPRAKA</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
     </div>
-    </nav>
- <a class="btn-getstarted" href="login.php">SIPRAKA</a>
-  </div>
-</header>
+  </header>
+
 
   <main class="main">
 
@@ -108,34 +148,34 @@
           </div>
         </div>
         <div class="row gy-4 mt-5 justify-content-center">
-        <div class="col-md-6 col-lg-3 d-flex align-items-stretch" data-aos="zoom-out" data-aos-delay="100">
-    <div class="icon-box text-center p-4 shadow rounded">
-      <div class="icon mb-3"><i class="fa-solid fa-trophy fs-2"></i></div>
-      <h4 class="title"><a href="">Program Keahlian</a></h4>
-      <p class="description fw-bold fs-5">11</p>
-    </div>
-</div>
-<!--End Icon Box -->
+          <div class="col-md-6 col-lg-3 d-flex align-items-stretch" data-aos="zoom-out" data-aos-delay="100">
+            <div class="icon-box text-center p-4 shadow rounded">
+              <div class="icon mb-3"><i class="fa-solid fa-trophy fs-2"></i></div>
+              <h4 class="title"><a href="">Program Keahlian</a></h4>
+              <p class="description fw-bold fs-5">11</p>
+            </div>
+          </div>
+          <!--End Icon Box -->
 
-  <div class="col-md-6 col-lg-3 d-flex align-items-stretch" data-aos="zoom-out" data-aos-delay="200">
-    <div class="icon-box text-center p-4 shadow rounded">
-      <div class="icon mb-3"><i class="fa-solid fa-users"></i></div>
-      <h4 class="title"><a href="">Team Humas</a></h4>
-      <p class="description fw-bold fs-5">4</p>
-    </div>
-  </div><!--End Icon Box -->
+          <div class="col-md-6 col-lg-3 d-flex align-items-stretch" data-aos="zoom-out" data-aos-delay="200">
+            <div class="icon-box text-center p-4 shadow rounded">
+              <div class="icon mb-3"><i class="fa-solid fa-users"></i></div>
+              <h4 class="title"><a href="">Team Humas</a></h4>
+              <p class="description fw-bold fs-5">4</p>
+            </div>
+          </div><!--End Icon Box -->
 
-  <div class="col-md-6 col-lg-3 d-flex align-items-stretch" data-aos="zoom-out" data-aos-delay="300">
-    <div class="icon-box text-center p-4 shadow rounded">
-      <div class="icon mb-3"><i class="fa-solid fa-handshake-simple"></i></div>
-      <h4 class="title"><a href="">Du/Di Rekanan</a></h4>
-      <p class="description fw-bold fs-5">141</p>
-    </div>
-  </div><!--End Icon Box -->
-</div>
-<!--End Icon Box -->
-
+          <div class="col-md-6 col-lg-3 d-flex align-items-stretch" data-aos="zoom-out" data-aos-delay="300">
+            <div class="icon-box text-center p-4 shadow rounded">
+              <div class="icon mb-3"><i class="fa-solid fa-handshake-simple"></i></div>
+              <h4 class="title"><a href="">Du/Di Rekanan</a></h4>
+              <p class="description fw-bold fs-5">141</p>
+            </div>
+          </div><!--End Icon Box -->
         </div>
+        <!--End Icon Box -->
+
+      </div>
       </div>
 
     </section><!-- /Hero Section -->
@@ -150,20 +190,26 @@
       </div><!-- End Section Title -->
 
       <div class="container d-flex justify-content-center text-center">
-  <div class="row gy-4 justify-content-center">
-    <div class="col-lg-8 content" data-aos="fade-up" data-aos-delay="100">
-      <p>
-        HUMAS SMKN 2 Bangkalan adalah tim yang bertanggung jawab dalam membangun serta menjaga hubungan baik antara sekolah dengan dunia industri, masyarakat, dan instansi terkait. Kami berperan dalam pengelolaan informasi, komunikasi, serta pengembangan kerja sama strategis untuk meningkatkan citra dan jaringan sekolah.
-      </p>
-      <p>Sebagai jembatan antara sekolah dan pihak eksternal, HUMAS memiliki beberapa fokus utama:</p>
-      <ul class="list-unstyled">
-        <li><i class="bi bi-check2-circle text-success"></i> <span>Menjalin kerja sama dengan dunia usaha dan industri (Du/Di)</span></li>
-        <li><i class="bi bi-check2-circle text-success"></i> <span>Mengelola komunikasi dan hubungan masyarakat</span></li>
-        <li><i class="bi bi-check2-circle text-success"></i> <span>Mengembangkan branding serta promosi sekolah</span></li>
-      </ul>
-    </div>
-  </div>
-</div>
+        <div class="row gy-4 justify-content-center">
+          <div class="col-lg-8 content" data-aos="fade-up" data-aos-delay="100">
+            <p>
+              HUMAS SMKN 2 Bangkalan adalah tim yang bertanggung jawab dalam membangun serta menjaga hubungan baik
+              antara sekolah dengan dunia industri, masyarakat, dan instansi terkait. Kami berperan dalam pengelolaan
+              informasi, komunikasi, serta pengembangan kerja sama strategis untuk meningkatkan citra dan jaringan
+              sekolah.
+            </p>
+            <p>Sebagai jembatan antara sekolah dan pihak eksternal, HUMAS memiliki beberapa fokus utama:</p>
+            <ul class="list-unstyled">
+              <li><i class="bi bi-check2-circle text-success"></i> <span>Menjalin kerja sama dengan dunia usaha dan
+                  industri (Du/Di)</span></li>
+              <li><i class="bi bi-check2-circle text-success"></i> <span>Mengelola komunikasi dan hubungan
+                  masyarakat</span></li>
+              <li><i class="bi bi-check2-circle text-success"></i> <span>Mengembangkan branding serta promosi
+                  sekolah</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
 
 
       </div>
@@ -230,92 +276,104 @@
       </div><!-- End Section Title -->
 
       <div class="container">
-          <div class="row gy-4 isotope-container" data-aos="fade-up" data-aos-delay="200">
+        <div class="row gy-4 isotope-container" data-aos="fade-up" data-aos-delay="200">
 
-            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-app">
-              <img src="assets/img/portfolio/adiluhung.jpg" class="img-fluid" alt="">
-              <div class="portfolio-info">
-                <h4>PT.Adiluhung</h4>
-                <!-- <p>Monitoring ke 1</p> -->
-                <a href="assets/img/portfolio/adiluhung.jpg" title="PT. Adiluhung" data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
-              </div>
-            </div><!-- End Portfolio Item -->
+          <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-app">
+            <img src="assets/img/portfolio/adiluhung.jpg" class="img-fluid" alt="">
+            <div class="portfolio-info">
+              <h4>PT.Adiluhung</h4>
+              <!-- <p>Monitoring ke 1</p> -->
+              <a href="assets/img/portfolio/adiluhung.jpg" title="PT. Adiluhung" data-gallery="portfolio-gallery-app"
+                class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+            </div>
+          </div><!-- End Portfolio Item -->
 
-            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-product">
-              <img src="assets/img/portfolio/dinsos.jpg" class="img-fluid" alt="">
-              <div class="portfolio-info">
-                <h4>Dinas Sosial Bangkalan</h4>
-                <!-- <p>Monitoring ke 2</p> -->
-                <a href="assets/img/portfolio/dinsos.jpg" title="Dinsos" data-gallery="portfolio-gallery-product" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
-              </div>
-            </div><!-- End Portfolio Item -->
+          <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-product">
+            <img src="assets/img/portfolio/dinsos.jpg" class="img-fluid" alt="">
+            <div class="portfolio-info">
+              <h4>Dinas Sosial Bangkalan</h4>
+              <!-- <p>Monitoring ke 2</p> -->
+              <a href="assets/img/portfolio/dinsos.jpg" title="Dinsos" data-gallery="portfolio-gallery-product"
+                class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+            </div>
+          </div><!-- End Portfolio Item -->
 
-            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-branding">
-              <img src="assets/img/portfolio/rsud.jpg" class="img-fluid" alt="">
-              <div class="portfolio-info">
-                <h4>RSUD Syamrabu Bangkalan</h4>
-                <!-- <p>Foto Bersama</p> -->
-                <a href="assets/img/portfolio/rsud.jpg" title="RSUD Syamrabu" data-gallery="portfolio-gallery-branding" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
-              </div>
-            </div><!-- End Portfolio Item -->
+          <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-branding">
+            <img src="assets/img/portfolio/rsud.jpg" class="img-fluid" alt="">
+            <div class="portfolio-info">
+              <h4>RSUD Syamrabu Bangkalan</h4>
+              <!-- <p>Foto Bersama</p> -->
+              <a href="assets/img/portfolio/rsud.jpg" title="RSUD Syamrabu" data-gallery="portfolio-gallery-branding"
+                class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+            </div>
+          </div><!-- End Portfolio Item -->
 
-            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-app">
-              <img src="assets/img/portfolio/mpstore2.jpg" class="img-fluid" alt="">
-              <div class="portfolio-info">
-                <h4>MPStore </h4>
-                <!-- <p>Penarikan Siswa Magang</p> -->
-                <a href="assets/img/portfolio/mpstore2.jpg" title="MPstore" data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
-              </div>
-            </div><!-- End Portfolio Item -->
+          <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-app">
+            <img src="assets/img/portfolio/mpstore2.jpg" class="img-fluid" alt="">
+            <div class="portfolio-info">
+              <h4>MPStore </h4>
+              <!-- <p>Penarikan Siswa Magang</p> -->
+              <a href="assets/img/portfolio/mpstore2.jpg" title="MPstore" data-gallery="portfolio-gallery-app"
+                class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+            </div>
+          </div><!-- End Portfolio Item -->
 
-            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-app">
-              <img src="assets/img/portfolio/sumber.jpg" class="img-fluid" alt="">
-              <div class="portfolio-info">
-                <h4>Sumber Rejeki Baru</h4>
-                <!-- <p>Foto bersama Pembimbing</p> -->
-                <a href="assets/img/portfolio/sumber.jpg" title="Sumber Rejeki Baru" data-gallery="portfolio-gallery-product" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
-              </div>
-            </div><!-- End Portfolio Item -->
+          <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-app">
+            <img src="assets/img/portfolio/sumber.jpg" class="img-fluid" alt="">
+            <div class="portfolio-info">
+              <h4>Sumber Rejeki Baru</h4>
+              <!-- <p>Foto bersama Pembimbing</p> -->
+              <a href="assets/img/portfolio/sumber.jpg" title="Sumber Rejeki Baru"
+                data-gallery="portfolio-gallery-product" class="glightbox preview-link"><i
+                  class="bi bi-zoom-in"></i></a>
+            </div>
+          </div><!-- End Portfolio Item -->
 
-            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-branding">
-              <img src="assets/img/portfolio/maduratecno.jpg" class="img-fluid" alt="">
-              <div class="portfolio-info">
-                <h4>Madura Tecnovacion</h4>
-                <!-- <p> Jl. Clibri AA-32 Pangeranan Asri</p> -->
-                <a href="assets/img/portfolio/maduratecno.jpg" title="Madura Tecnovation" data-gallery="portfolio-gallery-branding" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
-              </div>
-            </div><!-- End Portfolio Item -->
+          <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-branding">
+            <img src="assets/img/portfolio/maduratecno.jpg" class="img-fluid" alt="">
+            <div class="portfolio-info">
+              <h4>Madura Tecnovacion</h4>
+              <!-- <p> Jl. Clibri AA-32 Pangeranan Asri</p> -->
+              <a href="assets/img/portfolio/maduratecno.jpg" title="Madura Tecnovation"
+                data-gallery="portfolio-gallery-branding" class="glightbox preview-link"><i
+                  class="bi bi-zoom-in"></i></a>
+            </div>
+          </div><!-- End Portfolio Item -->
 
-            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-app">
-              <img src="assets/img/portfolio/fida.jpg" class="img-fluid" alt="">
-              <div class="portfolio-info">
-                <h4>Politehnik Perkapalan Negeri Surabaya</h4>
-                <!-- <p>Foto Bersama Pembimbing</p> -->
-                <a href="assets/img/portfolio/fida.jpg" title="PPNS" data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
-              </div>
-            </div><!-- End Portfolio Item -->
+          <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-app">
+            <img src="assets/img/portfolio/fida.jpg" class="img-fluid" alt="">
+            <div class="portfolio-info">
+              <h4>Politehnik Perkapalan Negeri Surabaya</h4>
+              <!-- <p>Foto Bersama Pembimbing</p> -->
+              <a href="assets/img/portfolio/fida.jpg" title="PPNS" data-gallery="portfolio-gallery-app"
+                class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+            </div>
+          </div><!-- End Portfolio Item -->
 
-            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-product">
-              <img src="assets/img/portfolio/fiesto.jpg" class="img-fluid" alt="">
-              <div class="portfolio-info">
-                <h4>Vieto Surabaya</h4>
-                <!-- <p>foto Bersama Pembimbing</p> -->
-                <a href="assets/img/portfolio/fiesto.jpg" title="Viesto" data-gallery="portfolio-gallery-product" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
-              </div>
-            </div><!-- End Portfolio Item -->
+          <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-product">
+            <img src="assets/img/portfolio/fiesto.jpg" class="img-fluid" alt="">
+            <div class="portfolio-info">
+              <h4>Vieto Surabaya</h4>
+              <!-- <p>foto Bersama Pembimbing</p> -->
+              <a href="assets/img/portfolio/fiesto.jpg" title="Viesto" data-gallery="portfolio-gallery-product"
+                class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+            </div>
+          </div><!-- End Portfolio Item -->
 
-            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-branding">
-              <img src="assets/img/portfolio/suryaagung.jpg" class="img-fluid" alt="">
-              <div class="portfolio-info">
-                <h4>Surya Angung Motor</h4>
-                <!-- <p>Foto Bersama</p> -->
-                <a href="assets/img/portfolio/suryaagung.jpg" title="Surya Agung" data-gallery="portfolio-gallery-branding" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
-              </div>
-            </div><!-- End Portfolio Item -->
+          <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-branding">
+            <img src="assets/img/portfolio/suryaagung.jpg" class="img-fluid" alt="">
+            <div class="portfolio-info">
+              <h4>Surya Angung Motor</h4>
+              <!-- <p>Foto Bersama</p> -->
+              <a href="assets/img/portfolio/suryaagung.jpg" title="Surya Agung"
+                data-gallery="portfolio-gallery-branding" class="glightbox preview-link"><i
+                  class="bi bi-zoom-in"></i></a>
+            </div>
+          </div><!-- End Portfolio Item -->
 
-          </div><!-- End Portfolio Container -->
+        </div><!-- End Portfolio Container -->
 
-      
+
 
     </section><!-- /Portfolio Section -->
 
@@ -348,7 +406,8 @@
               <div class="member-img">
                 <img src="img/pak muhtar.jpg" class="img-fluid" alt="">
                 <div class="social">
-                  <a href="https://www.instagram.com/mochtara_gemmezz?igsh=MnY5b2drdzRuaW1s"><i class="bi bi-instagram"></i></a>
+                  <a href="https://www.instagram.com/mochtara_gemmezz?igsh=MnY5b2drdzRuaW1s"><i
+                      class="bi bi-instagram"></i></a>
                 </div>
               </div>
               <div class="member-info">
@@ -363,7 +422,8 @@
               <div class="member-img">
                 <img src="img/pak dimas.jpg" class="img-fluid" alt="">
                 <div class="social">
-                  <a href="https://www.instagram.com/dimassetyoo?igsh=MTRiZGR4eDdlZ3FhNg%3D%3D"><i class="bi bi-instagram"></i></a>
+                  <a href="https://www.instagram.com/dimassetyoo?igsh=MTRiZGR4eDdlZ3FhNg%3D%3D"><i
+                      class="bi bi-instagram"></i></a>
                 </div>
               </div>
               <div class="member-info">
@@ -391,80 +451,86 @@
 
     </section><!-- /Team Section -->
 
-  
+
 
     <footer class="bg-light pt-4">
-  <div class="container">
-    <div class="row">
-      <!-- Kolom Google Maps -->
-      <div class="col-lg-4 col-md-6">
-        <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3953.567961439648!2d112.746822!3d-7.048782!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd800ffb95aaf13%3A0x2c2633e22d23495b!2sJl.%20Halim%20Perdana%20Kusuma%2C%20Mlajah%2C%20Kec.%20Bangkalan%2C%20Kabupaten%20Bangkalan%2C%20Jawa%20Timur%2069115!5e0!3m2!1sid!2sid!4v1700000000000"
-          width="100%" height="200" style="border:0;" allowfullscreen="" loading="lazy">
-        </iframe>
-      </div>
+      <div class="container">
+        <div class="row">
+          <!-- Kolom Google Maps -->
+          <div class="col-lg-4 col-md-6">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3953.567961439648!2d112.746822!3d-7.048782!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd800ffb95aaf13%3A0x2c2633e22d23495b!2sJl.%20Halim%20Perdana%20Kusuma%2C%20Mlajah%2C%20Kec.%20Bangkalan%2C%20Kabupaten%20Bangkalan%2C%20Jawa%20Timur%2069115!5e0!3m2!1sid!2sid!4v1700000000000"
+              width="100%" height="200" style="border:0;" allowfullscreen="" loading="lazy">
+            </iframe>
+          </div>
 
-      <!-- Kolom Informasi Kontak -->
-      <div class="col-lg-4 col-md-6">
-        <h5 class="fw-bold">Informasi Kontak</h5>
-        <p><i class="bi bi-geo-alt"></i> Jl. Halim Perdana Kusuma, Bangkalan - Jawa Timur</p>
-        <p><i class="bi bi-envelope"></i> Email Address: <a href="mailto:smkn2_bkl@yahoo.com">smkn2_bkl@yahoo.com</a></p>
-        <p><i class="bi bi-telephone"></i> 0313092223</p>
-      </div>
+          <!-- Kolom Informasi Kontak -->
+          <div class="col-lg-4 col-md-6">
+            <h5 class="fw-bold">Informasi Kontak</h5>
+            <p><i class="bi bi-geo-alt"></i> Jl. Halim Perdana Kusuma, Bangkalan - Jawa Timur</p>
+            <p><i class="bi bi-envelope"></i> Email Address: <a
+                href="mailto:smkn2_bkl@yahoo.com">smkn2_bkl@yahoo.com</a></p>
+            <p><i class="bi bi-telephone"></i> 0313092223</p>
+          </div>
 
-      <!-- Kolom Layanan Kami -->
-      <div class="col-lg-4 col-md-12">
-        <h5 class="fw-bold">Layanan Kami</h5>
-        <ul class="list-unstyled">
-          <li><a href="#">Humas</a></li>
-          <li><a href="#">Bursa Kerja Khusus</a></li>
-          <li><a href="#">Lembaga Sertifikasi Profesi</a></li>
-          <li><a href="#">Unit Produksi dan Jasa</a></li>
-          <li><a href="#">Organisasi Siswa</a></li>
-          <li><a href="#">Koperasi</a></li>
-          <li><a href="#">Quiz Room</a></li>
-        </ul>
+          <!-- Kolom Layanan Kami -->
+          <div class="col-lg-4 col-md-12">
+            <h5 class="fw-bold">Layanan Kami</h5>
+            <ul class="list-unstyled">
+              <li><a href="#">Humas</a></li>
+              <li><a href="#">Bursa Kerja Khusus</a></li>
+              <li><a href="#">Lembaga Sertifikasi Profesi</a></li>
+              <li><a href="#">Unit Produksi dan Jasa</a></li>
+              <li><a href="#">Organisasi Siswa</a></li>
+              <li><a href="#">Koperasi</a></li>
+              <li><a href="#">Quiz Room</a></li>
+            </ul>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-</footer>
+    </footer>
 
     <hr>
 
     <!-- Bagian Bawah Footer -->
     <div class="text-center pb-3">
       <div class="mb-2">
-        <a href="https://www.facebook.com/smkn2bkln/?_rdc=1&_rdr#" class="text-dark me-3"><i class="bi bi-facebook"></i></a>
-        <a href="https://api.whatsapp.com/send/?phone=%2B6281234280648&text&type=phone_number&app_absent=0" class="text-dark me-3"><i class="bi bi-whatsapp"></i></a>
-        <a href="https://www.instagram.com/smkn2_bangkalan?igsh=OTVpcDhkbDZtYzd2" class="text-dark me-3"><i class="bi bi-instagram"></i></a>
-        <a href="https://www.youtube.com/channel/UCYpbJ6dTs7FDQRcQGyRxcgg" class="text-dark"><i class="bi bi-youtube"></i></a>
+        <a href="https://www.facebook.com/smkn2bkln/?_rdc=1&_rdr#" class="text-dark me-3"><i
+            class="bi bi-facebook"></i></a>
+        <a href="https://api.whatsapp.com/send/?phone=%2B6281234280648&text&type=phone_number&app_absent=0"
+          class="text-dark me-3"><i class="bi bi-whatsapp"></i></a>
+        <a href="https://www.instagram.com/smkn2_bangkalan?igsh=OTVpcDhkbDZtYzd2" class="text-dark me-3"><i
+            class="bi bi-instagram"></i></a>
+        <a href="https://www.youtube.com/channel/UCYpbJ6dTs7FDQRcQGyRxcgg" class="text-dark"><i
+            class="bi bi-youtube"></i></a>
       </div>
       <p class="m-0">© Copyright 2022 | SMKN 2 Bangkalan All Rights Reserved.</p>
     </div>
-  </div>
-</footer>
+    </div>
+    </footer>
 
 
-  </footer>
+    </footer>
 
-  <!-- Scroll Top -->
-  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+    <!-- Scroll Top -->
+    <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
+        class="bi bi-arrow-up-short"></i></a>
 
-  <!-- Preloader -->
-  <div id="preloader"></div>
+    <!-- Preloader -->
+    <div id="preloader"></div>
 
-  <!-- Vendor JS Files -->
-  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="assets/vendor/php-email-form/validate.js"></script>
-  <script src="assets/vendor/aos/aos.js"></script>
-  <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
-  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
-  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
-  <script src="assets/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
-  <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+    <!-- Vendor JS Files -->
+    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/vendor/php-email-form/validate.js"></script>
+    <script src="assets/vendor/aos/aos.js"></script>
+    <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
+    <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+    <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+    <script src="assets/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
+    <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
 
-  <!-- Main JS File -->
-  <script src="assets/js/main.js"></script>
+    <!-- Main JS File -->
+    <script src="assets/js/main.js"></script>
 
 </body>
 

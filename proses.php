@@ -7,7 +7,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $alamat_pkl = $_POST["alamatPkl"];
     $dudi_id = $_POST["dudiId"];
     $konsentrasi_keahlian = $_POST["konsentrasiKeahlian"];
-    $siswa = $_POST["siswaList"];
+    $siswa = $_POST["siswa"];
     $tanggal_mulai = $_POST["tanggalMulai"];
     $tanggal_berakhir = $_POST["tanggalBerakhir"];
 

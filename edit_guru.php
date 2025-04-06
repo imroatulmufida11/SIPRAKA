@@ -43,31 +43,55 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 
 if ($conn->connect_error) {
     die("Koneksi gagal: " . $conn->connect_error);
-} // Pastikan ada koneksi ke database
+}
 
-// Ambil data berdasarkan ID
+// Pastikan ada ID yang dikirim
 if (isset($_GET['id'])) {
-    $id = $_GET['id'];
-    $query = "SELECT * FROM data_pembimbing WHERE id = $id";
-    $result = $conn->query($query);
-    $row = $result->fetch_assoc();
+    $id = intval($_GET['id']); // Hindari SQL Injection
+
+    $query = "SELECT * FROM data_pembimbing WHERE id = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+    } else {
+        die("Data tidak ditemukan.");
+    }
+    $stmt->close();
+} else {
+    die("ID tidak ditemukan di URL.");
 }
 
 // Simpan perubahan data
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $nama = $_POST['nama_pembimbing'];
+    if (!isset($_POST['nama'], $_POST['jurusan'], $_POST['du_di'])) {
+        die("Data tidak lengkap.");
+    }
+
+    $nama = $_POST['nama'];
     $jurusan = $_POST['jurusan'];
     $du_di = $_POST['du_di'];
 
-    $updateQuery = "UPDATE siswa SET nama_siswa='$nama_siswa', jurusan='$jurusan', du_di='$du_di' WHERE id=$id";
-    
-    if ($conn->query($updateQuery) === TRUE) {
+    // Update data_pembimbing
+    $updateQuery = "UPDATE data_pembimbing SET nama_pembimbing=?, jurusan=?, du_di=? WHERE id=?";
+    $stmt = $conn->prepare($updateQuery);
+    $stmt->bind_param("sssi", $nama, $jurusan, $du_di, $id);
+
+    if ($stmt->execute()) {
         echo "<script>alert('Data berhasil diperbarui!'); window.location='data_pembimbing.php';</script>";
     } else {
-        echo "Error: " . $conn->error;
+        echo "Error: " . $stmt->error;
     }
+    
+    $stmt->close();
 }
+
+$conn->close();
 ?>
+
 <body>
     <div class="container-xxl position-relative bg-white d-flex p-0">
         <!-- Spinner Start -->
@@ -100,11 +124,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             <div class="navbar-nav w-100">
                 <a href="dasboard_admin.php" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
-                <a href="tambahdata_admin.php" class="nav-item nav-link active"><i class="fa fa-calendar-plus me-2"></i>Tambah Data</a>
-                <a href="form_permohonan.php" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Permohonan</a>
-                <a href="form.html" class="nav-item nav-link"><i class="fa fa-eye me-2"></i>Monitoring</a>
-                <a href="table.html" class="nav-item nav-link"><i class="fa-solid fa-hand-holding-heart me-2"></i>Penarikan</a>
-                <a href="chart.html" class="nav-item nav-link"><i class="fa fa-pen me-2"></i>Absensi</a>
+                <a href="tambahdata_admin.php" class="nav-item nav-link active"><i class="fa-solid fa-calendar-plus me-2"></i>Tambah Data</a>
+                <a href="form_permohonan.php" class="nav-item nav-link"><i class="fa-solid fa-th me-2"></i>Permohonan</a>
+                <a href="from_monitoring.php" class="nav-item nav-link"><i class="fa-solid fa-eye me-2"></i>Monitoring</a>
+                <a href="from_penarikan.php" class="nav-item nav-link"><i class="fa-solid fa-hand-holding-heart me-2"></i>Penarikan</a>
+                <a href="form_surattugas.php" class="nav-item nav-link"><i class="fa-solid fa-envelope-open-text me-2"></i>Surat Tugas</a>
+                <a href="form_pengantar.php" class="nav-item nav-link"><i class="fa-solid fa-comment me-2"></i>Surat Pengantar</a>
+                <a href="absensi_admin.php" class="nav-item nav-link"><i class="fa-solid fa-pen me-2"></i>Absensi</a>
             </div>
         </nav>
     </div>
@@ -122,32 +148,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
 
-        <div class="container-fluid pt-4 px-4">
-                    <div class="row g-4">
-                        <div class="col-12">
-                            <div class="bg-light rounded h-100 p-4">
-                                <h2 class="mb-4">Edit Data Du/Di</h2>
-                                <div class="card">
-                </div>
-                <div class="card-body">
-                    <form method="POST">
-                        <div class="mb-3">
-                            <label class="form-label">Nama Guru</label>
-                            <input type="text" class="form-control" name="nama" value="<?= htmlspecialchars($row['nama'] ?? '') ?>" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Jurusan</label>
-                            <input type="text" class="form-control" name="jurusan" value="<?= htmlspecialchars($row['jurusan'] ?? '') ?>" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Du/Di</label>
-                            <input type="text" class="form-control" name="du_di" value="<?= htmlspecialchars($row['du_di'] ?? '') ?>" required>
-                        </div>
-                        <div class="d-flex justify-content-end">
-                            <button type="submit" class="btn btn-primary me-2">Simpan Perubahan</button>
-                            <a href="data_siswa.php" class="btn btn-secondary">Batal</a>
-                        </div>
-                    </form>
+      <!-- HTML Form -->
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+        <div class="col-12">
+            <div class="bg-light rounded h-100 p-4">
+                <h2 class="mb-4">Edit Data Du/Di</h2>
+                <div class="card">
+                    <div class="card-body">
+                        <form method="POST" action="edit_guru.php?id=<?= $id ?>">
+                            <div class="mb-3">
+                                <label class="form-label">Nama Pembimbing</label>
+                                <input type="text" class="form-control" name="nama" value="<?= htmlspecialchars($row['nama_pembimbing'] ?? '') ?>" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Jurusan</label>
+                                <input type="text" class="form-control" name="jurusan" value="<?= htmlspecialchars($row['jurusan'] ?? '') ?>" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Du/Di</label>
+                                <input type="text" class="form-control" name="du_di" value="<?= htmlspecialchars($row['du_di'] ?? '') ?>" required>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <button type="submit" class="btn btn-primary me-2">Simpan Perubahan</button>
+                                <a href="data_siswa.php" class="btn btn-secondary">Batal</a>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>

@@ -68,25 +68,30 @@
                 <a href="form_permohonan.php" class="nav-item nav-link active"><i class="fa-solid fa-th me-2"></i>Permohonan</a>
                 <a href="from_monitoring.php" class="nav-item nav-link"><i class="fa-solid fa-eye me-2"></i>Monitoring</a>
                 <a href="from_penarikan.php" class="nav-item nav-link"><i class="fa-solid fa-hand-holding-heart me-2"></i>Penarikan</a>
+                <a href="form_surattugas.php" class="nav-item nav-link"><i class="fa-solid fa-envelope-open-text me-2"></i>Surat Tugas</a>
+                <a href="form_pengantar.php" class="nav-item nav-link"><i class="fa-solid fa-comment me-2"></i>Surat Pengantar</a>
                 <a href="absensi_admin.php" class="nav-item nav-link"><i class="fa-solid fa-pen me-2"></i>Absensi</a>
             </div>
         </nav>
     </div>
     <!-- Sidebar End -->
 
-    <!-- Content Start -->
-    <div class="content">
-        <!-- Navbar Start -->
-        <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0" style="height: 56px;">
-        <div class="ms-auto">
-            <!-- Tombol Lihat Data (pojok kanan) -->
-            <a href="surat_balasan.php" class="btn btn-primary px-3 py-2">
-                Lihat Data
-            </a>
-        </div>
-    </nav>
+    <!-- Navbar Start -->
+  <div class="content">
+<nav class="navbar navbar-expand bg-light navbar-light sticky-top px-3 py-2 d-flex align-items-center" style="height: 56px;">
+    <!-- Sidebar Toggler di Kiri -->
+    <a href="#" class="sidebar-toggler me-auto">
+        <i class="fa fa-bars"></i>
+    </a>
 
-        </nav>
+    <!-- Tombol Lihat Data di Kanan -->
+    <a href="surat_balasan.php" class="btn btn-primary btn-sm px-3">
+        Lihat Data
+    </a>
+</nav>
+<!-- Navbar End -->
+
+
 
         
 
@@ -141,9 +146,12 @@ $result = $conn->query($sql);
                             <input type="text" class="form-control" name="konsentrasiKeahlian" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Nama dan NISN Siswa:</label>
-                            <textarea class="form-control" name="siswaList" rows="3" placeholder="Nama - NISN" required></textarea>
-                        </div>
+    <label class="form-label">Nama, NISN, dan Semester/Tingkat Siswa:</label>
+    <textarea class="form-control" name="siswa" rows="4" 
+        placeholder="Afra, 1234567890, XII/1" required></textarea>
+</div>
+
+
                         <div class="mb-3">
                             <label class="form-label">Tanggal Mulai PKL:</label>
                             <input type="date" class="form-control" name="tanggalMulai" required>

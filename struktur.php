@@ -33,67 +33,82 @@
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
+  <style>
+  .mobile-nav-active .navbar-collapse {
+    display: block !important;
+  }
+
+  .navbar-collapse {
+    transition: all 0.3s ease-in-out;
+  }
+
+  /* Dropdown animasi */
+  .dropdown-menu {
+    display: none;
+  }
+
+  .dropdown-menu.show {
+    display: block;
+  }
+</style>
+
 </head>
 
 <body class="index-page">
 
-<style>
-  .mobile-nav-toggle {
-    display: none !important;
-}
+  <!-- Header -->
+  <header id="header" class="sticky-top bg-light">
+    <div class="container-fluid container-xl">
+      <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm w-100">
 
-</style>
+        <!-- Logo -->
+        <a class="navbar-brand" href="index.php">
+          <img src="img/SMKN-2-BANGKALAN.png" alt="Logo" height="40">
+        </a>
 
-<header id="header" class="header d-flex align-items-center sticky-top bg-light">
-<div class="container-fluid container-xl d-flex align-items-center justify-content-start">
-    
-    <!-- Logo di pojok kiri -->
-    <a href="index.html" class="logo d-flex align-items-center">
-      <img src="img/SMKN-2-BANGKALAN.png" alt="SMKLogo" height="50">
-    </a>
-</div>
-    <!-- Navbar -->
-    <nav id="navbar" class="navbar navbar-expand-lg navbar-light">
-      <div class="container-fluid">
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-          <span class="navbar-toggler-icon"></span>
-        </button>
+        <!-- Tombol Hamburger & SIPRAKA (Mobile) -->
+        <div class="d-lg-none d-flex align-items-center ms-auto">
+          <!-- Custom Hamburger Toggle -->
+          <i class="mobile-nav-toggle bi bi-list d-lg-none fs-1 me-3" style="cursor: pointer;"></i>
+          <!-- SIPRAKA (Mobile) -->
+          <a class="btn btn-primary btn-sm text-white" href="login.php">SIPRAKA</a>
+        </div>
+
+        <!-- NAV MENU -->
         <div class="collapse navbar-collapse" id="navbarNav">
-  <ul class="navbar-nav">
-    <li class="nav-item"><a class="nav-link active" href="index.php">Home</a></li>
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link active" href="index.php">Home</a>
+            </li>
 
-    <!-- Dropdown Profil -->
-    <li class="nav-item dropdown">
-      <a class="nav-link dropdown-toggle" href="#" id="profilDropdown" role="button" data-bs-toggle="dropdown">
-        Profil
-      </a>
-      <ul class="dropdown-menu">
-        <li><a class="dropdown-item" href="visi_misi.php">Visi & Misi</a></li>
-        <li><a class="dropdown-item" href="struktur.php">Struktur Organisasi</a></li>
-      </ul>
-    </li>
+            <!-- Dropdown Profil -->
+            <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button">Profil</a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="visi_misi.php">Visi & Misi</a></li>
+                <li><a class="dropdown-item" href="struktur.php">Struktur Organisasi</a></li>
+              </ul>
+            </li>
 
-    <!-- Dropdown Kegiatan PKL -->
-    <li class="nav-item dropdown">
-      <a class="nav-link dropdown-toggle" href="#" id="kegiatanDropdown" role="button" data-bs-toggle="dropdown">
-        Kegiatan PKL
-      </a>
-      <ul class="dropdown-menu">
-        <li><a class="dropdown-item" href="alur.php">Alur Prakerin</a></li>
-        <li><a class="dropdown-item" href="rekanan.php">Du/Di Rekanan</a></li>
-      </ul>
-    </li>
-  </ul>
-</div>
+            <!-- Dropdown PKL -->
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Kegiatan PKL</a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="alur.php">Alur Prakerin</a></li>
+                <li><a class="dropdown-item" href="rekanan.php">Du/Di Rekanan</a></li>
+              </ul>
+            </li>
 
-      </div> <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
-      
+            <!-- SIPRAKA (Desktop) -->
+            <li class="nav-item d-none d-lg-block">
+              <a class="btn btn-primary text-white ms-lg-3" href="login.php">SIPRAKA</a>
+            </li>
+          </ul>
+        </div>
+
+      </nav>
     </div>
-    </nav>
- <a class="btn-getstarted" href="login.php">SIPRAKA</a>
-  </div>
-</header>
-
+  </header>
 <div class="container mt-4">
     <h2 class="text-center">Struktur Organisasi</h2>
     <div class="text-center">

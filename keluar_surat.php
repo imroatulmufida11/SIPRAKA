@@ -170,45 +170,48 @@ $conn->close();
     <p><strong>Konsentrasi Keahlian:</strong> <?= htmlspecialchars($row["konsentrasi_keahlian"] ?? "Tidak tersedia") ?></p>
 
     <?php if (!empty($row["siswa"])): ?>
-        <table class="table table-bordered">
-            <thead>
-                <tr class="text-dark">
-                    <th>No</th>
-                    <th>Nama</th>
-                    <th>NISN</th>
-                </tr>
-            </thead>
-            <tbody class="text-dark">
-                <?php
-                $siswaList = explode("\n", trim($row["siswa"]));
-                $no = 1;
-                foreach ($siswaList as $siswa) {  
-                    $data = explode("-", trim($siswa));
-                    if (count($data) === 2) {
-                        echo "<tr><td>$no</td><td>" . htmlspecialchars($data[0]) . "</td><td>" . htmlspecialchars($data[1]) . "</td></tr>";
-                        $no++;
-                    }
-                }
-                ?>
-            </tbody>
-        </table>
-        <p>
-            Jika berkenan, kami berharap PKL ini dapat dilaksanakan mulai tanggal <strong><?= htmlspecialchars($row["tanggal_mulai"]) ?></strong> 
-            sampai dengan tanggal <strong><?= htmlspecialchars($row["tanggal_berakhir"]) ?></strong>.
-            Kami mengharapkan jawaban/informasi mengenai waktu dan durasi pelaksanaan PKL agar dapat kami koordinasikan lebih lanjut.
-            Atas perhatian dan kerja sama yang diberikan, kami ucapkan terima kasih.
-        </p>
-        <p><em>Wassalamu'alaikum Wr. Wb.</em></p>
+    <table class="table table-bordered">
+        <thead>
+            <tr class="text-dark">
+                <th>No</th>
+                <th>Nama</th>
+                <th>NISN</th>
+            </tr>
+        </thead>
+        <tbody class="text-dark">
+            <?php
+            $siswaList = explode("\n", trim($row["siswa"]));
+            $no = 1;
+            foreach ($siswaList as $siswa) {  
+                $data = explode(",", trim($siswa));
+                $nama = isset($data[0]) ? htmlspecialchars($data[0]) : '-';
+                $nisn = isset($data[1]) ? htmlspecialchars($data[1]) : '-';
+                
+                echo "<tr><td>$no</td><td>$nama</td><td>$nisn</td></tr>";
+                $no++;
+            }
+            ?>
+        </tbody>
+    </table>
 
-        <div class="text-end">
-            <p>Hormat Kami,</p>
-            <p>Kepala SMK Negeri 2 Bangkalan</p>
-            <br><br><br>
-            <p><strong>Nur Hazizah, S.Pd., M.Pd.</strong></p>
-        </div>
-    <?php else: ?>
-        <p><em>Belum ada data siswa.</em></p>
-    <?php endif; ?>
+    <p>
+        Jika berkenan, kami berharap PKL ini dapat dilaksanakan mulai tanggal <strong><?= htmlspecialchars($row["tanggal_mulai"]) ?></strong> 
+        sampai dengan tanggal <strong><?= htmlspecialchars($row["tanggal_berakhir"]) ?></strong>.
+        Kami mengharapkan jawaban/informasi mengenai waktu dan durasi pelaksanaan PKL agar dapat kami koordinasikan lebih lanjut.
+        Atas perhatian dan kerja sama yang diberikan, kami ucapkan terima kasih.
+    </p>
+    <p><em>Wassalamu'alaikum Wr. Wb.</em></p>
+
+    <div class="text-end">
+        <p>Hormat Kami,</p>
+        <p>Kepala SMK Negeri 2 Bangkalan</p>
+        <br><br><br>
+        <p><strong>Nur Hazizah, S.Pd., M.Pd.</strong></p>
+    </div>
+<?php else: ?>
+    <p><em>Belum ada data siswa.</em></p>
+<?php endif; ?>
+
 </div>
 
 </body>
