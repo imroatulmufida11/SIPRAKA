@@ -33,6 +33,62 @@
     <!-- Template Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
 </head>
+
+
+<body>
+    <div class="container-xxl position-relative bg-white d-flex p-0">
+        <!-- Spinner Start -->
+        <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <!-- Spinner End -->
+
+
+        <div class="container-xxl position-relative bg-white d-flex p-0">
+    
+    <!-- Sidebar Start -->
+    <div class="sidebar pe-4 pb-3">
+        <nav class="navbar bg-light navbar-light">
+            <a href="dasboard_admin.php" class="navbar-brand mx-4 mb-3">
+                <h3 class="text-primary">SIPRAKA</h3>
+            </a>
+
+            <div class="d-flex align-items-center ms-4 mb-4">
+                <div class="position-relative">
+                    <img class="rounded-circle" src="img/foto.jpg" alt="Admin" style="width: 40px; height: 40px;">
+                    <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
+                </div>
+                <div class="ms-3">
+                    <h6 class="mb-0">Admin</h6>
+                    <span>Online</span>
+                </div>
+            </div>
+            <div class="navbar-nav w-100">
+                <a href="dasboard_admin.php" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                <a href="tambahdata_admin.php" class="nav-item nav-link active"><i class="fa-solid fa-calendar-plus me-2"></i>Tambah Data</a>
+                <a href="form_permohonan.php" class="nav-item nav-link"><i class="fa-solid fa-th me-2"></i>Permohonan</a>
+                <a href="from_monitoring.php" class="nav-item nav-link"><i class="fa-solid fa-eye me-2"></i>Monitoring</a>
+                <a href="from_penarikan.php" class="nav-item nav-link"><i class="fa-solid fa-hand-holding-heart me-2"></i>Penarikan</a>
+                <a href="form_surattugas.php" class="nav-item nav-link"><i class="fa-solid fa-envelope-open-text me-2"></i>Surat Tugas</a>
+                <a href="form_pengantar.php" class="nav-item nav-link"><i class="fa-solid fa-comment me-2"></i>Surat Pengantar</a>
+                <a href="absensi_admin.php" class="nav-item nav-link"><i class="fa-solid fa-pen me-2"></i>Absensi</a>
+            </div>
+        </nav>
+    </div>
+    <!-- Sidebar End -->
+
+    <div class="content">
+        
+        <!-- Navbar Start -->
+        <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-2 shadow">
+            <button onclick="history.back()" class="btn btn-secondary px-3 py-2">Kembali</button>
+        </nav>
+        <!-- Navbar End -->
+
+        
+
 <?php
 $servername = "localhost";
 $username = "root";
@@ -91,62 +147,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 $conn->close();
 ?>
-
-<body>
-    <div class="container-xxl position-relative bg-white d-flex p-0">
-        <!-- Spinner Start -->
-        <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
-            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
-                <span class="sr-only">Loading...</span>
-            </div>
-        </div>
-        <!-- Spinner End -->
-
-
-        <div class="container-xxl position-relative bg-white d-flex p-0">
-    
-    <!-- Sidebar Start -->
-    <div class="sidebar pe-4 pb-3">
-        <nav class="navbar bg-light navbar-light">
-            <a href="dasboard_admin.php" class="navbar-brand mx-4 mb-3">
-                <h3 class="text-primary">SIPRAKA</h3>
-            </a>
-
-            <div class="d-flex align-items-center ms-4 mb-4">
-                <div class="position-relative">
-                    <img class="rounded-circle" src="img/foto.jpg" alt="Admin" style="width: 40px; height: 40px;">
-                    <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
-                </div>
-                <div class="ms-3">
-                    <h6 class="mb-0">Admin</h6>
-                    <span>Online</span>
-                </div>
-            </div>
-            <div class="navbar-nav w-100">
-                <a href="dasboard_admin.php" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
-                <a href="tambahdata_admin.php" class="nav-item nav-link active"><i class="fa-solid fa-calendar-plus me-2"></i>Tambah Data</a>
-                <a href="form_permohonan.php" class="nav-item nav-link"><i class="fa-solid fa-th me-2"></i>Permohonan</a>
-                <a href="from_monitoring.php" class="nav-item nav-link"><i class="fa-solid fa-eye me-2"></i>Monitoring</a>
-                <a href="from_penarikan.php" class="nav-item nav-link"><i class="fa-solid fa-hand-holding-heart me-2"></i>Penarikan</a>
-                <a href="form_surattugas.php" class="nav-item nav-link"><i class="fa-solid fa-envelope-open-text me-2"></i>Surat Tugas</a>
-                <a href="form_pengantar.php" class="nav-item nav-link"><i class="fa-solid fa-comment me-2"></i>Surat Pengantar</a>
-                <a href="absensi_admin.php" class="nav-item nav-link"><i class="fa-solid fa-pen me-2"></i>Absensi</a>
-            </div>
-        </nav>
-    </div>
-    <!-- Sidebar End -->
-
-    <div class="content">
-        
-        <!-- Navbar Start -->
-        <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-2 shadow">
-            <button onclick="history.back()" class="btn btn-secondary px-3 py-2">Kembali</button>
-        </nav>
-        <!-- Navbar End -->
-
-        
-
-
 
       <!-- HTML Form -->
 <div class="container-fluid pt-4 px-4">

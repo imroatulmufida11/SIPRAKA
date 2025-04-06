@@ -39,35 +39,51 @@ $username = "root";
 $password = "";
 $dbname = "db_sipraka";
 
-$conn = new mysqli($servername, $username, $password, $dbname);
+// Aktifkan error report untuk debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
+// Koneksi
+$conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Koneksi gagal: " . $conn->connect_error);
-} // Pastikan ada koneksi ke database
+}
 
 // Ambil data berdasarkan ID
-if (isset($_GET['id'])) {
-    $id = $_GET['id'];
-    $query = "SELECT * FROM siswa WHERE id = $id";
-    $result = $conn->query($query);
-    $row = $result->fetch_assoc();
+$id = $_GET['id'] ?? null;
+if (!$id) {
+    die("ID tidak ditemukan.");
+}
+
+$query = "SELECT * FROM siswa WHERE id = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("i", $id);
+$stmt->execute();
+$result = $stmt->get_result();
+$row = $result->fetch_assoc();
+
+if (!$row) {
+    die("Data tidak ditemukan.");
 }
 
 // Simpan perubahan data
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $nama = $_POST['nama_siswa'];
+    $nama = $_POST['nama'];
     $jurusan = $_POST['jurusan'];
     $du_di = $_POST['du_di'];
 
-    $updateQuery = "UPDATE siswa SET nama_siswa='$nama_siswa', jurusan='$jurusan', du_di='$du_di' WHERE id=$id";
-    
-    if ($conn->query($updateQuery) === TRUE) {
+    $updateQuery = "UPDATE siswa SET nama_siswa = ?, jurusan = ?, du_di = ? WHERE id = ?";
+    $stmt = $conn->prepare($updateQuery);
+    $stmt->bind_param("sssi", $nama, $jurusan, $du_di, $id);
+
+    if ($stmt->execute()) {
         echo "<script>alert('Data berhasil diperbarui!'); window.location='data_siswa.php';</script>";
     } else {
-        echo "Error: " . $conn->error;
+        echo "Error: " . $stmt->error;
     }
 }
 ?>
+
 <body>
     <div class="container-xxl position-relative bg-white d-flex p-0">
         <!-- Spinner Start -->
@@ -135,7 +151,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <form method="POST">
                         <div class="mb-3">
                             <label class="form-label">Nama Siswa</label>
-                            <input type="text" class="form-control" name="nama" value="<?= htmlspecialchars($row['nama'] ?? '') ?>" required>
+                            <input type="text" class="form-control" name="nama" value="<?= htmlspecialchars($row['nama_siswa'] ?? '') ?>" required>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Jurusan</label>
