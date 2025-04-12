@@ -95,7 +95,7 @@
 
         
 
-        <?php
+<?php
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -110,6 +110,10 @@ if ($conn->connect_error) {
 // Ambil data Du/Di dari database
 $sql = "SELECT id, nama_dudi, alamat FROM data_dudi";
 $result = $conn->query($sql);
+
+// Ambil data siswa dari database
+$sql_siswa = "SELECT id, nama_siswa, nisn FROM siswa"; // Pastikan query ini sesuai
+$result_siswa = $conn->query($sql_siswa);
 ?>  
 
 <div class="container-fluid pt-4 px-4">
@@ -123,6 +127,7 @@ $result = $conn->query($sql);
                             <label class="form-label">Nomor Surat:</label>
                             <input type="text" class="form-control" name="nomorSurat" required>
                         </div>
+
                         <div class="mb-3">
                             <label class="form-label">Tempat PKL:</label>
                             <select class="form-control" name="dudiId" id="tempatPkl" required>
@@ -134,6 +139,7 @@ $result = $conn->query($sql);
                                 <?php endwhile; ?>
                             </select>
                         </div>
+
                         <!-- Input hidden untuk menyimpan nama_dudi -->
                         <input type="hidden" name="tempatPkl" id="namaDudi">
 
@@ -141,25 +147,35 @@ $result = $conn->query($sql);
                             <label class="form-label">Alamat PKL:</label>
                             <textarea class="form-control" name="alamatPkl" id="alamatPkl" required readonly></textarea>
                         </div>
+
                         <div class="mb-3">
                             <label class="form-label">Konsentrasi Keahlian:</label>
                             <input type="text" class="form-control" name="konsentrasiKeahlian" required>
                         </div>
-                        <div class="mb-3">
-    <label class="form-label">Nama, NISN, dan Semester/Tingkat Siswa:</label>
-    <textarea class="form-control" name="siswa" rows="4" 
-        placeholder="Afra, 1234567890, XII/1" required></textarea>
-</div>
 
+                        <!-- Mengganti textarea menjadi select untuk siswa -->
+                        <div class="mb-3">
+                            <label class="form-label">Nama, NISN, dan Semester/Tingkat Siswa:</label>
+                            <select class="form-control" name="siswa_id" id="namaSiswa" required>
+                                <option value="">Pilih Siswa</option>
+                                <?php while ($row_siswa = $result_siswa->fetch_assoc()) : ?>
+                                    <option value="<?= $row_siswa['id'] ?>" data-nisn="<?= $row_siswa['nisn'] ?>">
+                                        <?= htmlspecialchars($row_siswa['nama_siswa']) ?> - <?= $row_siswa['nisn'] ?> - XII/1
+                                    </option>
+                                <?php endwhile; ?>
+                            </select>
+                        </div>
 
                         <div class="mb-3">
                             <label class="form-label">Tanggal Mulai PKL:</label>
                             <input type="date" class="form-control" name="tanggalMulai" required>
                         </div>
+
                         <div class="mb-3">
                             <label class="form-label">Tanggal Berakhir PKL:</label>
                             <input type="date" class="form-control" name="tanggalBerakhir" required>
                         </div>
+
                         <button type="submit" class="btn btn-primary">Buat Surat</button>
                     </form>
                 </div>
@@ -173,6 +189,13 @@ document.getElementById("tempatPkl").addEventListener("change", function() {
     var selectedOption = this.options[this.selectedIndex];
     document.getElementById("alamatPkl").value = selectedOption.getAttribute("data-alamat");
     document.getElementById("namaDudi").value = selectedOption.getAttribute("data-nama"); // Set nama DU/DI
+});
+
+document.getElementById("namaSiswa").addEventListener("change", function () {
+    var selectedOption = this.options[this.selectedIndex];
+    var nisn = selectedOption.getAttribute("data-nisn");
+    // Mengisi nilai NISN ke form jika diperlukan
+    console.log("NISN Siswa: " + nisn);
 });
 </script>
 

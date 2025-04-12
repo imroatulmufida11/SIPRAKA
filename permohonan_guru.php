@@ -135,7 +135,7 @@ $result = $conn->query($sql);
                                             <i class='fa fa-file-alt text-white'></i> Surat
                                         </a>
                                         <a href='upload_surat.php?id=" . urlencode($row['id']) . "' class='btn btn-warning btn-sm'>
-                                            <i class='fa fa-upload text-white'></i> Upload
+                                            <i class='fa fa-upload text-white'></i> Upload Surat Balasan
                                         </a>
                                     </div>
                                   </td>";

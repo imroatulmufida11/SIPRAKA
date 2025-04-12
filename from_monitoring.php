@@ -11,23 +11,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nama_guru = $_POST['namaGuru'];
     $nip_guru = $_POST['nipGuru'];
     $jabatan_guru = $_POST['jabatanGuru'];
-    $tempat_pkl = $_POST['tempatPkl'];
+    $tempat_pkl = $_POST['tempatPkl']; // Menggunakan ID DU/DI
     $alamat_pkl = $_POST['alamatPkl'];
     $tanggal_surat = $_POST['tanggalSurat'];
-    $tanggal_mulai = $_POST['tanggalMulai'];
-    $tanggal_berakhir = $_POST['tanggalBerakhir'];
     $konsentrasi_keahlian = $_POST['konsentrasiKeahlian'];
-    $siswa = $_POST['siswaList'];
+    $siswa_id = $_POST['siswa_id'];
 
     // Query insert
     $sql = "INSERT INTO monitoring_pkl (nomor_surat, nama_guru, nip_guru, jabatan_guru, tempat_pkl, 
-            alamat_pkl, tanggal_surat, konsentrasi_keahlian, siswa) 
+            alamat_pkl, tanggal_surat, konsentrasi_keahlian, siswa_id) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    
+
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("sssssssss", $nomor_surat, $nama_guru, $nip_guru, $jabatan_guru, $tempat_pkl, 
-                      $alamat_pkl, $tanggal_surat, $konsentrasi_keahlian, $siswa);
-    
+                      $alamat_pkl, $tanggal_surat, $konsentrasi_keahlian, $siswa_id);
+
     if ($stmt->execute()) {
         $message = '<div class="alert alert-success">Data berhasil disimpan!</div>';
         $last_id = $stmt->insert_id;
@@ -39,6 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -132,7 +131,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </nav>
 <!-- Navbar End -->
         
-    <?php
+<?php
 // Ambil data DU/DI
 $sqlDudi = "SELECT id, nama_dudi, alamat FROM data_dudi";
 $resultDudi = $conn->query($sqlDudi);
@@ -140,17 +139,10 @@ $resultDudi = $conn->query($sqlDudi);
 // Ambil data pembimbing dari tabel data_pembimbing
 $sqlPembimbing = "SELECT nama_pembimbing FROM data_pembimbing";
 $resultPembimbing = $conn->query($sqlPembimbing);
-while ($row = $resultPembimbing->fetch_assoc()) {
-     $row['nama_pembimbing'] . "</p>"; // Cek apakah semua muncul
-}
 
-//ambil data jurusan dari tabel data_pembimbing
-$sqlJurusan = "SELECT jurusan FROM data_pembimbing";
-$resultJurusan = $conn->query($sqlJurusan);{
-
-}
-
-
+// Ambil data siswa dari database
+$sql_siswa = "SELECT id, nama_siswa, nisn FROM siswa";
+$result_siswa = $conn->query($sql_siswa);
 ?>
 
 <div class="container-fluid pt-4 px-4">
@@ -158,7 +150,7 @@ $resultJurusan = $conn->query($sqlJurusan);{
         <div class="col-12">
             <div class="bg-light rounded h-100 p-4">
                 <div class="container mt-4">
-                    <h2 class="text-center">Formulir Surat Monotoring</h2>
+                    <h2 class="text-center">Formulir Surat Monitoring</h2>
                     <?php
                     if(isset($_SESSION['error'])) {
                         echo '<div class="alert alert-danger">' . $_SESSION['error'] . '</div>';
@@ -175,19 +167,21 @@ $resultJurusan = $conn->query($sqlJurusan);{
                             <input type="text" class="form-control" name="nomorSurat" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Nama Guru Pembimbing:</label>
-                            <select class="form-select" name="namaGuru" required>
-                                <option selected disabled>Pilih Guru Pembimbing</option>
-                                <?php 
-                                $sqlPembimbing = "SELECT nama_pembimbing FROM data_pembimbing"; // Jalankan ulang query
-                                $resultPembimbing = $conn->query($sqlPembimbing); 
-                                while ($row = $resultPembimbing->fetch_assoc()) { ?>
-                                    <option value="<?= htmlspecialchars($row['nama_pembimbing']); ?>">
-                                        <?= htmlspecialchars($row['nama_pembimbing']); ?>
-                                    </option>
-                                <?php } ?>
-                            </select>
-                        </div>
+    <label class="form-label">Nama Guru Pembimbing:</label>
+    <select class="form-select" name="namaGuru" required>
+        <option selected disabled>Pilih Guru Pembimbing</option>
+        <?php 
+        // Pastikan query mengambil id dan nama_pembimbing
+        $sqlPembimbing = "SELECT id, nama_pembimbing FROM data_pembimbing";
+        $resultPembimbing = $conn->query($sqlPembimbing); 
+        while ($row = $resultPembimbing->fetch_assoc()) { ?>
+            <option value="<?= htmlspecialchars($row['id']); ?>">
+                <?= htmlspecialchars($row['nama_pembimbing']); ?>
+            </option>
+        <?php } ?>
+    </select>
+</div>
+
                         <div class="mb-3">
                             <label class="form-label">NIP:</label>
                             <input type="text" class="form-control" name="nipGuru" required>
@@ -197,32 +191,43 @@ $resultJurusan = $conn->query($sqlJurusan);{
                             <input type="text" class="form-control" name="jabatanGuru" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Tempat PKL:</label>
-                            <select class="form-select" name="tempatPkl" id="tempatPkl" required>
-                                <option selected disabled>Pilih DU/DI</option>
-                                <?php while ($row = $resultDudi->fetch_assoc()) { ?>
-                                    <option value="<?= htmlspecialchars($row['nama_dudi']); ?>" data-alamat="<?= htmlspecialchars($row['alamat']); ?>">
-                                        <?= htmlspecialchars($row['nama_dudi']); ?>
-                                    </option>
-                                <?php } ?>
-                            </select>
-                        </div>
+    <label class="form-label">Tempat PKL (DU/DI):</label>
+    <select class="form-select" name="tempatPkl" id="tempatPkl" required>
+        <option selected disabled>Pilih DU/DI</option>
+        <?php while ($row = $resultDudi->fetch_assoc()) { ?>
+            <option 
+                value="<?= htmlspecialchars($row['id']); ?>" 
+                data-alamat="<?= htmlspecialchars($row['alamat']); ?>">
+                <?= htmlspecialchars($row['nama_dudi']); ?>
+            </option>
+        <?php } ?>
+    </select>
+</div>
+
+<div class="mb-3">
+    <label class="form-label">Alamat PKL:</label>
+    <textarea class="form-control" name="alamatPkl" id="alamatPkl" rows="2" readonly required></textarea>
+</div>
+
                         <div class="mb-3">
-                            <label class="form-label">Alamat PKL:</label>
-                            <textarea class="form-control" name="alamatPkl" id="alamatPkl" rows="2" required readonly></textarea>
+                            <label class="form-label">Konsentrasi Keahlian:</label>
+                            <input type="text" class="form-control" name="konsentrasiKeahlian" required>
                         </div>
-                        <div class="mb-3">
-                        <label class="form-label">Konsentrasi Keahlian:</label>
-                        <input type="text" class="form-control" name="konsentrasiKeahlian" required>
-                    </div>
                         <div class="mb-3">
                             <label class="form-label">Tanggal Surat:</label>
                             <input type="date" class="form-control" name="tanggalSurat" required>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Nama Siswa (Setiap Nama di Baris Baru):</label>
-                            <textarea class="form-control" name="siswaList" rows="3" required></textarea>
-                        </div>
+                            <div class="mb-3">
+                                <label class="form-label">Nama, NISN, dan Semester/Tingkat Siswa:</label>
+                                <select class="form-control" name="siswa_id" id="namaSiswa" required>
+                                    <option value="">Pilih Siswa</option>
+                                    <?php while ($row_siswa = $result_siswa->fetch_assoc()) : ?>
+                                        <option value="<?= $row_siswa['id'] ?>" data-nisn="<?= $row_siswa['nisn'] ?>">
+                                            <?= htmlspecialchars($row_siswa['nama_siswa']) ?> - <?= $row_siswa['nisn'] ?> - XII/1
+                                        </option>
+                                    <?php endwhile; ?>
+                                </select>
+                            </div>
                         <button type="submit" class="btn btn-primary">Buat Surat</button>
                     </form>
                     <?= $message; ?> <!-- Menampilkan pesan error atau sukses -->

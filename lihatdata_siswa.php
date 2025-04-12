@@ -99,8 +99,8 @@ if ($conn->connect_error) {
     die("Koneksi gagal: " . $conn->connect_error);
 }
 
-// Query untuk mengambil data siswa dengan nama DUDI (bukan ID)
-$sql = "SELECT siswa.id, siswa.nama_siswa, siswa.jurusan, data_dudi.nama_dudi 
+// Query untuk mengambil data siswa termasuk nisn dan nama DUDI
+$sql = "SELECT siswa.id, siswa.nama_siswa, siswa.nisn, siswa.jurusan, data_dudi.nama_dudi 
         FROM siswa 
         JOIN data_dudi ON siswa.du_di = data_dudi.id";
 
@@ -119,6 +119,7 @@ $result = $conn->query($sql);
                                 <tr>
                                     <th>No</th>
                                     <th>Nama Siswa</th>
+                                    <th>NISN</th>
                                     <th>Jurusan</th>
                                     <th>Du/Di</th>
                                     <th>Aksi</th>
@@ -132,8 +133,9 @@ $result = $conn->query($sql);
                                     echo "<tr>";
                                     echo "<td>" . $no++ . "</td>";
                                     echo "<td>" . htmlspecialchars($row['nama_siswa']) . "</td>";
+                                    echo "<td>" . htmlspecialchars($row['nisn']) . "</td>"; // Kolom NISN
                                     echo "<td>" . htmlspecialchars($row['jurusan']) . "</td>";
-                                    echo "<td>" . htmlspecialchars($row['nama_dudi']) . "</td>"; // Menampilkan nama Du/Di
+                                    echo "<td>" . htmlspecialchars($row['nama_dudi']) . "</td>"; // Nama Du/Di
                                     echo "<td class='text-center'>
                                             <div class='d-flex justify-content-center gap-2'>
                                                 <a href='edit_siswa.php?id=" . $row['id'] . "' class='btn btn-warning btn-sm'>
@@ -147,7 +149,7 @@ $result = $conn->query($sql);
                                     echo "</tr>";
                                 }
                             } else {
-                                echo "<tr><td colspan='5' class='text-center'>Tidak ada data</td></tr>";
+                                echo "<tr><td colspan='6' class='text-center'>Tidak ada data</td></tr>";
                             }
                             ?>
                             </tbody>
@@ -156,11 +158,8 @@ $result = $conn->query($sql);
                 </div>
             </div>
         </div>
-    </div>
-
+    </div>
 </body>
-
-
 
 <?php
 $conn->close();

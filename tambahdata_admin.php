@@ -103,10 +103,10 @@
                     <!-- Card Data Du/Di -->
                     <div class="col-md-3">
                         <div class="card bg-light text-center p-3 h-100 d-flex flex-column justify-content-between">
-                            <i class="fa fa-building text-warning fs-1"></i>
+                            <i class="fa fa-building text-success fs-1"></i>
                             <h5 class="mt-3">Data Du/Di</h5>
                             <p class="flex-grow-1">Kelola data Dunia Usaha/Dunia Industri secara efisien.</p>
-                            <a href="data_dudi.php" class="btn btn-warning mt-auto">Tambah Data</a>
+                            <a href="data_dudi.php" class="btn btn-success mt-auto">Tambah Data</a>
                         </div>
                     </div>
                     <!-- Card Data Pembimbing -->
@@ -121,19 +121,19 @@
                     <!-- Card Data Siswa -->
                     <div class="col-md-3">
                         <div class="card bg-light text-center p-3 h-100 d-flex flex-column justify-content-between">
-                            <i class="fa fa-user-graduate text-primary fs-1"></i>
+                            <i class="fa fa-user-graduate text-success fs-1"></i>
                             <h5 class="mt-3">Data Siswa</h5>
                             <p class="flex-grow-1">Kelola data siswa yang terdaftar dalam sistem.</p>
-                            <a href="data_siswa.php" class="btn btn-primary mt-auto">Tambah Data</a>
+                            <a href="data_siswa.php" class="btn btn-success mt-auto">Tambah Data</a>
                         </div>
                     </div>
                     <!-- Card Semua Data -->
                     <div class="col-md-3">
                         <div class="card bg-light text-center p-3 h-100 d-flex flex-column justify-content-between">
-                            <i class="fa fa-database text-secondary fs-1"></i>
+                            <i class="fa fa-database text-success fs-1"></i>
                             <h5 class="mt-3">Semua Data</h5>
                             <p class="flex-grow-1">Lihat dan kelola semua data yang telah diinputkan.</p>
-                            <a href="semua_data.php" class="btn btn-secondary mt-auto">Lihat Data</a>
+                            <a href="semua_data.php" class="btn btn-success mt-auto">Lihat Data</a>
                         </div>
                     </div>
                 </div>

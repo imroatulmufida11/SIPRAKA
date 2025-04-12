@@ -15,7 +15,7 @@ if (isset($_GET['id'])) {
     $query = "DELETE FROM data_pembimbing WHERE id = $id";
 
     if ($conn->query($query) === TRUE) {
-        echo "<script>alert('Data berhasil dihapus!'); window.location='data_pembimbing.php';</script>";
+        echo "<script>alert('Data berhasil dihapus!'); window.location='lihatdata_guru.php';</script>";
     } else {
         echo "Error: " . $conn->error;
     }

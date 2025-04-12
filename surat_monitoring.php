@@ -2,7 +2,6 @@
 session_start();
 require_once __DIR__ . '/config.php';
 
-
 // Validasi ID
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     die("ID tidak valid");
@@ -10,9 +9,8 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 
 $id = $_GET['id'];
 
-// Query untuk mengambil data (disederhanakan)
+// Ambil data dari monitoring_pkl
 $sql = "SELECT * FROM monitoring_pkl WHERE id = ?";
-
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $id);
 $stmt->execute();
@@ -23,6 +21,41 @@ if ($result->num_rows === 0) {
 }
 
 $data = $result->fetch_assoc();
+
+// Ambil data guru dari ID
+$guru_id = $data['nama_guru'];
+$nama_guru = "-";
+$nip_guru = "-";
+$jabatan_guru = "-";
+
+$sql_guru = "SELECT nama_pembimbing FROM data_pembimbing WHERE id = ?";
+$stmt_guru = $conn->prepare($sql_guru);
+$stmt_guru->bind_param("i", $guru_id);
+$stmt_guru->execute();
+$result_guru = $stmt_guru->get_result();
+
+if ($result_guru->num_rows > 0) {
+    $guru_data = $result_guru->fetch_assoc();
+    $nama_guru = $guru_data['nama_pembimbing'];
+}
+
+// Ambil data tempat_pkl dari tabel monitoring_pkl
+$tempat_pkl = $data['tempat_pkl']; // Pastikan kolom ini ada di tabel monitoring_pkl
+
+// Ambil nama DUDI dari ID tempat_pkl
+$id_dudi = $data['tempat_pkl'];
+$nama_dudi = "-";
+
+$sql_dudi = "SELECT nama_dudi FROM data_dudi WHERE id = ?";
+$stmt_dudi = $conn->prepare($sql_dudi);
+$stmt_dudi->bind_param("i", $id_dudi);
+$stmt_dudi->execute();
+$result_dudi = $stmt_dudi->get_result();
+
+if ($result_dudi->num_rows > 0) {
+    $dudi_data = $result_dudi->fetch_assoc();
+    $nama_dudi = $dudi_data['nama_dudi'];
+}
 ?>
 
 
@@ -158,8 +191,7 @@ $data = $result->fetch_assoc();
         <td style="width: 10px;">:</td>
         <td style="width: 80px;">Nama</td>
         <td style="width: 10px;">:</td>
-        <td><?= htmlspecialchars($data['nama_guru']) ?></td>
-    </tr>
+        <td><?= htmlspecialchars($nama_guru) ?></td>    
     <tr>
         <td></td>
         <td></td>
@@ -182,14 +214,15 @@ $data = $result->fetch_assoc();
     <tr>
         <td style="width: 80px;">Untuk</td>
         <td style="width: 10px;">:</td>
-        <td>Monitoring siswa PKL ke <strong><?= htmlspecialchars($data['tempat_pkl']) ?></strong></td>
+        <td>Monitoring siswa PKL ke <strong><?= htmlspecialchars($nama_dudi) ?></strong></td>
     </tr>
+
     <tr>
     <td></td>
     <td></td>
     <td>
     <?= nl2br(htmlspecialchars($data['alamat_pkl'])) ?> 
-    <span style="margin-left: 50px;">pada tanggal</span> 
+    <span style="margin-left: 20px;">pada tanggal</span> 
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
     <strong><?= date("F Y", strtotime($data['tanggal_surat'])) ?></strong>
 </td>
@@ -202,33 +235,49 @@ $data = $result->fetch_assoc();
 
 
         <!-- Tabel Siswa -->
-        <table class="table table-bordered" mt-4 style="border: 100px;">
-            <thead>
-                <tr class="text-dark">
-                    <th>No</th>
-                    <th>Nama Siswa</th>
-                    <th>Catatan Monitoring</th>
-                    <th>Tanda Tangan Siswa</th>
-                    <th>Tanda Tangan Pembimbing DU/DI</th>
+        <?php
+$siswa_data = [];
+
+if (!empty(trim($data["siswa_id"]))) {
+    $siswa_ids = array_map('intval', explode(",", $data["siswa_id"]));
+    $id_list = implode(",", $siswa_ids);
+
+    $sql_siswa = "SELECT nama_siswa, nisn FROM siswa WHERE id IN ($id_list)";
+    $result_siswa = mysqli_query($conn, $sql_siswa);
+
+    if ($result_siswa) {
+        while ($siswa = mysqli_fetch_assoc($result_siswa)) {
+            $siswa_data[] = $siswa;
+        }
+    }
+}
+
+?>
+
+<?php if (!empty($siswa_data)): ?>
+    <table class="table table-bordered mt-4">
+        <thead>
+            <tr class="text-dark">
+                <th>No</th>
+                <th>Nama</th>
+                <th>NISN</th>
+                <th>Semester/Tingkat</th>
+            </tr>
+        </thead>
+        <tbody class="text-dark">
+            <?php $no = 1; foreach ($siswa_data as $siswa): ?>
+                <tr>
+                    <td><?= $no++; ?></td>
+                    <td><?= htmlspecialchars($siswa["nama_siswa"]); ?></td>
+                    <td><?= htmlspecialchars($siswa["nisn"]); ?></td>
+                    <td>XII/1</td>
                 </tr>
-            </thead>
-            <tbody class="text-dark">
-                <?php
-                $siswa_list = explode("\n", $data['siswa']);
-                foreach ($siswa_list as $index => $siswa) {
-                    if (!empty(trim($siswa))) {
-                        echo "<tr>";
-                        echo "<td>" . ($index + 1) . "</td>";
-                        echo "<td>" . htmlspecialchars($siswa) . "</td>";
-                        echo "<td></td>";
-                        echo "<td></td>";
-                        echo "<td></td>";
-                        echo "</tr>";
-                    }
-                }
-                ?>
-            </tbody>
-        </table>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+<?php else: ?>
+    <p><em>Belum ada data siswa.</em></p>
+<?php endif; ?>
 
        <!-- Tanda Tangan -->
 <div class="row mt-5">
@@ -294,6 +343,20 @@ $data = $result->fetch_assoc();
                 font-size: 12px !important; /* Kecilkan font biar muat */
             }
         }
+        table.table-bordered th, 
+    table.table-bordered td {
+        border: 1px solid #000 !important;
+    }
+
+    table.table-bordered th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+    }
+
+    table.table-bordered td {
+        font-weight: 500;
+}
+
     </style>
 </head>
 

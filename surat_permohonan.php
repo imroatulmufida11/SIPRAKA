@@ -169,38 +169,49 @@ if (!$row = mysqli_fetch_assoc($result)) {
         
         <p><strong>Konsentrasi Keahlian:</strong> <?= htmlspecialchars($row["konsentrasi_keahlian"]) ?></p>
 
-        <?php if (!empty(trim($row["siswa"]))): ?>
-            <table class="table table-bordered" mt-4 style="border: 100px;">
-                <thead>
-                    <tr class="text-dark">
-                        <th>No</th>
-                        <th>Nama</th>
-                        <th>NISN</th>
-                        <th>Semester/Tingkat</th>
-                    </tr>
-                </thead>
-                <tbody class="text-dark">
-                    <?php
-                    $siswaList = explode("\n", trim($row["siswa"]));
-                    $no = 1;
-                    foreach ($siswaList as $siswa) {  
-                        $data = array_map('trim', explode(",", $siswa));
-                        if (count($data) >= 2) {
-                            echo "<tr>
-                                    <td>$no</td>
-                                    <td>" . htmlspecialchars($data[0]) . "</td>
-                                    <td>" . htmlspecialchars($data[1]) . "</td>
-                                    <td>" . (isset($data[2]) ? htmlspecialchars($data[2]) : '-') . "</td>
-                                  </tr>";
-                            $no++;
-                        }
-                    }
-                    ?>
-                </tbody>
-            </table>
-        <?php else: ?>
-            <p><em>Belum ada data siswa.</em></p>
-        <?php endif; ?>
+        <?php
+$siswa_data = [];
+
+if (!empty(trim($row["siswa_id"]))) {
+    $siswa_ids = array_map('intval', explode(",", $row["siswa_id"]));
+    $id_list = implode(",", $siswa_ids);
+
+    $sql_siswa = "SELECT nama_siswa, nisn FROM siswa WHERE id IN ($id_list)";
+    $result_siswa = mysqli_query($conn, $sql_siswa);
+
+    if ($result_siswa) {
+        while ($siswa = mysqli_fetch_assoc($result_siswa)) {
+            $siswa_data[] = $siswa;
+        }
+    }
+}
+?>
+
+<?php if (!empty($siswa_data)): ?>
+    <table class="table table-bordered mt-4">
+        <thead>
+            <tr class="text-dark">
+                <th>No</th>
+                <th>Nama</th>
+                <th>NISN</th>
+                <th>Semester/Tingkat</th>
+            </tr>
+        </thead>
+        <tbody class="text-dark">
+            <?php $no = 1; foreach ($siswa_data as $siswa): ?>
+                <tr>
+                    <td><?= $no++; ?></td>
+                    <td><?= htmlspecialchars($siswa["nama_siswa"]); ?></td>
+                    <td><?= htmlspecialchars($siswa["nisn"]); ?></td>
+                    <td>XII/1</td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+<?php else: ?>
+    <p><em>Belum ada data siswa.</em></p>
+<?php endif; ?>
+
 
         <p>
             Jika berkenan, kami berharap PKL ini dapat dilaksanakan mulai tanggal <strong><?= htmlspecialchars($row["tanggal_mulai"]) ?></strong> 
@@ -211,18 +222,19 @@ if (!$row = mysqli_fetch_assoc($result)) {
         <p><em>Wassalamu'alaikum Wr. Wb.</em></p>
 
         <div class="text-end">
-    <div class="d-inline-block text-start">
-        <p class="mb-1">Hormat Kami,</p>
-        <p class="mb-5">Kepala SMK Negeri 2 Bangkalan</p> <!-- Tambah jarak di sini -->
+            <div class="d-inline-block text-start">
+                <p class="mb-1">Hormat Kami,</p>
+                <p class="mb-5">Kepala SMK Negeri 2 Bangkalan</p> <!-- Tambah jarak di sini -->
 
-        <p class="fw-bold mb-1">Nur Hazizah, S.Pd., M.Pd.</p>
-        <p class="mb-1">Pembina Tk. I / IV/b</p>
-        <p>NIP 196912181997032006</p>
+                <p class="fw-bold mb-1">Nur Hazizah, S.Pd., M.Pd.</p>
+                <p class="mb-1">Pembina Tk. I / IV/b</p>
+                <p>NIP 196912181997032006</p>
+            </div>
+        </div>
+
     </div>
 </div>
 
-    </div>
-</div>
 <head>
     <style>
         @media print {

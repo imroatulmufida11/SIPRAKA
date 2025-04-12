@@ -2,24 +2,44 @@
 include 'config.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Menangkap data dari form
     $nomor_surat = $_POST["nomorSurat"];
     $tempat_pkl = $_POST["tempatPkl"];
     $alamat_pkl = $_POST["alamatPkl"];
     $dudi_id = $_POST["dudiId"];
     $konsentrasi_keahlian = $_POST["konsentrasiKeahlian"];
-    $siswa = $_POST["siswa"];
+    $siswa_id = $_POST["siswa_id"]; // Pastikan nama sesuai dengan form
     $tanggal_mulai = $_POST["tanggalMulai"];
     $tanggal_berakhir = $_POST["tanggalBerakhir"];
 
-    // echo "Data" . $nomor_surat, $tempat_pkl, $alamat_pkl, $konsentrasi_keahlian, $siswa, $tanggal_mulai, $tanggal_berakhir;
-    $sql = "INSERT INTO permohonan_pkl (nomor_surat, dudi_id, tempat_pkl, alamat_pkl, konsentrasi_keahlian, siswa, tanggal_mulai, tanggal_berakhir) 
-            VALUES ('$nomor_surat', '$dudi_id','$tempat_pkl','$alamat_pkl', '$konsentrasi_keahlian', '$siswa', '$tanggal_mulai', '$tanggal_berakhir')";
+    // Prepared statement untuk menghindari SQL Injection
+    $sql = "INSERT INTO permohonan_pkl (nomor_surat, dudi_id, tempat_pkl, alamat_pkl, konsentrasi_keahlian, siswa_id, tanggal_mulai, tanggal_berakhir) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
-    if (mysqli_query($conn, $sql)) {
-        $id = mysqli_insert_id($conn);
-        header("Location: surat_permohonan.php?id=" . $id);
+    if ($stmt = $conn->prepare($sql)) {
+        // Bind parameter
+        $stmt->bind_param("ssssssss", $nomor_surat, $dudi_id, $tempat_pkl, $alamat_pkl, $konsentrasi_keahlian, $siswa_id, $tanggal_mulai, $tanggal_berakhir);
+
+        // Eksekusi statement
+        if ($stmt->execute()) {
+            // Ambil ID dari record yang baru dimasukkan
+            $id = $stmt->insert_id;
+            // Redirect ke halaman surat_permohonan.php dengan ID surat
+            header("Location: surat_permohonan.php?id=" . $id);
+            exit();
+        } else {
+            // Jika gagal eksekusi query
+            echo "Error: " . $stmt->error;
+        }
+
+        // Tutup statement
+        $stmt->close();
     } else {
-        echo "Error: " . mysqli_error($conn);
+        // Jika gagal mempersiapkan statement
+        echo "Error: " . $conn->error;
     }
 }
+
+// Tutup koneksi setelah selesai
+$conn->close();
 ?>

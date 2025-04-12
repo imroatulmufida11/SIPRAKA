@@ -125,14 +125,15 @@ $message = "";
 // Jika form disubmit
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nama = $_POST["nama"];
+    $nisn = $_POST["nisn"];
     $jurusan = $_POST["jurusan"];
     $du_di = $_POST["du_di"];
     $pembimbing_id = $_POST["pembimbing_id"];
 
-    if (!empty($nama) && !empty($jurusan) && !empty($du_di) && !empty($pembimbing_id)) {
-        $sql_insert = "INSERT INTO siswa (nama_siswa, jurusan, du_di, pembimbing_id) VALUES (?, ?, ?, ?)";
+    if (!empty($nama) && !empty($nisn) && !empty($jurusan) && !empty($du_di) && !empty($pembimbing_id)) {
+        $sql_insert = "INSERT INTO siswa (nama_siswa, nisn, jurusan, du_di, pembimbing_id) VALUES (?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($sql_insert);
-        $stmt->bind_param("ssii", $nama, $jurusan, $du_di, $pembimbing_id);
+        $stmt->bind_param("ssssi", $nama, $nisn, $jurusan, $du_di, $pembimbing_id);
 
         if ($stmt->execute()) {
             $message = "<div class='alert alert-success'>Data berhasil disimpan!</div>";
@@ -159,6 +160,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <input type="text" class="form-control" id="namaInput" name="nama" placeholder="Masukkan Nama" required>
                         <label for="namaInput">Nama Siswa</label>
                     </div>
+
+                    <!-- Tambahan Kolom NISN -->
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="nisnInput" name="nisn" placeholder="Masukkan NISN" required>
+                        <label for="nisnInput">NISN</label>
+                    </div>
+
                     <div class="form-floating mb-3">
                         <select class="form-select" id="jurusanSelect" name="jurusan" required>
                             <option selected disabled>Pilih Jurusan</option>
@@ -202,7 +210,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </form>
             </div>
         </div>
-</div>
+    </div>
 </div>
 
 
